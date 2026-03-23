@@ -71,6 +71,11 @@ if a > b:
 #Exercise 7: Odd or Even
 #Instructions
 #Write code that asks the user for a number and determines whether this number is odd or even.
+number = input('Please input a number')
+if int(number) == int(number)//2*2:
+    print("Even number")
+else:
+    print("Odd number")
 
 
 
