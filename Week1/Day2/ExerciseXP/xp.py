@@ -71,6 +71,7 @@ if a > b:
 #Exercise 7: Odd or Even
 #Instructions
 #Write code that asks the user for a number and determines whether this number is odd or even.
+
 number = input('Please input a number')
 if int(number) == int(number)//2*2:
     print("Even number")
@@ -83,6 +84,11 @@ else:
 #Instructions
 #Write code that asks the user for their name and determines whether or not you have the same name. Print out a funny message based on the outcome.
 
+name = input('Please input your name')
+if name == "Aleksandra":
+    print("Hi! I have the same name as yours!")
+else:
+    print("Hi! And my name is Aleksandra!")
 
 
 #Exercise 9: Tall enough to ride a roller coaster
