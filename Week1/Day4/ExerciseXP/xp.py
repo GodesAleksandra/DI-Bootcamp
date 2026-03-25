@@ -115,7 +115,7 @@ all_toppings = []
 price = 0
 while True:
     topping = input("Please enter pizza toppings one by one (enter 'quit'  when you are finished): ")
-    if topping == 'quit':
+    if topping.lower() == 'quit':
         break
     else:
         print(f"Adding {topping} to your pizza.")
