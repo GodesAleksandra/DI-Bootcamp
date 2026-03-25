@@ -12,3 +12,15 @@ my_fav_numbers.remove(12)
 friend_fav_numbers = {14,15,16,18,20}
 our_fav_numbers = my_fav_numbers.union(friend_fav_numbers)
 print(our_fav_numbers)
+
+#Exercise 2: Tuple
+#Given a tuple of integers, try to add more integers to the tuple.
+#Hint: Tuples are immutable, meaning they cannot be changed after creation. Think about why you can’t add more integers to a tuple.
+tuple = (1,2,3,4,5)
+tuple = tuple + (6,7,8,10)
+print(tuple)
+# One of the key differences between tuples and other Python data structures is that tuples are immutable.
+# Once a tuple is created, its contents cannot be changed.
+# You are allowed to add tuples to tuples, so if you want to add one item, (or many), create a new tuple with the item(s), and add it to the existing tuple
+
+
