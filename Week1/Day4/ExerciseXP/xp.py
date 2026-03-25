@@ -24,3 +24,21 @@ print(tuple)
 # You are allowed to add tuples to tuples, so if you want to add one item, (or many), create a new tuple with the item(s), and add it to the existing tuple
 
 
+#Exercise 3: List Manipulation
+#You have a list: basket = ["Banana", "Apples", "Oranges", "Blueberries"]
+#Remove "Banana" from the list.
+#Remove "Blueberries" from the list.
+#Add "Kiwi" to the end of the list.
+#Add "Apples" to the beginning of the list.
+#Count how many times "Apples" appear in the list.
+#Empty the list.
+#Print the final state of the list.
+
+basket = ["Banana", "Apples", "Oranges", "Blueberries"]
+basket.remove("Banana")
+basket.remove("Blueberries")
+basket.append("Kiwi")
+basket.insert(0, "Apples")
+print(basket.count("Apples"))
+basket = []
+print(basket)
