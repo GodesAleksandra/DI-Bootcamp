@@ -71,6 +71,16 @@ for number in range(1,21):
 #if the input is incorrect, keep asking for the correct input until it is correct
 #if the input is correct print “thank you” and break the loop
 
+while True:
+    name = input("Please enter your name: ")
+    consist_digit = 0
+    for n in name:
+        if n.isdigit() == True:
+            consist_digit = 1
+            break
+    if len(name) >= 3 and consist_digit == 0:
+        break
+print("Thank you!")
 
 #Exercise 7: Favorite Fruits
 #Ask the user to input their favorite fruits (they can input several fruits, separated by spaces).
