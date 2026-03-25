@@ -63,3 +63,45 @@ for number in range(1,21):
 for number in range(1,21):
     if number%2 ==0:
         print(number)
+
+#Exercise 6: While Loop
+#Use an input to ask the user to enter their name.
+#Using a while True loop, check if the user gave a proper name (not digits and at least 3 letters long)
+#hint: check for the method isdigit()
+#if the input is incorrect, keep asking for the correct input until it is correct
+#if the input is correct print “thank you” and break the loop
+
+
+#Exercise 7: Favorite Fruits
+#Ask the user to input their favorite fruits (they can input several fruits, separated by spaces).
+#Store these fruits in a list.
+#Ask the user to input the name of any fruit.
+#If the fruit is in their list of favorite fruits, print:
+#"You chose one of your favorite fruits! Enjoy!"
+#If not, print:
+#"You chose a new fruit. I hope you enjoy it!"
+
+
+#Exercise 8: Pizza Toppings
+#Write a loop that asks the user to enter pizza toppings one by one.
+#Stop the loop when the user types 'quit'.
+#For each topping entered, print:
+#"Adding [topping] to your pizza."
+#After exiting the loop, print all the toppings and the total cost of the pizza.
+#The base price is $10, and each topping adds $2.50.
+
+
+#Exercise 9: Cinemax Tickets
+#Ask for the age of each person in a family who wants to buy a movie ticket.
+#Calculate the total cost based on the following rules:
+#Free for people under 3.
+#$10 for people aged 3 to 12.
+#$15 for anyone over 12.
+#Print the total ticket cost.
+
+#Bonus:
+#Imagine a group of teenagers wants to see a restricted movie (only for ages 16–21).
+#Write a program to:
+#Ask for each person’s age.
+#Remove anyone who isn’t allowed to watch.
+#Print the final list of attendees.
