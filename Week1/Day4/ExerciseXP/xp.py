@@ -91,6 +91,17 @@ print("Thank you!")
 #If not, print:
 #"You chose a new fruit. I hope you enjoy it!"
 
+input_fav_fruits = input("Please enter your favorite fruits: ")
+fruits = input_fav_fruits.split()
+input_fruit = input("Please enter the name of any fruit: ")
+is_fav = 0
+for fruit in fruits:
+    if fruit == input_fruit:
+        print("You chose one of your favorite fruits! Enjoy!")
+        is_fav = 1
+if is_fav == 0:
+    print("You chose a new fruit. I hope you enjoy it!")
+
 
 #Exercise 8: Pizza Toppings
 #Write a loop that asks the user to enter pizza toppings one by one.
