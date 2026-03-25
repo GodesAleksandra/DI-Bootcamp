@@ -49,5 +49,17 @@ print(basket)
 #1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5.
 #Avoid hard-coding each number manually.
 #Think: Can you generate this sequence using a loop or another method?
+
 my_list = sorted(list(range(1,6)) + [x + 0.5 for x in range(1,5)])
 print(my_list)
+
+#Exercise 5: For Loop
+#Write a for loop to print all numbers from 1 to 20, inclusive.
+#Write another for loop that prints every number from 1 to 20 where the index is even.
+
+for number in range(1,21):
+    print(number)
+
+for number in range(1,21):
+    if number%2 ==0:
+        print(number)
