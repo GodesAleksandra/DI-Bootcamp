@@ -84,6 +84,8 @@ while True:
         break
 print("Thank you!")
 
+#if name.isalpha() and len(name) >= 3:
+
 #Exercise 7: Favorite Fruits
 #Ask the user to input their favorite fruits (they can input several fruits, separated by spaces).
 #Store these fruits in a list.
