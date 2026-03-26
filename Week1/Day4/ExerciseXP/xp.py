@@ -163,5 +163,5 @@ for teen in teenagers:
     if 16 <= age <= 21:
         allowed.append(teen)
 
-print("Approved: ")
+print("Final list of attendees: ")
 print(allowed)
