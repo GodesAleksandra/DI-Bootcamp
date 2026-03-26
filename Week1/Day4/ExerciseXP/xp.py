@@ -106,6 +106,7 @@ for fruit in fruits:
 if is_fav == 0:
     print("You chose a new fruit. I hope you enjoy it!")
 
+#if input_fruit in fruits:
 
 #Exercise 8: Pizza Toppings
 #Write a loop that asks the user to enter pizza toppings one by one.
