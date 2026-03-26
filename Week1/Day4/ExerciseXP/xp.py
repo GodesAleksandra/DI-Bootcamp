@@ -153,7 +153,7 @@ while True:
         break
     elif int(age) < 3:
         total_price = total_price
-    elif int(age) < 12 and int(age) > 3:
+    elif 3 <= int(age) <= 12:
         total_price += 10
     elif int(age) > 12:
         total_price += 15
