@@ -114,7 +114,7 @@ if is_fav == 0:
 all_toppings = []
 price = 0
 while True:
-    topping = input("Please enter pizza toppings one by one (enter 'quit'  when you are finished): ")
+    topping = input("Please enter pizza toppings one by one (enter 'quit' when you are finished): ")
     if topping.lower() == 'quit':
         break
     else:
@@ -134,10 +134,34 @@ print(f"\nTotal price for your pizza: ${price}")
 #$10 for people aged 3 to 12.
 #$15 for anyone over 12.
 #Print the total ticket cost.
-
 #Bonus:
 #Imagine a group of teenagers wants to see a restricted movie (only for ages 16–21).
 #Write a program to:
 #Ask for each person’s age.
 #Remove anyone who isn’t allowed to watch.
 #Print the final list of attendees.
+
+total_price = 0
+while True:
+    age = input("Please enter the age of each person in a family who wants to buy a movie ticket (enter 'quit' when you are finished): ")
+    if age.lower() == 'quit':
+        break
+    elif int(age) < 3:
+        total_price = total_price
+    elif int(age) < 12 and int(age) > 3:
+        total_price += 10
+    elif int(age) > 12:
+        total_price += 15
+
+print(f"\nTotal price for your tickets: ${total_price}")
+
+teenagers = ["Kate", "Peter", "Tom", "David", "Alex"]
+
+allowed = []
+for teen in teenagers:
+    age = int(input(f"Enter {teen}'s age: "))
+    if 16 <= age <= 21:
+        allowed.append(teen)
+
+print("Approved: ")
+print(allowed)
