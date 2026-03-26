@@ -20,3 +20,13 @@ print(multiples)
 #3. The program should print the modified string.
 #The final string will not include any consecutive duplicates, but non-consecutive duplicates are allowed.
 #Example: In "recursive", the two ‘r’s and two ‘e’s are allowed because they are not consecutive.
+
+str = input("Please enter a string: ")
+letters = list(str)
+uniq_letters = []
+prev_letter = ''
+for letter in letters:
+    if prev_letter != letter:
+        uniq_letters.append(letter)
+    prev_letter = letter
+print("".join(uniq_letters))
