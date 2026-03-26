@@ -5,7 +5,12 @@
 #2. Create a program that generates a list of multiples of the given number.
 #3. The list should stop when it reaches the length specified by the user.
 
-
+num = int(input("Please enter a number: "))
+length = int(input("Please enter a length: "))
+multiples = []
+for i in range(1, length+1):
+    multiples.append(num * i)
+print(multiples)
 
 #Challenge 2: Remove Consecutive Duplicate Letters
 #1. Ask the user for a string.
