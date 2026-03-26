@@ -117,7 +117,7 @@ if is_fav == 0:
 #The base price is $10, and each topping adds $2.50.
 
 all_toppings = []
-price = 0
+price = 10
 while True:
     topping = input("Please enter pizza toppings one by one (enter 'quit' when you are finished): ")
     if topping.lower() == 'quit':
