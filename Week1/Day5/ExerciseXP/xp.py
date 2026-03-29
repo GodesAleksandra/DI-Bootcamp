@@ -97,6 +97,7 @@ if 'international_competitors' in brand:
 del brand['creation_date']
 print(brand['international_competitors'][-1])
 print(f"Major colors in the US: {', '.join(brand['major_color']['US'])}")
-print(f"Number of keys {len(brand.keys())}")
+print(f"Number of keys: {len(brand.keys())}")
+print(f"All keys of dictionary: {', '.join(list(brand.keys()))}")
 
 print(brand)
