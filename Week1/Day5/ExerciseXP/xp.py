@@ -26,7 +26,14 @@ print(my_dict)
 #Print the total cost at the end.
 #Bonus: Allow the user to input family members’ names and ages, then calculate the total ticket cost.
 
-family = {"rick": 43, 'beth': 13, 'morty': 5, 'summer': 8}
+family = {}
+while True:
+    name = input("Please enter name (enter 'quit' when you are finished): ")
+    if name.lower() == 'quit':
+        break
+    age = int(input(f"Please enter {name}'s age: "))
+    family[name] = age
+
 price = 0
 total_price = 0
 for k, v in family.items():
@@ -36,7 +43,7 @@ for k, v in family.items():
         price = 15
     else:
         price = 0
-    print(f"The ticket price for {k} is", price )
-    total_price = total_price + price
+    print(f"Ticket price for {k} is", price )
+    total_price += price
 
 print("Total cost is",total_price)
