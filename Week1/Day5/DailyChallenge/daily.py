@@ -14,3 +14,12 @@
 #For the input “dodo”, the output should be: {"d": [0, 2], "o": [1, 3]}.
 #For the input “froggy”, the output should be: {"f": [0], "r": [1], "o": [2], "g": [3, 4], "y": [5]}.
 #For the input “grapes”, the output should be: {"g": [0], "r": [1], "a": [2], "p": [3], "e": [4], "s": [5]}.
+
+my_word = input("Please enter a word: ")
+word_dict = {}
+
+for (ind, l) in enumerate(my_word):
+    word_dict.setdefault(l, []).append(ind)
+
+print(word_dict)
+
