@@ -76,7 +76,7 @@ print("Total cost is",total_price)
 #Print all keys of the dictionary.
 #Bonus: Create another dictionary called more_on_zara with creation_date and number_stores. Merge this dictionary with the original brand dictionary and print the result.
 
-zara_info = {
+brand = {
                 'name': 'Zara',
                 'creation_date': 1975,
                 'creator_name': 'Amancio Ortega Gaona',
@@ -89,4 +89,12 @@ zara_info = {
                     'US': ['pink', 'green']}
 }
 
-print(zara_info)
+brand['number_stores'] = 2
+print(print(f"Zara's clients: {', '.join(brand['type_of_clothes'])}."))
+brand['country_creation'] = 'Spain'
+if 'international_competitors' in brand:
+    brand['international_competitors'].append('Desigual')
+del brand['creation_date']
+
+
+print(brand)
