@@ -74,7 +74,8 @@ print("Total cost is",total_price)
 #Print the major colors in the US.
 #Print the number of keys in the dictionary.
 #Print all keys of the dictionary.
-#Bonus: Create another dictionary called more_on_zara with creation_date and number_stores. Merge this dictionary with the original brand dictionary and print the result.
+#Bonus: Create another dictionary called more_on_zara with creation_date and number_stores.
+#Merge this dictionary with the original brand dictionary and print the result.
 
 brand = {
                 'name': 'Zara',
@@ -100,4 +101,10 @@ print(f"Major colors in the US: {', '.join(brand['major_color']['US'])}")
 print(f"Number of keys: {len(brand.keys())}")
 print(f"All keys of dictionary: {', '.join(list(brand.keys()))}")
 
+more_on_zara = {
+    'creation_date': 1975,
+    'number_stores': 7000
+}
+
+brand.update(more_on_zara)
 print(brand)
