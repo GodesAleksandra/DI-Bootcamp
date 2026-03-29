@@ -90,11 +90,13 @@ brand = {
 }
 
 brand['number_stores'] = 2
-print(print(f"Zara's clients: {', '.join(brand['type_of_clothes'])}."))
+print(f"Zara's clients: {', '.join(brand['type_of_clothes'])}.")
 brand['country_creation'] = 'Spain'
 if 'international_competitors' in brand:
     brand['international_competitors'].append('Desigual')
 del brand['creation_date']
-
+print(brand['international_competitors'][-1])
+print(f"Major colors in the US: {', '.join(brand['major_color']['US'])}")
+print(f"Number of keys {len(brand.keys())}")
 
 print(brand)
