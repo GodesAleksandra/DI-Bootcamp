@@ -57,4 +57,15 @@ for key, value in items_purchase.items():
 
 wallet = int(wallet.replace('$','').replace(',',''))
 
-print(items_purchase)
+basket = []
+
+for key, value in items_purchase.items():
+    if wallet >= value:
+        basket.append(key)
+        wallet -= value
+basket.sort()
+
+if basket == []:
+    basket.append("Nothing")
+
+print(basket)
