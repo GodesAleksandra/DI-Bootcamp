@@ -48,3 +48,13 @@ print(word_dict)
 #items_purchase = {"Phone": "$999", "Speakers": "$300", "Laptop": "$5,000", "PC": "$1200"}
 #wallet = "$1"
 #The output should be: "Nothing".
+
+items_purchase = {"Water": "$1", "Bread": "$3", "TV": "$1,000", "Fertilizer": "$20"}
+wallet = "$300"
+
+for key, value in items_purchase.items():
+    items_purchase[key] = int(value.replace('$','').replace(',',''))
+
+wallet = int(wallet.replace('$','').replace(',',''))
+
+print(items_purchase)
