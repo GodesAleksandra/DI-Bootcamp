@@ -60,3 +60,26 @@ def generate_random(number):
 
 generate_random(56)
 
+#Exercise 5: Let’s Create Some Personalized Shirts!
+#Goal: Create a function to describe a shirt’s size and message, with default values.
+#Define a function called make_shirt(). This function should accept two parameters: size and text.
+#Set up the function to display a sentence summarizing the shirt’s size and message.
+#Call the Function
+#Modify the make_shirt() function so that size has a default value of “large” and text has a default value of “I love Python”.
+#Call the Function with Default and Custom Values
+#Call make_shirt() to make a large shirt with the default message.
+#Call make_shirt() to make a medium shirt with the default message.
+#Call make_shirt() to make a shirt of any size with a different message.
+#Bonus: Call make_shirt() using keyword arguments (e.g., make_shirt(size="small", text="Hello!")).
+#Expected Output:
+#The size of the shirt is large and the text is I love Python.
+#The size of the shirt is medium and the text is I love Python.
+#The size of the shirt is small and the text is Custom message.
+
+def make_shirt(size="large",text="I love Python"):
+    print(f"The size of the shirt is {size} and the text is {text}")
+
+make_shirt()
+make_shirt('medium')
+make_shirt('extra large','Peace!')
+make_shirt(size="extra small", text="Happy Birthday!")
