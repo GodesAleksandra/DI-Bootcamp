@@ -1,4 +1,5 @@
-myList = [10, 25, 17, 9, 30, -5]
-# Filters the elements which are not multiples of 5
-myList2 = filter(lambda n : n%5 == 0, myList)
-print (myList2)
+t = (1, 2, 3, 4, 5, "a", "b", "c")
+t1 = 1, 2, 3, 4, "g", "l"
+print(t)
+print(t1)
+print(len(t))
