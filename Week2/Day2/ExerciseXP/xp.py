@@ -106,3 +106,8 @@ def show_magicians(magician_names):
         print(name)
 
 def make_great(magician_names):
+    for i in range(len(magician_names)):
+        magician_names[i] += ' the Great'
+
+make_great(magician_names)
+show_magicians(magician_names)
