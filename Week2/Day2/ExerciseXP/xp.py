@@ -86,7 +86,6 @@ make_shirt(size="extra small", text="Happy Birthday!")
 
 #Exercise 6: Magicians…
 #Goal: Modify a list of magician names and display them in different ways.
-#Lists    #for loops    #Modifying lists    #Functions that modify data structures
 #Create a list called magician_names with the given names: ['Harry Houdini', 'David Blaine', 'Criss Angel']
 #Create a function called show_magicians() that takes the magician_names list as a parameter.
 #Inside the function, iterate through the list and print each magician’s name.
@@ -111,3 +110,49 @@ def make_great(magician_names):
 
 make_great(magician_names)
 show_magicians(magician_names)
+
+#Exercise 7: Temperature Advice
+#Goal: Generate a random temperature and provide advice based on the temperature range.
+#Create a function called get_random_temp() that returns a random integer between -10 and 40 degrees Celsius.
+#Create a function called main(). Inside this function:
+#Call get_random_temp() to get a random temperature.
+#Store the temperature in a variable and print a friendly message like:
+#“The temperature right now is 32 degrees Celsius.”
+#Inside main(), provide advice based on the temperature:
+#Below 0°C: e.g., “Brrr, that’s freezing! Wear some extra layers today.”
+#Between 0°C and 16°C: e.g., “Quite chilly! Don’t forget your coat.”
+#Between 16°C and 23°C: e.g., “Nice weather.”
+#Between 24°C and 32°C: e.g., “A bit warm, stay hydrated.”
+#Between 32°C and 40°C: e.g., “It’s really hot! Stay cool.”
+
+
+Step 4: Floating-Point Temperatures (Bonus)
+
+Modify get_random_temp() to return a random floating-point number using random.uniform() for more accurate temperature values.
+
+
+Step 5: Month-Based Seasons (Bonus)
+
+Instead of directly generating a random temperature, ask the user for a month (1-12) and determine the season using if/elif conditions.
+Modify get_random_temp() to return temperatures specific to each season.
+
+
+Expected Output:
+
+The temperature right now is 32 degrees Celsius.
+It's really hot! Stay cool.
+
+Below 0°C: e.g., “Brrr, that’s freezing! Wear some extra layers today.”
+Between 0°C and 16°C: e.g., “Quite chilly! Don’t forget your coat.”
+Between 16°C and 23°C: e.g., “Nice weather.”
+Between 24°C and 32°C: e.g., “A bit warm, stay hydrated.”
+Between 32°C and 40°C: e.g., “It’s really hot! Stay cool.”
+
+import random
+
+def get_random_temp():
+    random.randint(-10, 40)
+
+def main():
+    random_temp = get_random_temp()
+    print(f"The temperature right now is {random_temp} degrees Celsius.")
