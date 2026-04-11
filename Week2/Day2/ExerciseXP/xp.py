@@ -38,3 +38,25 @@ def describe_city(city, country="Unknown"):
 
 describe_city("Reykjavik", "Iceland")
 describe_city("Paris")
+
+#Exercise 4: Random
+#Create a function that generates random numbers and compares them.
+#At the beginning of your script, use import random to access the random number generation functions.
+#Create a function that accepts a number between 1 and 100 as a parameter.
+#Inside the function, use random.randint(1, 100) to generate a random integer between 1 and 100.
+#Compare the Numbers. If they are the same, print a success message. Otherwise, print a fail message and display both numbers.
+#Call the function with a number between 1 and 100.
+#Expected Output: Success! (if the numbers match)
+#Fail! Your number: 50, Random number: 23 (if they don't match)
+
+import random
+
+def generate_random(number):
+    num_random = random.randint(1, 100)
+    if num_random == number:
+        print("Success!")
+    else:
+        print(f"Fail! Your number: {number}, Random number: {num_random}")
+
+generate_random(56)
+
