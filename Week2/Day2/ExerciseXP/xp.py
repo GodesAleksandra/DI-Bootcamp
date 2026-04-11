@@ -21,3 +21,20 @@ def favorite_book(title):
     print(f"One of my favorite books is {title}")
 
 favorite_book('"Harry Potter"')
+
+#Exercise 3: Some Geography
+#Create a function that describes a city and its country.
+#Define a function named describe_city(). This function should accept two parameters: city and country.
+#Give the country parameter a default value, such as “Unknown”.
+#Inside the function, set up the code to display a sentence like “ is in “.
+#Replace <city> and <country> with the parameter values.
+#Call the describe_city() function with different city and country combinations.
+#Try calling it with and without providing the country argument to see the default value in action.
+#Example: describe_city("Reykjavik", "Iceland") and describe_city("Paris").
+#Expected Output: Reykjavik is in Iceland. Paris is in Unknown.
+
+def describe_city(city, country="Unknown"):
+    print(f"{city} is in {country}")
+
+describe_city("Reykjavik", "Iceland")
+describe_city("Paris")
