@@ -83,3 +83,26 @@ make_shirt()
 make_shirt('medium')
 make_shirt('extra large','Peace!')
 make_shirt(size="extra small", text="Happy Birthday!")
+
+#Exercise 6: Magicians…
+#Goal: Modify a list of magician names and display them in different ways.
+#Lists    #for loops    #Modifying lists    #Functions that modify data structures
+#Create a list called magician_names with the given names: ['Harry Houdini', 'David Blaine', 'Criss Angel']
+#Create a function called show_magicians() that takes the magician_names list as a parameter.
+#Inside the function, iterate through the list and print each magician’s name.
+#Create a function called make_great() that takes the magician_names list as a parameter.
+#Inside the function, use a for loop to iterate through the list and add “the Great” before each magician’s name.
+#Call make_great() to modify the list.
+#Call show_magicians() to display the modified list.
+#Expected Output:
+#Harry Houdini the Great
+#David Blaine the Great
+#Criss Angel the Great
+
+magician_names = ['Harry Houdini', 'David Blaine', 'Criss Angel']
+
+def show_magicians(magician_names):
+    for name in magician_names:
+        print(name)
+
+def make_great(magician_names):
