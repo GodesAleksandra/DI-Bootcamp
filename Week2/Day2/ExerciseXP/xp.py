@@ -124,34 +124,36 @@ show_magicians(magician_names)
 #Between 16°C and 23°C: e.g., “Nice weather.”
 #Between 24°C and 32°C: e.g., “A bit warm, stay hydrated.”
 #Between 32°C and 40°C: e.g., “It’s really hot! Stay cool.”
-
-
-Step 4: Floating-Point Temperatures (Bonus)
-
-Modify get_random_temp() to return a random floating-point number using random.uniform() for more accurate temperature values.
-
-
-Step 5: Month-Based Seasons (Bonus)
-
-Instead of directly generating a random temperature, ask the user for a month (1-12) and determine the season using if/elif conditions.
-Modify get_random_temp() to return temperatures specific to each season.
-
-
-Expected Output:
-
-The temperature right now is 32 degrees Celsius.
-It's really hot! Stay cool.
-
-Below 0°C: e.g., “Brrr, that’s freezing! Wear some extra layers today.”
-Between 0°C and 16°C: e.g., “Quite chilly! Don’t forget your coat.”
-Between 16°C and 23°C: e.g., “Nice weather.”
-Between 24°C and 32°C: e.g., “A bit warm, stay hydrated.”
-Between 32°C and 40°C: e.g., “It’s really hot! Stay cool.”
+#Bonus: Modify get_random_temp() to return a random floating-point number using random.uniform() for more accurate temperature values.
+#Bonus: Instead of directly generating a random temperature, ask the user for a month (1-12) and determine the season using if/elif conditions.
+#Modify get_random_temp() to return temperatures specific to each season.
+#Expected Output:
+#The temperature right now is 32 degrees Celsius.
+#It's really hot! Stay cool.
 
 import random
 
+month_input = int(input("Please enter a month (1-12) "))
+
+if month_input in (12,1,2):
+    season = "winter"
+elif month_input in (3,4,5):
+    season = "spring"
+elif month_input in (6,7,8):
+    season = "summer"
+elif month_input in (9,10,11):
+    season = "autumn"
+
 def get_random_temp():
-    random.randint(-10, 40)
+    if season == "winter":
+        temp_random = random.uniform(-10, 5)
+    elif season == "spring":
+        temp_random = random.uniform(10, 25)
+    elif season == "summer":
+        temp_random = random.uniform(25, 40)
+    elif season == "autumn":
+        temp_random = random.uniform(5, 20)
+    return temp_random
 
 def main():
     random_temp = get_random_temp()
@@ -166,3 +168,5 @@ def main():
         print("Quite chilly! Don’t forget your coat.")
     elif 32 <= random_temp < 40:
         print("It’s really hot! Stay cool.")
+
+main()
