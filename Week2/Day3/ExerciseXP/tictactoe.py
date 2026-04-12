@@ -39,3 +39,17 @@
 #After the loop ends, display the final result (winner or tie).
 
 
+board = [[" " for _ in range(3)] for _ in range(3)]
+
+def display_board(board):
+    for row in board:
+        print("|".join(row))
+        print("-|-|-")
+
+def player_input(player):
+    row = int(input("Enter row: "))
+    column = int(input("Enter column: "))
+    return row,column
+
+
+display_board(board)
