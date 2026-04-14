@@ -38,18 +38,46 @@
 #Switch to the next player.
 #After the loop ends, display the final result (winner or tie).
 
-
-board = [[" " for _ in range(3)] for _ in range(3)]
-
 def display_board(board):
     for row in board:
         print("|".join(row))
         print("-|-|-")
 
 def player_input(player):
-    row = int(input("Enter row: "))
-    column = int(input("Enter column: "))
+    row = int(input(f"Player {player}, enter row: "))
+    column = int(input(f"Player {player}, enter column: "))
     return row,column
 
+def check_win(board, player):
+    for i in range(3):
+        if all(board[i][j] == player for j in range(3)) or all(board[j][i] == player for j in range(3)):
+            return True
+    if all(board[i][i] == player for i in range(3)) or all(board[i][2 - i] == player for i in range(3)):
+        return True
+    return False
 
-display_board(board)
+def is_tie(board):
+    if all(" " not in row for row in board):
+        return True
+
+def play():
+    board = [[" " for _ in range(3)] for _ in range(3)]
+    players = ['O', 'X']
+    current_player = 0
+    display_board(board)
+    while check_win(board, players[current_player]) != True or is_tie(board) != True:
+        row, col = player_input(players[current_player])
+        if board[row][col] != " ":
+            print("Position already taken.")
+            continue
+        board[row][col] = players[current_player]
+        display_board(board)
+        if check_win(board, players[current_player]):
+            print(f"{players[current_player]} wins!")
+            break
+        if is_tie(board):
+            print("It's tie!")
+            break
+        current_player = (current_player + 1) % 2
+
+play()
