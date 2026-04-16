@@ -152,15 +152,11 @@ my_dog.do_a_trick()
 #It should create a new Person object with the given first name and age.
 #It should assign the family’s last name to the person.
 #It should add this new person to the members list.
-
-
-Add a method called check_majority(first_name):
-It should search the members list for a person with that first_name.
-If the person exists, call their is_18() method.
-If the person is over 18, print:
-"You are over 18, your parents Jane and John accept that you will go out with your friends"
-Otherwise, print:
-"Sorry, you are not allowed to go out with your friends."
+#Add a method called check_majority(first_name):
+#It should search the members list for a person with that first_name.
+#If the person exists, call their is_18() method.
+#If the person is over 18, print: "You are over 18, your parents Jane and John accept that you will go out with your friends"
+#Otherwise, print: "Sorry, you are not allowed to go out with your friends."
 
 
 Add a method called family_presentation():
@@ -177,11 +173,11 @@ Add members to the family using the born() method.
 Use check_majority() to see if someone is allowed to go out.
 Display family information with family_presentation().
 
-
-# Add a method called born(first_name, age):
-# It should create a new Person object with the given first name and age.
-# It should assign the family’s last name to the person.
-# It should add this new person to the members list.
+#Add a method called check_majority(first_name):
+#It should search the members list for a person with that first_name.
+#If the person exists, call their is_18() method.
+#If the person is over 18, print: "You are over 18, your parents Jane and John accept that you will go out with your friends"
+#Otherwise, print: "Sorry, you are not allowed to go out with your friends."
 
 
 class Person:
@@ -196,9 +192,13 @@ class Person:
         else:
             return False
 
-class Family:
+class Family(Person):
     def __init__(self, last_name, members):
+        super().__init__(first_name, age)
         self.last_name = last_name
         self.members = []
 
     def born(first_name, age):
+        person = Person(first_name, age)
+        person.last_name = self.last_name
+        self.members.append(person)
