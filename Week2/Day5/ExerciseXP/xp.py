@@ -44,11 +44,7 @@ class Siamese(Cat):
     def sing(self, sounds):
         return f'{sounds}'
 
-all_cats = [bengal_obj, chartreux_obj, siamese_obj]
-
-bengal_obj = {"name": "Alice", "age": 2}
-chartreux_obj = {"name": "Baby", "age": 1}
-siamese_obj = {"name": "Monika", "age": 5}
+all_cats = [Bengal("Alice",2), Chartreux("Baby",1), Siamese("Monika",5)]
 
 sara_pets = Pets(all_cats)
 sara_pets.walk()
