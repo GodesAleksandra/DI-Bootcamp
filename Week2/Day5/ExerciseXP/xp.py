@@ -84,7 +84,8 @@ dog1 = Dog("Jo", 2, 15)
 dog2 = Dog("Baby", 1, 12)
 dog3 = Dog("Rich", 5, 18)
 
-# Step 3: Test dog methods
 print(dog1.bark())
 print(dog2.run_speed())
 print(dog3.fight(dog2))
+
+
