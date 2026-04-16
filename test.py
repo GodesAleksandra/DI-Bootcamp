@@ -1,12 +1,15 @@
-#Using map and filter, try to say hello to everyone who's name is less than or equal to 4 letters
+class Person():
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
 
-people = ["Rick", "Morty", "Beth", "Jerry", "Snowball"]
+  def show_details(self):
+    print("Hello my name is " + self.name)
 
-def length_less_4(s):
-    return len(s) <= 4
+  def edit_name(self, new_name):
+    self.name = new_name
 
-filtered_object = filter(length_less_4, people)
-
-names_greeting = map(lambda name: print(f"Hello {name}"),filtered_object)
-
-print(list(names_greeting))
+first_person = Person("John", 36)
+first_person.show_details()
+first_person.edit_name("George")
+first_person.show_details()
