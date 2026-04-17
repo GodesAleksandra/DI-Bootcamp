@@ -157,48 +157,57 @@ my_dog.do_a_trick()
 #If the person exists, call their is_18() method.
 #If the person is over 18, print: "You are over 18, your parents Jane and John accept that you will go out with your friends"
 #Otherwise, print: "Sorry, you are not allowed to go out with your friends."
+#Add a method called family_presentation():
+#It should print the family’s last name.
+#Then, it should print each family member’s first name and age.
+#Once implemented, your program should allow you to:
+#Create a family with a last name.
+#Add members to the family using the born() method.
+#Use check_majority() to see if someone is allowed to go out.
+#Display family information with family_presentation().
 
 
-Add a method called family_presentation():
-It should print the family’s last name.
-Then, it should print each family member’s first name and age.
-
-
-Expected Behavior:
-
-Once implemented, your program should allow you to:
-
-Create a family with a last name.
-Add members to the family using the born() method.
-Use check_majority() to see if someone is allowed to go out.
-Display family information with family_presentation().
-
-#Add a method called check_majority(first_name):
-#It should search the members list for a person with that first_name.
-#If the person exists, call their is_18() method.
-#If the person is over 18, print: "You are over 18, your parents Jane and John accept that you will go out with your friends"
-#Otherwise, print: "Sorry, you are not allowed to go out with your friends."
-
-
-class Person:
+class Person():
     def __init__(self, first_name, age, last_name):
         self.first_name = first_name
         self.age = age
         self.last_name = ""
 
-    def is_18():
+    def is_18(self):
         if self.age >= 18:
             return True
         else:
             return False
 
 class Family(Person):
-    def __init__(self, last_name, members):
-        super().__init__(first_name, age)
+    def __init__(self, last_name):
+        #super().__init__(first_name, age)
         self.last_name = last_name
         self.members = []
 
-    def born(first_name, age):
-        person = Person(first_name, age)
+    def born(self, first_name, age):
+        person = Person(first_name, age, "")
         person.last_name = self.last_name
         self.members.append(person)
+
+    def check_majority(self, first_name):
+        for member in self.members:
+            if member.first_name == first_name:
+                if member.is_18():
+                    print("You are over 18, your parents Jane and John accept that you will go out with your friends")
+                else:
+                    print("Sorry, you are not allowed to go out with your friends.")
+
+    def family_presentation(self):
+        print(self.last_name)
+        for member in self.members:
+            print(f"{member.first_name}, {member.age}")
+
+my_family = Family("Godes")
+my_family.born("Aleksandra", 18)
+my_family.born("Stanislav", 20)
+my_family.born("Dan", 1)
+my_family.born("Nika", 12)
+my_family.check_majority("Aleksandra")
+my_family.check_majority("Dan")
+my_family.family_presentation()
