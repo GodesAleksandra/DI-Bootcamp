@@ -42,10 +42,14 @@ class Pagination:
         self.current_items = self.get_visible_items()
 
     def get_visible_items(self):
-        return self.items[self.current_idx:self.current_idx+self.page_size]
+        start_index = self.current_idx * self.page_size
+        end_index = start_index + self.page_size
+        return self.items[start_index:end_index]
 
     def go_to_page(self, page_num):
-        if page_num > self.total_pages:
+        if page_num <= 0:
+            raise ValueError("Number of page is less than 1")
+        elif page_num > self.total_pages:
             raise ValueError("Number of page is bigger than amount of total pages")
         else:
             self.current_idx = page_num - 1
@@ -73,3 +77,25 @@ class Pagination:
             self.current_idx -= 1
             self.current_items = self.get_visible_items()
         return self
+
+alphabetList = list("abcdefghijklmnopqrstuvwxyz")
+p = Pagination(alphabetList, 4)
+
+print(p.get_visible_items())
+# ['a', 'b', 'c', 'd']
+
+p.next_page()
+print(p.get_visible_items())
+# ['e', 'f', 'g', 'h']
+
+p.last_page()
+print(p.get_visible_items())
+# ['y', 'z']
+
+p.go_to_page(10)
+print(p.current_idx + 1)
+# Output: ValueError
+
+p.go_to_page(0)
+print(p.current_idx + 1)
+# Raises ValueError
