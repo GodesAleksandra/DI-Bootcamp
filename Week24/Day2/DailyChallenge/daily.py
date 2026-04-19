@@ -39,7 +39,7 @@ class Pagination:
         self.page_size = page_size
         self.current_idx = 0
         self.total_pages = math.ceil(len(self.items)/self.page_size)
-        self.current_items = self.get_visible_items()
+        #self.current_items = self.get_visible_items()
 
     def get_visible_items(self):
         start_index = self.current_idx * self.page_size
@@ -53,29 +53,29 @@ class Pagination:
             raise ValueError("Number of page is bigger than amount of total pages")
         else:
             self.current_idx = page_num - 1
-            self.current_items = self.get_visible_items()
+            #self.current_items = self.get_visible_items()
         return self
 
     def first_page(self):
         self.current_idx = 0
-        self.current_items = self.get_visible_items()
+        #self.current_items = self.get_visible_items()
         return self
 
     def last_page(self):
-        self.current_idx = self.total_pages
-        self.current_items = self.get_visible_items()
+        self.current_idx = self.total_pages - 1
+        #self.current_items = self.get_visible_items()
         return self
 
     def next_page(self):
-        if self.current_idx < self.total_pages:
+        if self.current_idx < self.total_pages - 1:
             self.current_idx += 1
-            self.current_items = self.get_visible_items()
+            #self.current_items = self.get_visible_items()
         return self
 
     def previous_page(self):
         if self.current_idx > 0:
             self.current_idx -= 1
-            self.current_items = self.get_visible_items()
+            #self.current_items = self.get_visible_items()
         return self
 
 alphabetList = list("abcdefghijklmnopqrstuvwxyz")
