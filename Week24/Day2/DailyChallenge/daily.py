@@ -17,25 +17,19 @@
 #Step 4: Implement Navigation Methods
 #These methods should help navigate through pages:
 #go_to_page(page_num)
-→ Goes to the specified page number (1-based indexing).
-→ If page_num is out of range, raise a ValueError.
+#→ Goes to the specified page number (1-based indexing).
+#→ If page_num is out of range, raise a ValueError.
+#first_page()
+#→ Navigates to the first page.
+#last_page()
+#→ Navigates to the last page.
 
-first_page()
-→ Navigates to the first page.
-
-last_page()
-→ Navigates to the last page.
-
-next_page()
-→ Moves one page forward (if not already on the last page).
-
-previous_page()
-→ Moves one page backward (if not already on the first page).
-
-📝 Note:
-
-Pages are indexed internally from 0, but user input is expected to start at 1.
-All navigation methods (except go_to_page) should return self to allow method chaining.
+#next_page()
+#→ Moves one page forward (if not already on the last page).
+#previous_page()
+#→ Moves one page backward (if not already on the first page).
+#Pages are indexed internally from 0, but user input is expected to start at 1.
+#All navigation methods (except go_to_page) should return self to allow method chaining.
 
 import math
 
@@ -44,10 +38,22 @@ class Pagination:
         self.items = items or []
         self.page_size = page_size
         self.current_idx = 0
-        self.total_pages = math.ceil()
+        self.total_pages = math.ceil(len(self.items)/self.page_size)
 
     def get_visible_items(self):
         return self.items[self.current_idx:self.current_idx+self.page_size]
 
     def go_to_page(self, page_num):
+        if page_num > self.total_pages:
+            raise ValueError("Number of page is bigger than amount of total pages")
+        else:
+            self.current_idx = page_num - 1
+        return self
 
+    def first_page(self):
+        self.current_idx = 0
+        return self
+
+    def last_page(self):
+        self.current_idx = self.total_pages
+        return self
