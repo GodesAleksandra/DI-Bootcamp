@@ -57,3 +57,13 @@ class Pagination:
     def last_page(self):
         self.current_idx = self.total_pages
         return self
+
+    def next_page(self):
+        if self.current_idx < self.total_pages:
+            self.current_idx += 1
+        return self
+
+    def previous_page(self):
+        if self.current_idx > 0:
+            self.current_idx -= 1
+        return self
