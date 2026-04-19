@@ -16,8 +16,7 @@
 #Use slicing based on the current_idx and page_size.
 #Step 4: Implement Navigation Methods
 #These methods should help navigate through pages:
-
-go_to_page(page_num)
+#go_to_page(page_num)
 → Goes to the specified page number (1-based indexing).
 → If page_num is out of range, raise a ValueError.
 
@@ -50,4 +49,5 @@ class Pagination:
     def get_visible_items(self):
         return self.items[self.current_idx:self.current_idx+self.page_size]
 
-    def go_to_page(page_num):
+    def go_to_page(self, page_num):
+
