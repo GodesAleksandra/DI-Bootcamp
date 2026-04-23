@@ -30,10 +30,10 @@ for (let i = 0; i < people.length; i++) {
     console.log(people[i])
 }
 for (let i = 0; i < people.length; i++) {
+    console.log(people[i])
     if (people[i] == 'Devon') {
         break;
     }
-    console.log(people[i])
 }
 
 console.log(people);
