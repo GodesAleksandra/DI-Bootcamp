@@ -19,5 +19,8 @@
 const people = ["Greg", "Mary", "Devon", "James"];
 people.splice(0, 1);
 people[2] = "Jason";
+people.push("Aleksandra");
+const index = people.indexOf("Mary");
+console.log(index); // Output: 2
 
 console.log(people);
