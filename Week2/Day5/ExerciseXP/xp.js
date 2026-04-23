@@ -26,5 +26,8 @@ console.log(people_copy);
 console.log(people.indexOf("Foo"));
 let last = people[people.length - 1];
 console.log(last);
+for (let i = 0; i < people.length; i++) {
+    console.log(people[i])
+}
 
 console.log(people);
