@@ -5,6 +5,24 @@
     <title>Title</title>
 </head>
 <body>
-<script>console.log('Hi!')</script>
+    <form id="form1" onsubmit="getvalue(event)">
+        <label>First name: </label><input type="text" name="fname" value="David"><br>
+        <label>Last name: </label><input type="text" name="lname" value="BenGurion"><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+
+            form.addEventListener("submit", getvalue)
+
+            function getvalue(event){
+                event.preventDefault();
+                const form = document.getElementById('form1');
+                const firstName = form.elements['fname'];
+                const lastName = form.elements['lname'];
+
+                console.log();
+            }
+    </script>
 </body>
 </html>

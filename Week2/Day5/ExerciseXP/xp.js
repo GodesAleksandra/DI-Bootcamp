@@ -17,3 +17,6 @@
 
 
 const people = ["Greg", "Mary", "Devon", "James"];
+people[2] = "Jason";
+
+console.log(people);
