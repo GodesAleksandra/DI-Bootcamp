@@ -21,7 +21,7 @@ people.splice(0, 1);
 people[2] = "Jason";
 people.push("Aleksandra");
 console.log(people.indexOf("Mary"));
-const new_people = people.slice(1,1);
+let people_copy = people.slice(1,2);
 
-console.log(new_people);
+console.log(people_copy);
 console.log(people);
