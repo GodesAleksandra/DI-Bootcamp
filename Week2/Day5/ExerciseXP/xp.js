@@ -17,6 +17,7 @@
 
 
 const people = ["Greg", "Mary", "Devon", "James"];
+colors.splice(0, 1);
 people[2] = "Jason";
 
 console.log(people);
