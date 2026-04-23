@@ -20,7 +20,8 @@ const people = ["Greg", "Mary", "Devon", "James"];
 people.splice(0, 1);
 people[2] = "Jason";
 people.push("Aleksandra");
-const index = people.indexOf("Mary");
-console.log(index); // Output: 2
+console.log(people.indexOf("Mary"));
+const new_people = people.slice(1,1);
 
+console.log(new_people);
 console.log(people);
