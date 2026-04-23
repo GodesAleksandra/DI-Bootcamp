@@ -22,6 +22,9 @@ people[2] = "Jason";
 people.push("Aleksandra");
 console.log(people.indexOf("Mary"));
 let people_copy = people.slice(1,3);
-
 console.log(people_copy);
+console.log(people.indexOf("Foo"));
+let last = people[people.length - 1];
+console.log(last);
+
 console.log(people);
