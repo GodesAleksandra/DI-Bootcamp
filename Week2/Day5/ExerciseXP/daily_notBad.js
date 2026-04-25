@@ -15,7 +15,7 @@ Your string is : 'This dinner is not that bad ! You cook well',
   Your string is : 'This dinner is bad !'
   --> the result is : 'This dinner is bad !'*/
 
-let sentence = "This dinner is not that bad ! You cook well";
+let sentence = "This movie is not so bad !";
 let wordNot = sentence.indexOf("not");
 let wordBad = sentence.indexOf("bad");
 let new_sentence = '';
