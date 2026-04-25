@@ -105,7 +105,7 @@ Using a for in loop, console.log the keys of the object.
 Using a for in loop, console.log the values of the object.*/
 
 family = {surname:"Black", members: ["Ben","Kate","John","Anna"], members_count:4, children_count: 2};
-let fam_keys, fam_val;
+let fam_keys = '', fam_val = '';
 
 for (let x in family) {
     fam_keys = fam_keys + ', ' + x;
