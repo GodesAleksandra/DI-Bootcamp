@@ -112,5 +112,5 @@ for (let x in family) {
     fam_val = fam_val + ', ' + family[x];
 }
 
-console.log("Keys: " + fam_keys);
+console.log("Keys: " + fam_keys.replace(/^, /, ''));
 console.log("Values: " + fam_val);
