@@ -12,10 +12,10 @@ Do this Daily Challenge by yourself, without looking at the answers on the inter
 
 let star = '';
 
-/*for (let i = 1; i < 7; i++) {
+for (let i = 1; i < 7; i++) {
     star += "*";
     console.log(star);
-}*/
+}
 
 for (let i = 1; i < 7; i++) {
     star = '';
