@@ -93,4 +93,4 @@ console.log("Number of floors: " + building.numberOfFloors);
 console.log("On the 1 floor " + building.numberOfAptByFloor.firstFloor + " apartments");
 console.log("On the 3 floor " + building.numberOfAptByFloor.thirdFloor + " apartments");
 console.log("The name of the second tenant is " + building.nameOfTenants[1] +
-    " and the number of rooms he has is " + building.numberOfRoomsAndRent[1][0]);
+    " and the number of rooms he has is " + building.numberOfRoomsAndRent.dan[0]);
