@@ -69,6 +69,7 @@ function myBill() {
             stock[x] -= 1;
         }
     }
+    console.log(prices);
 }
 
-console.log(prices);
+myBill();
