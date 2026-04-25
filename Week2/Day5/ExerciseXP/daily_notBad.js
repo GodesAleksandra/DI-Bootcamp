@@ -20,7 +20,7 @@ let wordNot = sentence.indexOf("not");
 let wordBad = sentence.indexOf("bad");
 let new_sentence = '';
 
-if (wordBad > wordNot) {
+if (wordBad > wordNot && wordBad !== -1 && wordNot !== -1) {
     new_sentence = sentence.substring(0,wordNot) + 'good' + sentence.substring(wordBad + 3);
 } else new_sentence = sentence;
 
