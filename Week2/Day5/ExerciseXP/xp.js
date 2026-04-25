@@ -139,7 +139,7 @@ Console.log the name of their secret society. The output should be “ABJKPS”*
 
 const names = ["Jack", "Philip", "Sarah", "Amanda", "Bernard", "Kyle"];
 let society_name = '';
-names = names.sort();
+names.sort();
 
 for (let n in names) {
     console.log(names[n]);
