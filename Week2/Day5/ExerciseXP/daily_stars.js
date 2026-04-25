@@ -17,7 +17,6 @@ let star = '';
     console.log(star);
 }*/
 
-let star;
 for (let i = 1; i < 7; i++) {
     star = '';
     for (let j = 1; j < i + 1; j++) {
