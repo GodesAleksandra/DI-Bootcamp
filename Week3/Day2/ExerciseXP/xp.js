@@ -26,3 +26,5 @@ function displayNumbersDivisible() {
     }
     console.log("Sum: " + sum);
 }
+
+displayNumbersDivisible();
