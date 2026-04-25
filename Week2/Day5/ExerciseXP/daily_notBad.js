@@ -13,7 +13,7 @@ let wordBad = sentence.indexOf("bad");
 let new_sentence = '';
 
 if (wordBad > wordNot) {
-    new_sentence = str.substring(0,wordNot + 2) + ' good ' + str.substring(wordBad + 2);
+    new_sentence = sentence.substring(0,wordNot + 2) + ' good ' + sentence.substring(wordBad + 2);
 } else new_sentence = sentence;
 
 console.log(new_sentence);
