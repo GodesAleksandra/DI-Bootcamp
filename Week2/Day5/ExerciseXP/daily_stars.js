@@ -10,6 +10,9 @@ Do this Daily Challenge by yourself, without looking at the answers on the inter
 * * * * * *
 */
 
+let star = '';
+
 for (let i = 1; i < 7; i++) {
-    console.log("*"*i);
+    star += "*";
+    console.log(star);
 }
