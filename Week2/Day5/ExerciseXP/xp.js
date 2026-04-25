@@ -60,9 +60,9 @@ let num;
 while (true) {
     num = Number(prompt('Please enter a number'));
 
-    try (typeof num !=== "number") {
+    try (typeof num === "number") {
         if (num >= 10) break;
     } catch {
-        alert("It's not a number!")
+        alert("It's not a number!");
     }
 }
