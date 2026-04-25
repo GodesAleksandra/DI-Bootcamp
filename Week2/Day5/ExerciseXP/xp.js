@@ -47,3 +47,14 @@ suffixes = ["st","nd","rd","th","th"];
 for (let i = 0; i < colors.length; i++) {
     console.log("My "+(i+1)+suffixes[i]+" choice is "+colors[i]);
 }
+
+/* Exercise 3 : Repeat the question
+Prompt the user for a number.
+Hint : Check the data type you receive from the prompt (ie. Use the typeof method)
+While the number is smaller than 10 continue asking the user for a new number.
+Tip : Which while loop is more relevant for this situation?*/
+
+let num = prompt('Please enter a number');
+if (typeof num == "Number") {
+    console.log("nmn.")
+}
