@@ -106,7 +106,7 @@ Using a for in loop, console.log the values of the object.*/
 
 family = {surname:"Black", members: ["Ben","Kate","John","Anna"], members_count:4, children_count: 2};
 
-for x in family {
+for (let x in family) {
     console.log(x);
     console.log(family[x]);
 }
