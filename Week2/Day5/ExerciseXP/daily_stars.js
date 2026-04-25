@@ -16,3 +16,10 @@ for (let i = 1; i < 7; i++) {
     star += "*";
     console.log(star);
 }
+
+
+for (let i = 1; i < 7; i++) {
+    for (let j = 1; j < 7; j++) {
+        console.log('*');
+    }
+}
