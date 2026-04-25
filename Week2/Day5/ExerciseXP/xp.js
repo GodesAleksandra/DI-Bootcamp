@@ -42,7 +42,8 @@ Loop through the array and as you loop console.log a string like so: “My #1 ch
 Bonus: Change it to console.log “My 1st choice”, “My 2nd choice”, “My 3rd choice”, picking the correct suffix for each number.
 Hint : create an array of suffixes to do the Bonus*/
 
-colors = ["blue","green","yellow","violet","grey"]
+colors = ["blue","green","yellow","violet","grey"];
+suffixes = ["st","nd","rd","th","th"];
 for (let i = 0; i < colors.length; i++) {
-    console.log("My #"+(i+1)+" choice is "+colors[i]);
+    console.log("My "+(i+1)+suffixes[i]+" choice is "+colors[i]);
 }
