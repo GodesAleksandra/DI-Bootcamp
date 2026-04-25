@@ -54,8 +54,15 @@ Hint : Check the data type you receive from the prompt (ie. Use the typeof metho
 While the number is smaller than 10 continue asking the user for a new number.
 Tip : Which while loop is more relevant for this situation?*/
 
-let num = Number(prompt('Please enter a number'));
-if (typeof num === "number") {
-    console.log("nmn.")
+//let num = Number(prompt('Please enter a number'));
+let num;
+
+while (true) {
+    num = Number(prompt('Please enter a number'));
+
+    try (typeof num !=== "number") {
+        if (num >= 10) break;
+    } catch {
+        alert("It's not a number!")
+    }
 }
-console.log(typeof num);
