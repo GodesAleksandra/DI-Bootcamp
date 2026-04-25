@@ -97,3 +97,4 @@ console.log("The name of the second tenant is " + building.nameOfTenants[1] +
 if ((building.numberOfRoomsAndRent.sarah[1] + building.numberOfRoomsAndRent.david[1]) > building.numberOfRoomsAndRent.dan[1]) {
      building.numberOfRoomsAndRent.dan[1] = 1200;
 }
+console.log(building.numberOfRoomsAndRent.dan[1]);
