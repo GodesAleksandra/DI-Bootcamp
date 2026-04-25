@@ -12,13 +12,14 @@ Do this Daily Challenge by yourself, without looking at the answers on the inter
 
 let star = '';
 
-for (let i = 1; i < 7; i++) {
+/*for (let i = 1; i < 7; i++) {
     star += "*";
     console.log(star);
-}
+}*/
 
-
+let star;
 for (let i = 1; i < 7; i++) {
+    star = '';
     for (let j = 1; j < i + 1; j++) {
         star += "*";
     }
