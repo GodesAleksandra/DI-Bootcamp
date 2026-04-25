@@ -44,5 +44,5 @@ Hint : create an array of suffixes to do the Bonus*/
 
 colors = ["blue","green","yellow","violet","grey"]
 for (let i = 0; i < colors.length; i++) {
-    console.log("My #"+i+" choice is "+colors[i]);
+    console.log("My #"+(i+1)+" choice is "+colors[i]);
 }
