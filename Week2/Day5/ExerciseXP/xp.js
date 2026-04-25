@@ -124,6 +124,10 @@ const details = {
   the: 'reindeer'
 }
 
+let str = '';
+
 for (let x in details) {
-    console.log(x + ' ' + details[x]);
+    str = str + ' ' + x + ' ' + details[x];
 }
+
+console.log(str);
