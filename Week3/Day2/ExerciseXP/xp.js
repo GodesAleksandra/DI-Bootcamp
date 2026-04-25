@@ -16,10 +16,10 @@ displayNumbersDivisible(45) : Console.log all the numbers divisible by 45,
 and their sum
 */
 
-function displayNumbersDivisible() {
+function displayNumbersDivisible(divisor) {
     let sum = 0;
     for (let i=0; i < 501; i++) {
-        if (i % 23 === 0) {
+        if (i % divisor === 0) {
             console.log(i);
             sum += i;
         }
@@ -27,4 +27,5 @@ function displayNumbersDivisible() {
     console.log("Sum: " + sum);
 }
 
-displayNumbersDivisible();
+displayNumbersDivisible(3);
+displayNumbersDivisible(45);
