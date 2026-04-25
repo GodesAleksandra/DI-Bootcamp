@@ -114,3 +114,16 @@ for (let x in family) {
 
 console.log("Keys: " + fam_keys.replace(/^, /, ''));
 console.log("Values: " + fam_val.replace(/^, /, ''));
+
+/*Exercise 6 : Rudolf
+Given the object above and using a for loop, console.log “my name is Rudolf the reindeer”*/
+
+const details = {
+  my: 'name',
+  is: 'Rudolf',
+  the: 'reindeer'
+}
+
+for (let x in details) {
+    console.log(x + ' ' + details[x]);
+}
