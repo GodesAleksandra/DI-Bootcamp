@@ -130,4 +130,4 @@ for (let x in details) {
     str = str + ' ' + x + ' ' + details[x];
 }
 
-console.log(str);
+console.log(str.replace(/^ /, ''));
