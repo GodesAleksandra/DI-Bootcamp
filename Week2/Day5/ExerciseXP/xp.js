@@ -58,3 +58,4 @@ let num = prompt('Please enter a number');
 if (typeof num === "Number") {
     console.log("nmn.")
 }
+console.log(typeof num);
