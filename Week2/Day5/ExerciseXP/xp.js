@@ -142,6 +142,6 @@ let society_name = '';
 names.sort();
 
 for (let n in names) {
-    console.log(names[n]);
+    console.log(names[n][0]);
 }
 console.log(society_name);
