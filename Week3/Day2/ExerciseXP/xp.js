@@ -27,5 +27,6 @@ function displayNumbersDivisible(divisor) {
     console.log("Sum: " + sum);
 }
 
+displayNumbersDivisible(23);
 displayNumbersDivisible(3);
 displayNumbersDivisible(45);
