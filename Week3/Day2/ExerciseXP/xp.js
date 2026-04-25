@@ -67,6 +67,7 @@ function myBill() {
     for (let x in stock) {
         if (x in shoppingList) {
             stock[x] -= 1;
+            console.log(stock[x]);
         }
     }
     console.log(stock);
