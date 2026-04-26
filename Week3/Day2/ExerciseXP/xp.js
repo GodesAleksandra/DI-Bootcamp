@@ -67,15 +67,13 @@ function myBill() {
     for (let x in shoppingList) {
         //console.log(x);
         for (let y in stock) {
-            if (shoppingList[x] == y) {
+            if (shoppingList[x] == y && stock[y] >= 1) {
                 stock[y] -= 1;
-                /*console.log(shoppingList[x]);
-                console.log(y);
-                console.log(stock[y]);*/
+                total_price += prices[x];
             }
         }
     }
-    console.log(stock);
+    console.log(total_price);
 }
 
 myBill();
