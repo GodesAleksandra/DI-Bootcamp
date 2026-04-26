@@ -69,8 +69,10 @@ function myBill() {
         for (let y in stock) {
             if (shoppingList[x] == y && stock[y] >= 1) {
                 stock[y] -= 1;
-                console.log(prices[x]);
-                //total_price += prices[x];
+                //console.log(prices[x]);
+                for (let z in prices) {
+                    total_price += prices[z];
+                }
             }
         }
     }
