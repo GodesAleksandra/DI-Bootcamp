@@ -64,11 +64,14 @@ let shoppingList = ["banana", "orange", "apple"];
 let total_price;
 
 function myBill() {
-    for (let x in stock) {
-        console.log(x);
-        if (x in shoppingList) {
-            stock[x] -= 1;
-            console.log(stock[x]);
+    for (let x in shoppingList) {
+        //console.log(x);
+        for (let y in stock) {
+        /*if (stock.includes(x) x in shoppingList) {
+            stock[x] -= 1;*/
+            console.log(x);
+            console.log(y);
+            console.log(stock[y]);
         }
     }
     console.log(stock);
