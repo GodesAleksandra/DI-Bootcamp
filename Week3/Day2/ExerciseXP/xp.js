@@ -61,7 +61,7 @@ const prices = {
 
 let shoppingList = ["banana", "orange", "apple"];
 
-let total_price;
+let total_price = 0;
 
 function myBill() {
     for (let x in shoppingList) {
