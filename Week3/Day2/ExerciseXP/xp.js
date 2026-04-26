@@ -65,18 +65,14 @@ let total_price = 0;
 
 function myBill() {
     for (let x in shoppingList) {
-        //console.log(x);
         for (let y in stock) {
-            if (shoppingList[x] == y && stock[y] >= 1) {
+            if (shoppingList[x] == y && stock[y] > 0) {
                 stock[y] -= 1;
-                //console.log(prices[x]);
-                for (let z in prices) {
-                    console.log(prices[z]);
-                    total_price += prices[z];
-                }
+                total_price += prices[y];
             }
         }
     }
+    console.log(stock);
     console.log(total_price);
 }
 
