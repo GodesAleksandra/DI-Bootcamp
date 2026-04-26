@@ -67,11 +67,11 @@ function myBill() {
     for (let x in shoppingList) {
         //console.log(x);
         for (let y in stock) {
-        /*if (stock.includes(x) x in shoppingList) {
-            stock[x] -= 1;*/
-            console.log(shoppingList[x]);
+        if (shoppingList[x] == y) {
+            stock[y] -= 1;
+            /*console.log(shoppingList[x]);
             console.log(y);
-            console.log(stock[y]);
+            console.log(stock[y]);*/
         }
     }
     console.log(stock);
