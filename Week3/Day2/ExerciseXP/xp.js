@@ -71,6 +71,7 @@ function myBill() {
                 stock[y] -= 1;
                 //console.log(prices[x]);
                 for (let z in prices) {
+                    console.log(prices[z]);
                     total_price += prices[z];
                 }
             }
