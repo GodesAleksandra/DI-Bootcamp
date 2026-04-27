@@ -59,11 +59,10 @@ const prices = {
     "blueberry":10
 }
 
-let shoppingList = ["banana", "orange", "apple"];
-
-let total_price = 0;
 
 function myBill() {
+    let shoppingList = ["banana", "orange", "apple"];
+    let total_price = 0;
     for (let x in shoppingList) {
         for (let y in stock) {
             if (shoppingList[x] == y && stock[y] > 0) {
@@ -79,37 +78,38 @@ function myBill() {
 myBill();
 
 /*Exercise 3 : What’s in my wallet ?
-Note: Read the illustration (point 4), while reading the instructions
 Create a function named changeEnough(itemPrice, amountOfChange) that receives two arguments :
 an item price
 and an array representing the amount of change in your pocket.
 In the function, determine whether or not you can afford the item.
 If the sum of the change is bigger or equal than the item’s price (ie. it means that you can afford the item), the function should return true
 If the sum of the change is smaller than the item’s price (ie. it means that you cannot afford the item) the function should return false
-
 Change will always be represented in the following order: quarters, dimes, nickels, pennies.
 A quarters is 0.25
 A dimes is 0.10
 A nickel is 0.05
 A penny is 0.01
-
-
 4. To illustrate:
-
 After you created the function, invoke it like this:
-
 changeEnough(4.25, [25, 20, 5, 0])
 The value 4.25 represents the item’s price
 The array [25, 20, 5, 0] represents 25 quarters, 20 dimes, 5 nickels and 0 pennies.
 The function should return true, since having 25 quarters, 20 dimes, 5 nickels and 0 pennies gives you 6.25 + 2 + .25 + 0 = 8.50 which is bigger than 4.25 (the total amount due)
-
-
 Examples
-
 changeEnough(14.11, [2,100,0,0]) => returns false
 changeEnough(0.75, [0,0,20,5]) => returns true
 */
 
 function changeEnough(itemPrice, amountOfChange) {
-
+    const coins_value = [0.25, 0.10, 0.05, 0.01];
+    let sum = 0;
+    let result = false;
+    for (let x in amountOfChange) {
+        sum += amountOfChange[x] * coins_value[x];
+    }
+    if (itemPrice >= sum) result = true;
+    return result;
 }
+
+changeEnough(14.11, [2,100,0,0])
+changeEnough(0.75, [0,0,20,5])
