@@ -153,7 +153,6 @@ function hotelCost(nights) {
 
 function planeRideCost(destination) {
     let plane_cost;
-    destination.toUpperCase();
 
     if (destination === "LONDON") {
         plane_cost = 183;
@@ -180,14 +179,14 @@ function totalVacationCost() {
     }
 
     while ((typeof destination !== "string") || !destination) {
-        destination = prompt('Please enter your destination');
+        destination = prompt('Please enter your destination').toUpperCase();
     }
 
     while (isNaN(car_days) || !car_days) {
         car_days = Number(prompt('Please enter a number of days your would like to rent the car'));
     }
 
-    let total_cost = hotelCost(nights_amount) + planeRideCost() + rentalCarCost(car_days);
+    let total_cost = hotelCost(nights_amount) + planeRideCost(destination) + rentalCarCost(car_days);
     console.log(total_cost);
     return total_cost;
 }
