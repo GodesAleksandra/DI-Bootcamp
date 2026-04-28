@@ -115,3 +115,4 @@ function changeEnough(itemPrice, amountOfChange) {
 
 changeEnough(14.11, [2,100,0,0])
 changeEnough(0.75, [0,0,20,5])
+changeEnough(4.25, [25, 20, 5, 0])
