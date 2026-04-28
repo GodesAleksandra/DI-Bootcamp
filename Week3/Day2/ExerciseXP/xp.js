@@ -107,7 +107,7 @@ function changeEnough(itemPrice, amountOfChange) {
     for (let x in amountOfChange) {
         sum += amountOfChange[x] * coins_value[x];
     }
-    if (itemPrice >= sum) result = true;
+    if (sum >= itemPrice) result = true;
     console.log(sum);
     console.log(result);
     return result;
