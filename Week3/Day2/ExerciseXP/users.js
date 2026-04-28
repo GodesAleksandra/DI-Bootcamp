@@ -16,4 +16,4 @@ Bonus: If the background color of the div is “light blue”, alert “Hello x 
 */
 
 document.getElementsByTagName("li")[1].innerHTML = "Richard";
-document.getElementsByTagName("ul")[1].removeChild(getElementsByTagName("li")[1]);
+document.getElementsByTagName("ul")[1].removeChild(document.getElementsByTagName("li")[1]);
