@@ -166,7 +166,9 @@ function planeRideCost() {
         plane_cost = 183;
     } else if (destination === "PARIS")
         plane_cost = 220;
-    } else plane_cost = 300;
+    } else {
+        plane_cost = 300;
+    }
     return plane_cost;
 }
 
