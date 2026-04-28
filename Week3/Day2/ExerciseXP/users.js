@@ -15,9 +15,16 @@ Change the font size of the whole body.
 Bonus: If the background color of the div is “light blue”, alert “Hello x and y” (x and y are the users in the div).
 */
 
-document.getElementsByTagName("li")[1].innerHTML = "Richard";
-document.getElementsByTagName("ul")[1].removeChild(document.getElementsByTagName("li")[3]);
-//for (let i = 0; i < 2; i++) {
-    document.getElementsByTagName("li")[0].innerHTML = "Aleksandra";
-    document.getElementsByTagName("li")[2].innerHTML = "Aleksandra";
-//}
+let tag_li = document.getElementsByTagName("li");
+let tag_ul = document.getElementsByTagName("li");
+
+tag_li[1].innerHTML = "Richard";
+tag_ul[1].removeChild(tag_li[3]);
+//tag_li[0].innerHTML = "Aleksandra";
+//tag_li[2].innerHTML = "Aleksandra";
+
+let elements = document.querySelectorAll('ul > li:first-child');
+
+for (let elem of elements) {
+    elem.innerHTML = "Aleksandra";
+}
