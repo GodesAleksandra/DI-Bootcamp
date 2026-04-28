@@ -147,28 +147,48 @@ Call the function totalVacationCost()
 
 Bonus: Instead of using a prompt inside the 3 first functions, only use a prompt inside the totalVacationCost() function. You need to change the 3 first functions, accordingly.*/
 
-function hotelCost() {
-    let nights_amount;
+function hotelCost(nights) {
+    return nights * 140;
+}
+
+function planeRideCost(destination) {
+    let plane_cost;
+
+    if (destination === "LONDON") {
+        plane_cost = 183;
+    } else if (destination === "PARIS") {
+        plane_cost = 220;
+    } else plane_cost = 300;
+    return plane_cost;
+}
+
+function rentalCarCost(days) {
+    let car_cost;
+
+    if (days > 10) {
+        car_cost = days*40*0.95;
+    } else car_cost = days*40;
+    return car_cost;
+}
+
+function totalVacationCost() {
+    let nights_amount, destination, car_days;
 
     while (isNaN(nights_amount) || !nights_amount) {
         nights_amount = Number(prompt('Please enter a number of nights you would like to stay in the hotel'));
     }
-    return nights_amount * 140;
-}
-
-function planeRideCost() {
-    let destination, plane_cost;
 
     while ((typeof destination !== "string") || !destination) {
         destination = prompt('Please enter your destination').toUpperCase();
     }
-    if (destination === "LONDON") {
-        plane_cost = 183;
-    } else if (destination === "PARIS")
-        plane_cost = 220;
-    } else {
-        plane_cost = 300;
+
+    while (isNaN(car_days) || !car_days) {
+        car_days = Number(prompt('Please enter a number of days your would like to rent the car'));
     }
-    return plane_cost;
+
+    let total_cost = hotelCost(nights_amount) + planeRideCost() + rentalCarCost(car_days);
+    console.log(total_cost);
+    return total_cost;
 }
 
+totalVacationCost();
