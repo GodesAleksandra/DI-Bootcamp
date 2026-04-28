@@ -159,7 +159,7 @@ function hotelCost() {
 function planeRideCost() {
     let destination, plane_cost;
 
-    while ((typeof destination !=== "string") || !destination) {
+    while ((typeof destination !== "string") || !destination) {
         destination = prompt('Please enter your destination').toUpperCase();
     }
     if (destination === "LONDON") {
