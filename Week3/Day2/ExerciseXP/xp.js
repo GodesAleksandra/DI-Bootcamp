@@ -153,7 +153,7 @@ function hotelCost(nights) {
 
 function planeRideCost(destination) {
     let plane_cost;
-    destination = destination.toUpperCase();
+    destination.toUpperCase();
 
     if (destination === "LONDON") {
         plane_cost = 183;
