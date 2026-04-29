@@ -27,5 +27,8 @@ for (let elem of elements) {
     elem.innerHTML = "Aleksandra";
 }
 
+for (let elem of tag_ul) {
+    elem.classList.add("student_list");
+}
 //tag_ul.classList.add("student_list");
 tag_ul[0].classList.add("university","attendance");
