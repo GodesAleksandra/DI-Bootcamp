@@ -277,4 +277,5 @@ const allBooks = [{"title":"The Little Prince", "author":"Antoine de Saint-Exupe
 
 const container = document.getElementsByClassName('listBooks');
 const div_section = document.createElement("div");
+div_section.setAttribute("id", "div_section");
 container[0].appendChild(div_section);
