@@ -11,7 +11,7 @@ Use the firstElementChild and the lastElementChild properties to retrieve the fi
 Display the text of each link. (Hint: use the textContent property).*/
 
 let div = document.getElementById('navBar');
-element.setAttribute("id", "socialNetworkNavigation");
+div.setAttribute("id", "socialNetworkNavigation");
 
 li = document.createElement("li");
 li.textContent = "Logout";
