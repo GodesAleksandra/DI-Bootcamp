@@ -288,5 +288,5 @@ allBooks.forEach(function(book, index) {
     const img = document.createElement('img');
     img.src = book.image; // Set source
     img.width = 100; // Set dimensions
-document.body.appendChild(img);
+    p.appendChild(img);
 });
