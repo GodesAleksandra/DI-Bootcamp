@@ -49,7 +49,7 @@ document.body.style.fontSize = "20px";
 if (div.style.backgroundColor == 'lightblue') {
     let users = [];
     for (let elem of document.querySelectorAll('.attendance > li')) {
-        users.append(elem);
+        users.push(elem.textContent);
     }
     alert("Hello "+users[0]+" and "+users[1]);
 }
