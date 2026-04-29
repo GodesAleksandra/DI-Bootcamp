@@ -274,3 +274,7 @@ If the book is already read. Set the color of the book’s details to red.*/
 
 const allBooks = [{"title":"The Little Prince", "author":"Antoine de Saint-Exupery", "image":"https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1367545443i/157993.jpg", "alreadyRead":true},
                 {"title":"The Hunger Games", "author":" Suzanne Collins", "image":"https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1586722975i/2767052.jpg", "alreadyRead":false}];
+
+const container = document.getElementsByClassName('listBooks');
+div_section = document.createElement("div");
+document.container.appendChild(div_section);
