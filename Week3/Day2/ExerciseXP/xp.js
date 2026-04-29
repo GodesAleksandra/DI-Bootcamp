@@ -283,6 +283,7 @@ container[0].appendChild(div_section);
 allBooks.forEach(function(book, index) {
     const p = document.createElement("p");
     p.textContent = `${book.title} writen by ${book.author}`;
+    if (book.alreadyRead) p.style.color = "red";
     div_section.appendChild(p);
   //console.log(`${book.title} writen by ${book.author}`);
 });
