@@ -46,3 +46,7 @@ for (let elem of tag_li) {
 }
 document.body.style.fontSize = "20px";
 
+if (div.style.backgroundColor == 'lightblue') {
+    alert("Hello x and y");
+}
+
