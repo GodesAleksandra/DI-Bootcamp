@@ -34,3 +34,4 @@ tag_ul[0].classList.add("university","attendance");
 
 let div = document.getElementById('container');
 div.style.background = 'light blue';
+div.style.padding = '10px';
