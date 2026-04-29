@@ -281,5 +281,5 @@ div_section.setAttribute("id", "div_section");
 container[0].appendChild(div_section);
 
 allBooks.forEach(function(book, index) {
-  console.log('${book.title} writen by ${book.author}');
+  console.log(`${book.title} writen by ${book.author}`);
 });
