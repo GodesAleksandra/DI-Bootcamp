@@ -20,11 +20,13 @@ let tag_ul = document.getElementsByTagName("ul");
 
 tag_li[1].innerHTML = "Richard";
 tag_ul[1].removeChild(tag_li[3]);
-//tag_li[0].innerHTML = "Aleksandra";
-//tag_li[2].innerHTML = "Aleksandra";
 
 let elements = document.querySelectorAll('ul > li:first-child');
 
 for (let elem of elements) {
     elem.innerHTML = "Aleksandra";
 }
+
+tag_ul.setAttribute('class', "student_list");
+tag_ul[0].setAttribute('class', "university");
+
