@@ -250,4 +250,4 @@ Append the text node to the newly created list node (<li>).
 Finally, append this updated list node to the unordered list (<ul>), using the appendChild method.
 
 Use the firstElementChild and the lastElementChild properties to retrieve the first and last <li> elements from their parent element (<ul>). Display the text of each link. (Hint: use the textContent property).*/
-
+ // nav_bar.html, nav_bar.js
