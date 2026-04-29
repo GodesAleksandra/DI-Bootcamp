@@ -15,6 +15,9 @@ Change the font size of the whole body.
 Bonus: If the background color of the div is “light blue”, alert “Hello x and y” (x and y are the users in the div).
 */
 
+let div = document.getElementById('container');
+console.log(div);
+
 let tag_li = document.getElementsByTagName("li");
 let tag_ul = document.getElementsByTagName("ul");
 
@@ -32,7 +35,6 @@ for (let elem of tag_ul) {
 }
 tag_ul[0].classList.add("university","attendance");
 
-let div = document.getElementById('container');
 div.style.background = 'lightblue';
 div.style.padding = '10px';
 
