@@ -35,3 +35,12 @@ tag_ul[0].classList.add("university","attendance");
 let div = document.getElementById('container');
 div.style.background = 'lightblue';
 div.style.padding = '10px';
+
+for (let elem of tag_li) {
+    if (elem.innerHTML = "Dan") {
+        elem.style.display = "none";
+    }
+    if (elem.innerHTML = "Richard") {
+        elem.style.border = "2px solid red";
+    }
+}
