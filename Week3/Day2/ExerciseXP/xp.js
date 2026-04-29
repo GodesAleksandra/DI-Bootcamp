@@ -276,5 +276,5 @@ const allBooks = [{"title":"The Little Prince", "author":"Antoine de Saint-Exupe
                 {"title":"The Hunger Games", "author":" Suzanne Collins", "image":"https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1586722975i/2767052.jpg", "alreadyRead":false}];
 
 const container = document.getElementsByClassName('listBooks');
-div_section = document.createElement("div");
+const div_section = document.createElement("div");
 container.appendChild(div_section);
