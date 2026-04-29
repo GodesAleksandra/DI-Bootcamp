@@ -47,6 +47,10 @@ for (let elem of tag_li) {
 document.body.style.fontSize = "20px";
 
 if (div.style.backgroundColor == 'lightblue') {
-    alert("Hello x and y");
+    let users = [];
+    for (let elem of document.querySelectorAll('.attendance > li')) {
+        users.append(elem);
+    }
+    alert("Hello "+users[0]+" and "+users[1]);
 }
 
