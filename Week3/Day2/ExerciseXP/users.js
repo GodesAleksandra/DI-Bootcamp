@@ -44,3 +44,5 @@ for (let elem of tag_li) {
         elem.style.border = "2px solid red";
     }
 }
+document.body.style.fontSize = "20px";
+
