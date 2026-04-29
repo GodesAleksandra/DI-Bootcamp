@@ -265,7 +265,6 @@ alreadyRead : which is a boolean (true or false).
 
 Initiate the array with 2 books of your choice (ie. Add manually 2 books objects in the array)
 
-Requirements : All the instructions below need to be coded in the js file:
 Using the DOM, render each book inside a div (the div must be added to the <section> created in part 1).
 For each book :
 You have to display the book’s title and the book’s author.
@@ -273,5 +272,5 @@ Example: HarryPotter written by JKRolling.
 The width of the image has to be set to 100px.
 If the book is already read. Set the color of the book’s details to red.*/
 
-let allBooks = [{"title":"The Little Prince", "author":"Antoine de Saint-Exupery", "image":"https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1367545443i/157993.jpg", "alreadyRead":true},
+const allBooks = [{"title":"The Little Prince", "author":"Antoine de Saint-Exupery", "image":"https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1367545443i/157993.jpg", "alreadyRead":true},
                 {"title":"The Hunger Games", "author":" Suzanne Collins", "image":"https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1586722975i/2767052.jpg", "alreadyRead":false}];
