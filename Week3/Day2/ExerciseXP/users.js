@@ -30,5 +30,7 @@ for (let elem of elements) {
 for (let elem of tag_ul) {
     elem.classList.add("student_list");
 }
-//tag_ul.classList.add("student_list");
 tag_ul[0].classList.add("university","attendance");
+
+let div = document.getElementById('container');
+elem.style.background = 'light blue';
