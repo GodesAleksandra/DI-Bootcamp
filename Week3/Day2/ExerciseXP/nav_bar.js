@@ -16,3 +16,10 @@ element.setAttribute("id", "socialNetworkNavigation");
 li = document.createElement("li");
 li.textContent = "Logout";
 document.querySelector("ul").appendChild(li);
+
+const ul = document.querySelector('ul');
+const frstLi = ul.firstElementChild;
+const lstLi = ul.lastElementChild;
+
+console.log(frstLi.textContent);
+console.log(lstLi.textContent);
