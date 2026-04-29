@@ -37,10 +37,10 @@ div.style.background = 'lightblue';
 div.style.padding = '10px';
 
 for (let elem of tag_li) {
-    if (elem.textContent = "Dan") {
+    if (elem.textContent == "Dan") {
         elem.style.display = "none";
     }
-    if (elem.textContent = "Richard") {
+    if (elem.textContent == "Richard") {
         elem.style.border = "2px solid red";
     }
 }
