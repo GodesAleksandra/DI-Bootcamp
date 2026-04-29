@@ -12,3 +12,7 @@ Display the text of each link. (Hint: use the textContent property).*/
 
 let div = document.getElementById('navBar');
 element.setAttribute("id", "socialNetworkNavigation");
+
+li = document.createElement("li");
+li.textContent = "Logout";
+document.querySelector("ul").appendChild(li);
