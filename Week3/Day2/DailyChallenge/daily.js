@@ -7,15 +7,21 @@ Bonus: Do the same process to create the moons.
 Be careful, each planet has a certain amount of moons. How should you display them?
 Should you still use an array for the planets ? Or an array of objects ?*/
 
-const planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
-const colors = ["grey", "yellow", "green", "red", "orange", "gold", "cyan", "blue"];
+const planets = [{"name":"Mercury","color":"grey", "moons":[]},
+{"name":"Venus","color":"yellow", "moons":[]},
+{"name":"Earth","color":"green", "moons":["The Moon"]},
+{"name":"Mars","color":"red", "moons":["Phobos", "Deimos"]},
+{"name":"Jupiter","color":"orange", "moons":[95]},
+{"name":"Saturn","color":"gold", "moons":146},
+{"name":"Uranus","color":"cyan", "moons":28},
+{"name":"Neptune","color":"blue", "moons":16}];
 
 let section = document.getElementsByClassName('listPlanets')[0];
 
 planets.forEach((planet, index) => {
-    const div = document.createElement("div");
-    div.classList.add("planet",colors[index]);
-    div.style.background = colors[index];
-    section.appendChild(div);
+    const div_planet = document.createElement("div");
+    div_planet.classList.add("planet",colors[index]);
+    div_planet.style.background = colors[index];
+    section.appendChild(div_planet);
 });
 
