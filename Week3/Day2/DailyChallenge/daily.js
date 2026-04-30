@@ -24,6 +24,13 @@ planets.forEach((planet, index) => {
     div_planet.style.background = planet.color;
     div_planet.textContent = planet.name;
     section.appendChild(div_planet);
+
+    for (let moon of planet.moons) {
+        const div_moon = document.createElement("div");
+        div_moon.classList.add("moon");
+        div_moon.textContent = moon;
+        section.appendChild(div_moon);
+    }
 });
 
 
