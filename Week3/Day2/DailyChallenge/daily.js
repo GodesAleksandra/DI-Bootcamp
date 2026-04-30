@@ -30,6 +30,7 @@ planets.forEach((planet, index) => {
         div_moon.classList.add("moon");
         div_moon.textContent = moon;
         div_moon.style.fontSize = "8px";
+        div_moon.style.textAlign = "center";
         section.appendChild(div_moon);
     }
 });
