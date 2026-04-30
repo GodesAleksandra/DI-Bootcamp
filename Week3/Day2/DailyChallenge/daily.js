@@ -9,19 +9,6 @@ Should you still use an array for the planets ? Or an array of objects ?*/
 const planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
 const colors = ["grey", "yellow", "green", "red", "orange", "gold", "cyan", "blue"];
 
-/*planets.forEach(function(planet, index) {
-    const div = document.createElement("div");
-    div_section.appendChild(p);
-    const img = document.createElement('img');
-    img.src = book.image; // Set source
-    img.width = 100; // Set dimensions
-    p.appendChild(img);
-});*/
-
-/*for (let planet of planets) {
-    const div = document.createElement("div");
-    div.classList.add("planet");
-}*/
 let section = document.getElementsByClassName('listPlanets')[0];
 
 planets.forEach((planet, index) => {
