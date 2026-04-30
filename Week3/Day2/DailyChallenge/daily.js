@@ -27,6 +27,6 @@ let section = document.getElementsByClassName('listPlanets')[0];
 planets.forEach((planet, index) => {
     const div = document.createElement("div");
     div.classList.add("planet",colors[index]);
-    section.appendChild(p);
+    section.appendChild(div);
 });
 
