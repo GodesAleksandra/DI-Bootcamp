@@ -22,9 +22,7 @@ planets.forEach((planet, index) => {
     const div_planet = document.createElement("div");
     div_planet.classList.add("planet",planet.color);
     div_planet.style.background = planet.color;
-    div_planet.style.display = "block";
     div_planet.textContent = planet.name;
-    //div_planet.style.verticalAlign = "middle";
     section.appendChild(div_planet);
     let gap = 0;
 
@@ -32,11 +30,10 @@ planets.forEach((planet, index) => {
         const div_moon = document.createElement("div");
         div_moon.classList.add("moon");
         div_moon.textContent = moon;
-        div_moon.style.display = "right";
         div_moon.style.fontSize = "8px";
         div_moon.style.textAlign = "center";
         div_moon.style.marginLeft = 130 + gap + "px";
-        //div_moon.style.verticalAlign = "middle";
+        div_moon.style.marginTop = "-130px";
         section.appendChild(div_moon);
         gap += 50;
     }
