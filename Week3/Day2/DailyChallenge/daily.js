@@ -5,3 +5,28 @@ Finally append each div to the <section> in the HTML (presented below).
 Bonus: Do the same process to create the moons.
 Be careful, each planet has a certain amount of moons. How should you display them?
 Should you still use an array for the planets ? Or an array of objects ?*/
+
+const planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
+const colors = ["grey", "yellow", "green", "red", "orange", "gold", "cyan", "blue"];
+
+/*planets.forEach(function(planet, index) {
+    const div = document.createElement("div");
+    div_section.appendChild(p);
+    const img = document.createElement('img');
+    img.src = book.image; // Set source
+    img.width = 100; // Set dimensions
+    p.appendChild(img);
+});*/
+
+/*for (let planet of planets) {
+    const div = document.createElement("div");
+    div.classList.add("planet");
+}*/
+let section = document.getElementsByClassName('listPlanets')[0];
+
+planets.forEach((planet, index) => {
+    const div = document.createElement("div");
+    div.classList.add("planet",colors[index]);
+    section.appendChild(p);
+});
+
