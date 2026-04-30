@@ -22,6 +22,7 @@ planets.forEach((planet, index) => {
     const div_planet = document.createElement("div");
     div_planet.classList.add("planet",planet.color);
     div_planet.style.background = planet.color;
+    div_planet.textContent = planet.name;
     section.appendChild(div_planet);
 });
 
