@@ -31,6 +31,7 @@ planets.forEach((planet, index) => {
         const div_moon = document.createElement("div");
         div_moon.classList.add("moon");
         div_moon.textContent = moon;
+        div_moon.style.display = "right";
         div_moon.style.fontSize = "8px";
         div_moon.style.textAlign = "center";
         div_moon.style.marginLeft = 130 + gap + "px";
