@@ -11,10 +11,10 @@ const planets = [{"name":"Mercury","color":"grey", "moons":[]},
 {"name":"Venus","color":"yellow", "moons":[]},
 {"name":"Earth","color":"green", "moons":["The Moon"]},
 {"name":"Mars","color":"red", "moons":["Phobos", "Deimos"]},
-{"name":"Jupiter","color":"orange", "moons":[95]},
-{"name":"Saturn","color":"gold", "moons":146},
-{"name":"Uranus","color":"cyan", "moons":28},
-{"name":"Neptune","color":"blue", "moons":16}];
+{"name":"Jupiter","color":"orange", "moons":["Ganymede","Europa","Io","Callisto"]},
+{"name":"Saturn","color":"gold", "moons":["Titan","Enceladus","Rhea","Mimas"]},
+{"name":"Uranus","color":"cyan", "moons":"Miranda","Titania","Oberon"},
+{"name":"Neptune","color":"blue", "moons":["Triton"]}];
 
 let section = document.getElementsByClassName('listPlanets')[0];
 
@@ -25,3 +25,4 @@ planets.forEach((planet, index) => {
     section.appendChild(div_planet);
 });
 
+Miranda, Titania, and Oberon
