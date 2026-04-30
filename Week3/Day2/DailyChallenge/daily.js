@@ -25,4 +25,4 @@ planets.forEach((planet, index) => {
     section.appendChild(div_planet);
 });
 
-Miranda, Titania, and Oberon
+
