@@ -23,7 +23,7 @@ planets.forEach((planet, index) => {
     div_planet.classList.add("planet",planet.color);
     div_planet.style.background = planet.color;
     div_planet.textContent = planet.name;
-    div_planet.style.verticalAlign = "middle";
+    //div_planet.style.verticalAlign = "middle";
     section.appendChild(div_planet);
 
     for (let moon of planet.moons) {
@@ -32,7 +32,8 @@ planets.forEach((planet, index) => {
         div_moon.textContent = moon;
         div_moon.style.fontSize = "8px";
         div_moon.style.textAlign = "center";
-        div_moon.style.verticalAlign = "middle";
+        div_moon.style.paddingLeft = "110px";
+        //div_moon.style.verticalAlign = "middle";
         section.appendChild(div_moon);
     }
 });
