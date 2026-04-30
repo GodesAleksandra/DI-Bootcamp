@@ -13,7 +13,7 @@ const planets = [{"name":"Mercury","color":"grey", "moons":[]},
 {"name":"Mars","color":"red", "moons":["Phobos", "Deimos"]},
 {"name":"Jupiter","color":"orange", "moons":["Ganymede","Europa","Io","Callisto"]},
 {"name":"Saturn","color":"gold", "moons":["Titan","Enceladus","Rhea","Mimas"]},
-{"name":"Uranus","color":"cyan", "moons":"Miranda","Titania","Oberon"},
+{"name":"Uranus","color":"cyan", "moons":["Miranda","Titania","Oberon"]},
 {"name":"Neptune","color":"blue", "moons":["Triton"]}];
 
 let section = document.getElementsByClassName('listPlanets')[0];
