@@ -20,8 +20,8 @@ let section = document.getElementsByClassName('listPlanets')[0];
 
 planets.forEach((planet, index) => {
     const div_planet = document.createElement("div");
-    div_planet.classList.add("planet",colors[index]);
-    div_planet.style.background = colors[index];
+    div_planet.classList.add("planet",planet.color);
+    div_planet.style.background = planet.color;
     section.appendChild(div_planet);
 });
 
