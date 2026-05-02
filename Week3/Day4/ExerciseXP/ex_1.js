@@ -33,7 +33,7 @@ function HighlightBoldP() {
     });
 }
 
-h1.addEventListener("mouseover", ChangeFontSizeRandom);
+h1.addEventListener("onmouseout", ChangeFontSizeRandom);
 function ChangeFontSizeRandom(e) {
     const randomSize = Math.floor(Math.random() * 101);
     e.target.style.fontSize = randomSize + 'px';
