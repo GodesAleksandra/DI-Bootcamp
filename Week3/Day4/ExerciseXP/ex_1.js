@@ -7,5 +7,8 @@ Add a <button> to the HTML file, that when clicked on, should make the text of a
 BONUS : When you hover on the h1, set the font size to a random pixel size between 0 to 100.(Check out this documentation)
 BONUS : When you hover on the 2nd paragraph, it should fade out (Check out “fade css animation” on Google)*/
 
-let h1 = document.querySelectorAll('h1');
+let h1 = document.querySelector('h1');
 console.log(h1);
+
+let article = document.querySelector('article');
+article.removeChild(document.querySelector('article > p:last-child'));
