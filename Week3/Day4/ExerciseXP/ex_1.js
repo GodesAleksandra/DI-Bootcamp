@@ -33,8 +33,39 @@ function HighlightBoldP() {
     });
 }
 
-h1.addEventListener("mouseout", ChangeFontSizeRandom);
+h1.addEventListener("mouseover", ChangeFontSizeRandom);
 function ChangeFontSizeRandom(e) {
     const randomSize = Math.floor(Math.random() * 101);
     e.target.style.fontSize = randomSize + 'px';
 }
+
+let p = document.querySelectorAll('p')[1];
+p.setAttribute("style", "opacity: 0; transition: opacity 0.5s ease-in-out;");
+p.addEventListener("mouseover", FadeOut);
+function FadeOut(e) {
+    e.target.style.opacity = "1";
+}
+
+
+
+/*.fade-element {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+
+.fade-element.is-visible {
+  opacity: 1;
+}
+
+
+const element = document.querySelector('.fade-element');
+const button = document.querySelector('#toggle-btn');
+
+button.addEventListener('click', () => {
+  // For transitions
+  element.classList.toggle('is-visible');
+
+  // OR for one-time keyframe animation
+  // element.classList.add('fade-in-animate');
+});*/
