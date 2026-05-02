@@ -17,9 +17,9 @@ The output should be :
 
 let form = document.forms[0];
 console.log(form);
-let fname = form.elements.fname;
-let lname = form.elements.lname;
-let submit = form.elements.submit;
+let fname = document.getElementById('fname');
+let lname = document.getElementById('lname');
+let submit = document.getElementById('submit');
 console.log(fname);
 console.log(lname);
 console.log(submit);
