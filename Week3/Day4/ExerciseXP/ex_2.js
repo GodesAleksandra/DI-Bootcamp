@@ -40,10 +40,3 @@ function createList(event){
         document.querySelector(".usersAnswer").appendChild(li);
     });
 }
-
-//firstElement.value
-
-/*<input type="text" id="fname" name="firstname"><br>
-      <label for="lname">Last name:</label><br>
-      <input type="text" id="lname" name="lastname"><br><br>
-      <input type="submit" value="Submit" id="submit">*/
