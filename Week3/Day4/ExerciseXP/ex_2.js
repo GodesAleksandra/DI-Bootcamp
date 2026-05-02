@@ -28,12 +28,18 @@ let lastname = form.elements.lastname;
 console.log(firstname);
 console.log(lastname);
 
-form.addEventListener("submit", getUserComments);
-function getUserComments(){
+form.addEventListener("submit", createList);
+function createList(event){
     event.preventDefault(); //prevent the default form submission action using JavaScript to implement custom actions such as form validation before the form data is sent to the server
+    let formData = new FormData(event.target);
 
+    // Iterate over form data and log each value
+    formData.forEach(function(value, key) {
+        console.log(`${key}: ${value}`);
+    });
 }
 
+//firstElement.value
 
 /*<input type="text" id="fname" name="firstname"><br>
       <label for="lname">Last name:</label><br>
