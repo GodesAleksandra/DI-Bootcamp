@@ -23,6 +23,10 @@ let submit = form.elements.submit;
 console.log(fname);
 console.log(lname);
 console.log(submit);
+let firstname = form.elements.firstname;
+let lastname = form.elements.lastname;
+console.log(firstname);
+console.log(lastname);
 
 
 /*<input type="text" id="fname" name="firstname"><br>
