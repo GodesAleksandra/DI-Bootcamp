@@ -28,7 +28,7 @@ function HideH3(e) {
 let btn_highlight = document.getElementById("btn_highlight");
 btn_highlight.addEventListener("click", HighlightBoldP);
 function HighlightBoldP() {
-    querySelectorAll('article > p').forEach(p => {
+    document.querySelectorAll('article > p').forEach(p => {
       p.style.fontWeight = "bold";
     });
 }
