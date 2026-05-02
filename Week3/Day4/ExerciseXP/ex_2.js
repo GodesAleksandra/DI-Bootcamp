@@ -14,3 +14,6 @@ The output should be :
     <li>first name of the user</li>
     <li>last name of the user</li>
 </ul>*/
+
+let form = document.forms[0];
+console.log(form);
