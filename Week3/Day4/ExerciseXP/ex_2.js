@@ -17,3 +17,10 @@ The output should be :
 
 let form = document.forms[0];
 console.log(form);
+let fname = form.elements.fname;
+
+
+/*<input type="text" id="fname" name="firstname"><br>
+      <label for="lname">Last name:</label><br>
+      <input type="text" id="lname" name="lastname"><br><br>
+      <input type="submit" value="Submit" id="submit">*/
