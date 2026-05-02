@@ -34,7 +34,7 @@ function HighlightBoldP() {
 }
 
 h1.addEventListener("hover", ChangeFontSizeRandom);
-function HighlightBoldP(e) {
+function ChangeFontSizeRandom(e) {
     const randomSize = Math.floor(Math.random() * 101);
     e.target.style.fontSize = randomSize + 'px';
 }
