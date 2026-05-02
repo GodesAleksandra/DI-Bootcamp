@@ -40,10 +40,10 @@ function ChangeFontSizeRandom(e) {
 }
 
 let p = document.querySelectorAll('p')[1];
-p.setAttribute("style", "opacity: 0; transition: opacity 0.5s ease-in-out;");
+p.setAttribute("style", "opacity: 1;");
 p.addEventListener("mouseover", FadeOut);
 function FadeOut(e) {
-    e.target.style.opacity = "1";
+    e.target.setAttribute("style", "opacity: 0; transition: opacity 0.5s ease-in-out;");
 }
 
 
