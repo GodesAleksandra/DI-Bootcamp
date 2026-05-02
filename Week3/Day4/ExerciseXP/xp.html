@@ -1,31 +1,43 @@
 <html>
 <body>
-    <button id="btn">Click me</button>
-    <button id="btn1">Hey Hey</button>
 
+    <style>
+        div { border : 2px solid blue}
+        button { border : 2px solid red}
+    </style>
+
+    <section id="section">
+        <div id="div">
+            <button id="btn">Click me</button>
+        </div>
+    </section>
     <script>
-        let x = document.getElementById("btn")
-        let y = document.getElementById("btn1")
+       let x = document.getElementById("btn")
+       let y = document.getElementById("div")
+       let z = document.getElementById("section")
 
-        y.addEventListener("click", RespondClick);
-        y.addEventListener("mouseover", RespondMouseOver);
+       x.addEventListener("click", XRespondClick);
+       y.addEventListener("click", YRespondClick);
+       z.addEventListener("click", ZRespondClick);
 
-        x.addEventListener("click", RespondClick);
-        x.addEventListener("mouseover", RespondMouseOver);
-        x.addEventListener("mouseout", RespondMouseOut);
+       function XRespondClick(e) {
+           alert("BTN is Clicked")
+           e.stopPropagation()
+       }
 
-        function RespondClick() {
-            alert("Button Clicked")
-        }
+       function YRespondClick(e) {
+           alert("DIV is Clicked")
+       }
 
-        function RespondMouseOver() {
-            alert("My mouse is over the btn")
-        }
+        function ZRespondClick(e) {
+           alert("SECTION is Clicked")
+       }
 
-        function RespondMouseOut() {
-            alert("My mouse is out of the btn")
-        }
+        //Result if I click on the button
+        // Alert : BTN is Clicked
+        // --> The bubbling stopped
 
     </script>
+
 </body>
 </html>
