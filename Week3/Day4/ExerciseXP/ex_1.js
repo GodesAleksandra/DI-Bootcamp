@@ -24,3 +24,9 @@ h3.addEventListener("click", HideH3);
 function HideH3(e) {
     e.target.style.display = "none";
 }
+
+let btn_highlight = document.getElementById("btn_highlight");
+btn_highlight.addEventListener("click", HighlightBoldP);
+function HighlightBoldP() {
+     document.querySelector('article > p').style.fontWeight = "bold";
+}
