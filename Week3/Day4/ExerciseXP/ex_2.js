@@ -35,7 +35,9 @@ function createList(event){
 
     // Iterate over form data and log each value
     formData.forEach(function(value, key) {
-        console.log(`${key}: ${value}`);
+        li = document.createElement("li");
+        li.textContent = value;
+        document.querySelector(".usersAnswer").appendChild(li);
     });
 }
 
