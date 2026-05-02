@@ -14,7 +14,13 @@ let article = document.querySelector('article');
 article.removeChild(document.querySelector('article > p:last-child'));
 
 let h2 = document.querySelector('h2');
-h2.addEventListener("click", ChangeColor);
-function ChangeColor(e) {
+h2.addEventListener("click", ChangeColorH2);
+function ChangeColorH2(e) {
     e.target.style.color = "red";
+}
+
+let h3 = document.querySelector('h3');
+h3.addEventListener("click", HideH3);
+function HideH3(e) {
+    e.target.style.display = "none";
 }
