@@ -32,3 +32,9 @@ function HighlightBoldP() {
       p.style.fontWeight = "bold";
     });
 }
+
+h1.addEventListener("hover", ChangeFontSizeRandom);
+function HighlightBoldP(e) {
+    const randomSize = Math.floor(Math.random() * 101);
+    e.target.style.fontSize = randomSize + 'px';
+}
