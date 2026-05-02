@@ -12,3 +12,9 @@ console.log(h1);
 
 let article = document.querySelector('article');
 article.removeChild(document.querySelector('article > p:last-child'));
+
+let h2 = document.querySelector('h2');
+h2.addEventListener("click", ChangeColor);
+function ChangeColor(e) {
+    e.target.style.color = "red";
+}
