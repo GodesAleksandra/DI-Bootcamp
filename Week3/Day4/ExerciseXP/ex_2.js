@@ -28,6 +28,12 @@ let lastname = form.elements.lastname;
 console.log(firstname);
 console.log(lastname);
 
+form.addEventListener("submit", getUserComments);
+function getUserComments(){
+    event.preventDefault(); //prevent the default form submission action using JavaScript to implement custom actions such as form validation before the form data is sent to the server
+
+}
+
 
 /*<input type="text" id="fname" name="firstname"><br>
       <label for="lname">Last name:</label><br>
