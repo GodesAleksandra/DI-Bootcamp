@@ -24,6 +24,10 @@ function AddParagraph() {
 }
 //setTimeout(AddParagraph, 2000);
 
-/*let timer =*/ setInterval(AddParagraph(), 2000);
+/*let timer = setInterval(AddParagraph(), 2000);*/
 /*let btn_clearInt = document.getElementById("clear");
 btn_clearInt.addEventListener("click", clearInterval(timer));*/
+
+const timer = setInterval(() => {
+  AddParagraph();
+}, 2000);
