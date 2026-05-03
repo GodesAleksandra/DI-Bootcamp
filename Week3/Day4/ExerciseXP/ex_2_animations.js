@@ -4,3 +4,20 @@ The <div id="animate"> should move 1px to the right every milisecond, until it r
 Hint : use clearInterval as soon as the box reaches the right end side of the container
 Hint : check out the demonstration in the Course Noted named JS Functions*/
 
+function myMove() {
+    let marginLeft = 0;
+    const timer = setInterval(() => {
+      /*if (document.querySelectorAll('p').length == 5) {
+        stopTimer();
+      } else AddParagraph();*/
+        const div_animate = document.getElementById('animate');
+        div_animate.style.marginLeft = marginLeft + "px";
+        if (marginLeft == 350) clearInterval(timer);
+        marginLeft += 1;
+    }, 1);
+
+    /*function stopTimer() {
+      clearInterval(timer);
+      console.log("Interval stopped.");
+    }*/
+}
