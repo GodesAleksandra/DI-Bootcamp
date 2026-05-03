@@ -12,7 +12,7 @@ The interval will be cleared (ie. clearInterval), when the user will click on th
 Instead of clicking on the button, the interval will be cleared (ie. clearInterval) as soon as there will be 5 paragraphs inside the <div id="container">.
 */
 
-function Greeting() {
+/*function Greeting() {
     alert("Hello World");
 }
 setTimeout(Greeting, 2000);
@@ -22,8 +22,8 @@ function AddParagraph() {
     p.textContent = "Hello World";
     document.getElementById("container").appendChild(p);
 }
-setTimeout(AddParagraph, 2000);
+setTimeout(AddParagraph, 2000);*/
 
-//let timer = setInterval(AddParagraph(), 2000);
+let timer = setInterval(AddParagraph(), 2000);
 /*let btn_clearInt = document.getElementById("clear");
 btn_clearInt.addEventListener("click", clearInterval(timer));*/
