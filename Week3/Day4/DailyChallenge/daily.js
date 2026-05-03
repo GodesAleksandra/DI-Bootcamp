@@ -18,6 +18,7 @@ function generateStory(event){
     let person = formData.get('person');
     let verb = formData.get('verb');
     let place = formData.get('place');
+    console.log(noun);
 
 }
 
