@@ -11,7 +11,7 @@ and the function returnItemsToDefault() on mouseout (ie. when the mouse pointer 
 let allBoldItems;
 
 function getBoldItems() {
-    allBoldItems = document.querySelectorAll('p').querySelectorAll('b, strong');
+    allBoldItems = document.querySelectorAll('p strong, p b');
     console.log(allBoldItems);
 }
 
