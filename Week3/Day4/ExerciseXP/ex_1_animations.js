@@ -15,14 +15,14 @@ Instead of clicking on the button, the interval will be cleared (ie. clearInterv
 /*function Greeting() {
     alert("Hello World");
 }
-setTimeout(Greeting, 2000);
+setTimeout(Greeting, 2000);*/
 
 function AddParagraph() {
     p = document.createElement("p");
     p.textContent = "Hello World";
     document.getElementById("container").appendChild(p);
 }
-setTimeout(AddParagraph, 2000);*/
+//setTimeout(AddParagraph, 2000);
 
 let timer = setInterval(AddParagraph(), 2000);
 /*let btn_clearInt = document.getElementById("clear");
