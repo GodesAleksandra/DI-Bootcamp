@@ -25,7 +25,7 @@ function AddParagraph() {
 setTimeout(AddParagraph, 2000);
 
 const timer = setInterval(() => {
-  if (document.querySelectorAll('p').length > 5) stopTimer();
+  if (document.querySelectorAll('p').length == 5) stopTimer();
   AddParagraph();
 }, 2000);
 
