@@ -36,5 +36,5 @@ function stopTimer() {
 }
 
 document.getElementById('clear').addEventListener('click', () => {
-    stopTimer()
+    stopTimer();
 });
