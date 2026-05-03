@@ -11,3 +11,8 @@ The function will add a new paragraph <p>Hello World</p> to the <div id="contain
 The interval will be cleared (ie. clearInterval), when the user will click on the button.
 Instead of clicking on the button, the interval will be cleared (ie. clearInterval) as soon as there will be 5 paragraphs inside the <div id="container">.
 */
+
+function Greeting() {
+    alert("Hello World");
+}
+setTimeout(Greeting, 2000);
