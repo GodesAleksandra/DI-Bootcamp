@@ -9,5 +9,5 @@ function calculateVolume(event){
     event.preventDefault(); //prevent the default form submission action using JavaScript to implement custom actions such as form validation before the form data is sent to the server
     let formData = new FormData(event.target);
     let radius = formData.get('radius');
-    volume.value = radius;
+    volume.value = (4 / 3) * Math.PI * Math.pow(radius, 3);
 }
