@@ -12,7 +12,7 @@ const lib_button = document.getElementById('lib-button');
 lib_button.addEventListener("click", generateStory);
 function generateStory(event){
     event.preventDefault(); //prevent the default form submission action using JavaScript to implement custom actions such as form validation before the form data is sent to the server
-    let formData = new FormData(event.target);
+    let formData = new FormData(libform);
     let noun = formData.get('noun');
     let adjective = formData.get('adjective');
     let person = formData.get('person');
