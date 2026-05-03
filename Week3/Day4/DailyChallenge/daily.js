@@ -21,7 +21,7 @@ function generateStory(event){
     if (!noun || !adjective || !person || !verb || !place) alert("All fields are required");
     //console.log(noun);
     const libArr = [
-    `${adjective} ${person} ${verb} in ${place} and saw a ${noun}.`,
+    `${adjective} ${person} with ${noun} ${verb} in ${place}.`,
     `While ${verb} in ${place}, ${adjective} ${person} saw a ${noun}.`,
     `${adjective} ${person} loves to travel to ${place} and buy ${noun} while ${verb}.`];
 
