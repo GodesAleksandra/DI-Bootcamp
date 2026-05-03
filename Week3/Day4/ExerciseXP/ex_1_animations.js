@@ -40,4 +40,6 @@ function stopTimer() {
   console.log("Interval stopped.");
 }
 
-document.getElementById('clear').onclick = stopTimer;
+document.getElementById('clear').addEventListener('click', () => {
+    stopTimer()
+});
