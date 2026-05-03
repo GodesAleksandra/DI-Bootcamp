@@ -7,9 +7,9 @@ Bonus: Add a “shuffle” button to the HTML file, when clicked the button shou
 Display the stories randomly.*/
 
 const libform = document.getElementById('libform');
-const lib-button = document.getElementById('lib-button');
+const lib_button = document.getElementById('lib-button');
 
-lib-button.addEventListener("click", generateStory);
+lib_button.addEventListener("click", generateStory);
 function generateStory(event){
     event.preventDefault(); //prevent the default form submission action using JavaScript to implement custom actions such as form validation before the form data is sent to the server
     let formData = new FormData(event.target);
