@@ -28,7 +28,7 @@ function generateStory(event){
     const randomInd = Math.floor(Math.random() * libArr.length);
     //madLibTextResult.innerText = madLibsArr[randomIndex];
 
-    lib_story.textContent = madLibsArr[randomIndex];
+    lib_story.textContent = libArr[randomInd];
 
 }
 
