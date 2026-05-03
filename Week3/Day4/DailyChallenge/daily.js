@@ -19,11 +19,10 @@ function generateStory(event){
     const verb = document.getElementById('verb').value;
     const place = document.getElementById('place').value;
     if (!noun || !adjective || !person || !verb || !place) alert("All fields are required");
-    const libArr = [
-    `${adjective} ${person} with ${noun} ${verb} in ${place}.`,
+    const libArr = [`${adjective} ${person} with ${noun} ${verb} in ${place}.`,
     `While ${verb} in ${place}, ${adjective} ${person} saw a ${noun}.`,
     `${adjective} ${person} loves to travel to ${place} and buy ${noun} while ${verb}.`];
 
     const randomInd = Math.floor(Math.random() * libArr.length);
-    lib_story.textContent = libArr[randomInd];
+    lib_story.innerText = libArr[randomInd];
 }
