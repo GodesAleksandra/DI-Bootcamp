@@ -8,10 +8,23 @@ Display the stories randomly.*/
 
 const libform = document.getElementById('libform');
 const lib_button = document.getElementById('lib-button');
+const shuffle_button = document.getElementById('shuffle-button');
 const lib_story = document.getElementById('story');
 
 lib_button.addEventListener("click", generateStory);
 function generateStory(event){
+    event.preventDefault();
+    const noun = document.getElementById('noun').value;
+    const adjective = document.getElementById('adjective').value;
+    const person = document.getElementById('person').value;
+    const verb = document.getElementById('verb').value;
+    const place = document.getElementById('place').value;
+    if (!noun || !adjective || !person || !verb || !place) alert("All fields are required");
+    lib_story.innerText = `${adjective} ${person} with ${noun} ${verb} in ${place}.`;
+}
+
+shuffle_button.addEventListener("click", shuffleStory);
+function shuffleStory(event){
     event.preventDefault();
     const noun = document.getElementById('noun').value;
     const adjective = document.getElementById('adjective').value;
