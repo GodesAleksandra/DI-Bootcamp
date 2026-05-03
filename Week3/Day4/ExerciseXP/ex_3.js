@@ -14,6 +14,7 @@ function getBoldItems() {
     allBoldItems = document.querySelectorAll('p strong, p b');
     //console.log(allBoldItems);
 }
+getBoldItems();
 
 function highlight() {
     allBoldItems.forEach(p => {
