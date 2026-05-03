@@ -16,3 +16,10 @@ function Greeting() {
     alert("Hello World");
 }
 setTimeout(Greeting, 2000);
+
+function AddParagraph() {
+    p = document.createElement("p");
+    p.textContent = "Hello World";
+    document.getElementById("container").appendChild(p);
+}
+setTimeout(AddParagraph, 2000);
