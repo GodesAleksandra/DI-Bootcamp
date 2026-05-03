@@ -6,8 +6,8 @@ Hint : check out the demonstration in the Course Noted named JS Functions*/
 
 function myMove() {
     let marginLeft = 0;
+    const div_animate = document.getElementById('animate');
     const timer = setInterval(() => {
-        const div_animate = document.getElementById('animate');
         div_animate.style.marginLeft = marginLeft + "px";
         if (marginLeft == 350) clearInterval(timer);
         marginLeft += 1;
