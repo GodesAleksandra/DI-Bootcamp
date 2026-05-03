@@ -33,4 +33,4 @@ const timer = setInterval(() => {
 }, 2000);
 
 const btn_clearInt = document.getElementById("clear");
-btn_clearInt.addEventListener("click", clearInterval(timer));
+//btn_clearInt.addEventListener("click", clearInterval(timer));
