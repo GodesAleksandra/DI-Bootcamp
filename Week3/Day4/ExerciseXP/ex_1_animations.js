@@ -18,7 +18,7 @@ function Greeting() {
 setTimeout(Greeting, 2000);
 
 function AddParagraph() {
-    p = document.createElement("p");
+    const p = document.createElement("p");
     p.textContent = "Hello World";
     document.getElementById("container").appendChild(p);
 }
