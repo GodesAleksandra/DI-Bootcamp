@@ -30,6 +30,7 @@ btn_clearInt.addEventListener("click", clearInterval(timer));*/
 
 const timer = setInterval(() => {
   AddParagraph();
+  if (document.querySelectorAll('p').length > 5) stopTimer();
 }, 2000);
 
 //const btn_clearInt = document.getElementById("clear");
