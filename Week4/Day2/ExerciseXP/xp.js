@@ -12,8 +12,10 @@ function funcOne() {
 
 // #1.1 - run in the console:
 funcOne()
+// Output: inside the funcOne function 3
 // #1.2 What will happen if the variable is declared
 // with const instead of let ?
+//TypeError: Assignment to constant variable.
 
 //#2
 let a = 0;
@@ -27,10 +29,18 @@ function funcThree() {
 
 // #2.1 - run in the console:
 funcThree()
+// Output: inside the funcThree function 0
 funcTwo()
 funcThree()
+// Output: inside the funcThree function 5
 // #2.2 What will happen if the variable is declared
 // with const instead of let ?
+funcThree()
+// Output: inside the funcThree function 0
+funcTwo()
+// TypeError: Assignment to constant variable.
+funcThree()
+// Output: inside the funcThree function 0
 
 
 //#3
