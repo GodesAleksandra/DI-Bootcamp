@@ -56,6 +56,7 @@ function funcFive() {
 // #3.1 - run in the console:
 funcFour()
 funcFive()
+// Output: inside the funcFive function hello
 
 //#4
 let a = 1;
