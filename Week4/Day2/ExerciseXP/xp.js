@@ -137,3 +137,19 @@ Then, use function expression and invoke it.
 Write in a one line comment, the difference between function declaration and function expression.
 Finally, use a one line arrow function and invoke it.*/
 
+function convertKgToGr(kg) {
+    return kg * 1000;
+}
+
+convertKgToGr(20);
+
+let convertToGr = function (kg) {
+    return kg * 1000;
+}
+convertToGr(20);
+
+// Function Declaration is hoisted and must have a name. Function Expression is not hoisted and anonymous.
+
+const convert = (x) => x * 1000;
+convert(5);
+
