@@ -122,3 +122,8 @@ const isString = (arg) => {
 
 console.log(isString('hello'));
 console.log(isString([1, 2, 4, 0]));
+
+/* Exercise 4 : Find the sum
+Create a one line function (ie. an arrow function) that receives two numbers as parameters and returns the sum.
+*/
+
