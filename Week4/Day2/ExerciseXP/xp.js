@@ -127,3 +127,13 @@ console.log(isString([1, 2, 4, 0]));
 Create a one line function (ie. an arrow function) that receives two numbers as parameters and returns the sum.
 */
 
+const sum = (x, y) => x + y;
+console.log(sum(20,30));
+
+/*Exercise 5 : Kg and grams
+Create a function that receives a weight in kilograms and returns it in grams. (Hint: 1 kg is 1000gr)
+First, use function declaration and invoke it.
+Then, use function expression and invoke it.
+Write in a one line comment, the difference between function declaration and function expression.
+Finally, use a one line arrow function and invoke it.*/
+
