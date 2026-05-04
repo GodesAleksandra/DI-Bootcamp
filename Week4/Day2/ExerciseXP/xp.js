@@ -68,8 +68,10 @@ function funcSix() {
 
 // #4.1 - run in the console:
 funcSix()
+//Output: inside the funcSix function test
 // #4.2 What will happen if the variable is declared
 // with const instead of let ?
+//Output: inside the funcSix function test
 
 //#5
 let a = 2;
@@ -80,5 +82,9 @@ if (true) {
 alert(`outside of the if block ${a}`);
 
 // #5.1 - run the code in the console
+// in the if block 5
+// outside of the if block 2
 // #5.2 What will happen if the variable is declared
 // with const instead of let ?
+// in the if block 5
+// outside of the if block 2
