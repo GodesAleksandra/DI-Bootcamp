@@ -159,5 +159,14 @@ The function should display in the DOM a sentence like "You will be a <job title
 and married to <partner's name> with <number of children> kids."*/
 
 (function (children,partner,location,job) {
-    console.log(`You will be a ${job} in ${location} and married to ${partner} with ${children} kids.`);
+    const p = document.createElement("p");
+    p.textContent = `You will be a ${job} in ${location} and married to ${partner} with ${children} kids.`;
+    document.body.appendChild(p);
 })(4,"Jack","Paris","cook");
+
+/*Exercise 7 : Welcome
+John has just signed in to your website and you want to welcome him.
+Create a Navbar in your HTML file.
+In your js file, create a self invoking funtion that takes 1 argument: the name of the user that just signed in.
+The function should add a div in the nabvar, displaying the name of the user and his profile picture.*/
+
