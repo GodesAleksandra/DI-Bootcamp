@@ -158,6 +158,6 @@ Create a self invoking function that takes 4 arguments: number of children, part
 The function should display in the DOM a sentence like "You will be a <job title> in <geographic location>,
 and married to <partner's name> with <number of children> kids."*/
 
-(function (name) {
-    alert("Hello " + name);
-})("Sarah")
+(function (children,partner,location,job) {
+    console.log(`You will be a ${job} in ${location} and married to ${partner} with ${children} kids.`);
+})(4,"Jack","Paris","cook");
