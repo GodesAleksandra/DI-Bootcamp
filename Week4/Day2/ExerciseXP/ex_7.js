@@ -5,7 +5,7 @@ In your js file, create a self invoking function that takes 1 argument: the name
 The function should add a div in the nabvar, displaying the name of the user and his profile picture.*/
 
 (function (user) {
-    const navbar = document.getElementById("nabvar");
+    const navbar = document.getElementById("navbar");
     const div = document.createElement("div");
     div.textContent = user;
     navbar.appendChild(div);
