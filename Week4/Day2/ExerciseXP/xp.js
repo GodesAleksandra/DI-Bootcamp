@@ -187,3 +187,35 @@ containing <first ingredient>, <second ingredient>, <third ingredient>".
 The client wants 6 ingredients in his juice, therefore, invoke the addIngredients function TWICE.
 Then invoke once the displayJuice function. Finally, invoke the makeJuice function in the global scope.*/
 
+//Part I:
+function makeJuice(size) {
+    function addIngredients(first,second,third) {
+        const p = document.createElement("p");
+        p.textContent = `The client wants a ${size} juice, containing ${first}, ${second}, ${third}`;
+        document.body.appendChild(p);
+    }
+    addIngredients('lemon','orange','grapefruit');
+};
+makeJuice('medium');
+
+//Part II:
+function makeJuice(size) {
+    const ingredients = [];
+    function addIngredients(first,second,third) {
+        ingredients.push(first,second,third);
+    }
+    addIngredients('lemon','orange','grapefruit');
+    addIngredients('mint','grape','pineapple');
+    function displayJuice() {
+        let text = '';
+        for (const i of ingredients) {
+            text = text + ', ' + i;
+        }
+        const p = document.createElement("p");
+        p.textContent = `The client wants a ${size} juice, containing ${text.replace(/^, /, '')}`;
+        document.body.appendChild(p);
+    }
+    displayJuice();
+};
+
+makeJuice('large');
