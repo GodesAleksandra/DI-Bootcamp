@@ -174,4 +174,8 @@ The function should add a div in the nabvar, displaying the name of the user and
     const div = document.createElement("div");
     p.textContent = user;
     document.getElementById("nabvar").appendChild(div);
-})(4,"Jack","Paris","cook");
+    const img = document.createElement('img');
+    img.src = "profile_picture.png";
+    img.width = 100;
+    p.appendChild(img);
+})("Anna");
