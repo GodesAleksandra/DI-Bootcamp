@@ -167,6 +167,11 @@ and married to <partner's name> with <number of children> kids."*/
 /*Exercise 7 : Welcome
 John has just signed in to your website and you want to welcome him.
 Create a Navbar in your HTML file.
-In your js file, create a self invoking funtion that takes 1 argument: the name of the user that just signed in.
+In your js file, create a self invoking function that takes 1 argument: the name of the user that just signed in.
 The function should add a div in the nabvar, displaying the name of the user and his profile picture.*/
 
+(function (user) {
+    const div = document.createElement("div");
+    p.textContent = user;
+    document.getElementById("nabvar").appendChild(div);
+})(4,"Jack","Paris","cook");
