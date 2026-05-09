@@ -28,12 +28,13 @@ const fruits = ["apple", "orange"];
 const vegetables = ["carrot", "potato"];
 
 const result = ['bread', ...vegetables, 'chicken', ...fruits];
-console.log(result);
+console.log(result);// Output: ['bread', 'carrot', 'potato', 'chicken', 'apple', 'orange']
 
 //------2------
 const country = "USA";
-console.log([...country]);
+console.log([...country]);// Output: ['U', 'S', 'A']
 
 //------Bonus------
 let newArray = [...[,,]];
-console.log(newArray);
+console.log(newArray);// Output: [undefined, undefined]
+
