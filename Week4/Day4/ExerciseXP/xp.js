@@ -58,3 +58,10 @@ console.log(welcomeStudents);
 const fullStackResidents = users.filter(user => user.role == 'Full Stack Resident');
 console.log(fullStackResidents);
 
+const lastNameFSResidents = fullStackResidents.map((value, index) => value.lastName);
+console.log(lastNameFSResidents);
+
+/*Exercise 5 : Star Wars
+Using this array use the reduce() method to combine all of these into a single string.*/
+
+const epic = ['a', 'long', 'time', 'ago', 'in a', 'galaxy', 'far far', 'away'];
