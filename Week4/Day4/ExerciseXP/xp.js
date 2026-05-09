@@ -55,3 +55,6 @@ const users = [{ firstName: 'Bradley', lastName: 'Bouley', role: 'Full Stack Res
 const welcomeStudents = users.map((value, index) => "Hello " + value.firstName);
 console.log(welcomeStudents);
 
+const fullStackResidents = users.filter(user => user.role == 'Full Stack Resident');
+console.log(fullStackResidents);
+
