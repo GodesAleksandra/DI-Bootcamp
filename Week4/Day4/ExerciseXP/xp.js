@@ -74,7 +74,8 @@ console.log(str)
 
 /*Exercise 6 : Employees #2
 Using the filter() method, create a new array, containing the students that passed the course.
-Bonus : Chain the filter method with a forEach method, to congratulate the students with their name and course name (ie. “Good job Jenner, you passed the course in Information Technology”, “Good Job Marco you passed the course in Robotics” ect…)*/
+Bonus : Chain the filter method with a forEach method, to congratulate the students with their name and course name
+(ie. “Good job Jenner, you passed the course in Information Technology”, “Good Job Marco you passed the course in Robotics” ect…)*/
 
 const students = [{name: "Ray", course: "Computer Science", isPassed: true},
                {name: "Liam", course: "Computer Science", isPassed: false},
@@ -83,3 +84,9 @@ const students = [{name: "Ray", course: "Computer Science", isPassed: true},
                {name: "Kimberly", course: "Artificial Intelligence", isPassed: false},
                {name: "Jamie", course: "Big Data", isPassed: false}];
 
+const studentsPassed = students.filter(user => user.isPassed == true);
+console.log(studentsPassed);
+
+studentsPassed.forEach((student, index) => {
+    console.log(`Good job ${student.name}, you passed the course in Information Technology`);
+});
