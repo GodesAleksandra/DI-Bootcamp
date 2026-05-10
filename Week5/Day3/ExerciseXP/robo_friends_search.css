@@ -15,3 +15,21 @@ h1{
     border-radius: 4px;
     box-sizing: border-box;
 }
+
+#robot-container {
+    display: flex;
+    flex-diraction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    width: 310px;
+    border: 5px solid black;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
