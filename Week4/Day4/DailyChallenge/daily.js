@@ -41,3 +41,6 @@ const winners = [];
 gameInfo.filter(game => game.score > 5).forEach(game => { winners.push(game.username ) });
 console.log(winners);
 
+let total_score = 0;
+gameInfo.forEach(game => { total_score += game.score });
+console.log('The total score is ' + total_score);
