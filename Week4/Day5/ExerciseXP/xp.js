@@ -56,4 +56,86 @@ class Person {
 }
 
 const member = new Person('John');
-console.log(typeof member);
+console.log(typeof member); // Output: object
+
+/*Exercise 5 : Dog class
+Using the Dog class below:
+
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+};
+Analyze the options below. Which constructor will successfully extend the Dog class?
+  // 1
+class Labrador extends Dog {
+  constructor(name, size) {
+    this.size = size;
+  }
+};
+
+
+  // 2
+class Labrador extends Dog {
+  constructor(name, size) {
+    super(name);
+    this.size = size;
+  }
+};
+
+
+  // 3
+class Labrador extends Dog {
+  constructor(size) {
+    super(name);
+    this.size = size;
+  }
+};
+
+
+  // 4
+class Labrador extends Dog {
+  constructor(name, size) {
+    this.name = name;
+    this.size = size;
+  }
+};*/
+
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+};
+
+// 2
+class Labrador extends Dog {
+  constructor(name, size) {
+    super(name);
+    this.size = size;
+  }
+};
+
+/*Exercise 6 : Challenges
+Evaluate these (ie True or False)
+[2] === [2]
+{} === {}
+
+What is, for each object below, the value of the property number and why?
+
+const object1 = { number: 5 };
+const object2 = object1;
+const object3 = object2;
+const object4 = { number: 5};
+
+object1.number = 4;
+console.log(object2.number)
+console.log(object3.number)
+console.log(object4.number)
+
+Create a class Animal with the attributes name, type and color. The type is the animal type, for example: dog, cat, dolphin etc …
+Create a class Mammal that extends from the Animal class. Inside the class, add a method called sound(). This method takes a parameter: the sound the animal makes, and returns the details of the animal (name, type and color) as well as the sound it makes.
+Create a farmerCow object that is an instance of the class Mammal. The object accepts a name, a type and a color and calls the sound method that “moos” her information.
+For example: Moooo I'm a cow, named Lily and I'm brown and white*/
+
+[2] === [2] //False
+{} === {} //False
