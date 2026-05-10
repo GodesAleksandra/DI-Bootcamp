@@ -160,12 +160,15 @@ class Animal {
 }
 
 class Mammal extends Animal {
-  constructor(name, type, color, sound) {
+  constructor(name, type, color, sounds) {
     super(name, type, color);
-    this.sound = sound;
+    this.sounds = sounds;
   }
   sound() {
-    console.log(`${this.name}, ${this.type}, ${this.color}`);
+    console.log(`${this.sounds} I'm a ${this.type}, named ${this.name} and I'm ${this.color}`);
+    //Moooo I'm a cow, named Lily and I'm brown and white
   }
 }
 
+let farmerCow = new Mammal('Lily', 'cow', 'brown and white', 'Moooo');
+farmerCow.sound();
