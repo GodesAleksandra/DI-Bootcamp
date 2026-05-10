@@ -1,0 +1,17 @@
+@import url('https://fonts.cdnfonts.com/css/sega-logo-font');
+
+h1{
+    font-family: 'SEGA LOGO FONT', sans-serif;
+    font-size: 3rem;
+    margin: 20px;
+}
+
+#search {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
