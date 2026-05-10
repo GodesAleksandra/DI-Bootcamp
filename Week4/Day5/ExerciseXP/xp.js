@@ -46,3 +46,14 @@ arrUsers.forEach(user => {
 });
 console.log(arrUsers);
 
+/*Exercise 4 : Person class
+Analyze the code below. What will be the output?*/
+
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+const member = new Person('John');
+console.log(typeof member);
