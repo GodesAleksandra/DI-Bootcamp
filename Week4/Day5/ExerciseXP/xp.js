@@ -137,5 +137,35 @@ Create a class Mammal that extends from the Animal class. Inside the class, add 
 Create a farmerCow object that is an instance of the class Mammal. The object accepts a name, a type and a color and calls the sound method that “moos” her information.
 For example: Moooo I'm a cow, named Lily and I'm brown and white*/
 
+// In JavaScript, objects are reference types, it checks if both operands refer to the exact same memory location (reference identity)
 [2] === [2] //False
 {} === {} //False
+
+const object1 = { number: 5 };
+const object2 = object1;
+const object3 = object2;
+const object4 = { number: 5};
+
+object1.number = 4;
+console.log(object2.number) // 4
+console.log(object3.number) // 4
+console.log(object4.number) // 5
+
+class Animal {
+  constructor(name, type, color) {
+    this.name = name;
+    this.type = type;
+    this.color = color;
+  }
+}
+
+class Mammal extends Animal {
+  constructor(name, type, color, sound) {
+    super(name, type, color);
+    this.sound = sound;
+  }
+  sound() {
+    console.log(`${this.name}, ${this.type}, ${this.color}`);
+  }
+}
+
