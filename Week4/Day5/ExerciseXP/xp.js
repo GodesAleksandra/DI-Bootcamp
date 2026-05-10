@@ -28,6 +28,8 @@ function displayStudentInfo(objUser){
     console.log('Your full name is ' + objUser.first + ' ' + objUser.last);
 }
 
+/*function displayStudentInfo({ first, last }) { console.log(Your full name is ${first} ${last}); }*/
+
 displayStudentInfo({first: 'Elie', last:'Schoppik'});
 
 /* Exercise 3: User & id
