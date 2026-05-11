@@ -1,5 +1,14 @@
 @import url('https://fonts.cdnfonts.com/css/sega-logo-font');
 
+#header {
+    display: flex;
+    flex-diraction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-image: url('circuit-pattern.png');
+    background-color: #49D12E;
+}
+
 h1{
     font-family: 'SEGA LOGO FONT', sans-serif;
     font-size: 3rem;
