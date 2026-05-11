@@ -1,5 +1,10 @@
 @import url('https://fonts.cdnfonts.com/css/sega-logo-font');
 
+body {
+    background-image: url('circuit-pattern.png');
+    background-color: #8727F5;
+}
+
 #header {
     display: flex;
     flex-diraction: row;
