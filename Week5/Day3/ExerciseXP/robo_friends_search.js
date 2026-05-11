@@ -75,9 +75,10 @@ const robot_container = document.getElementById("robot-container");
 
 const input = document.getElementById("search");
 input.addEventListener("input", (event) => {
-  let robotsFiltArr = [...robots];
-  robotsFiltArr.filter(robot => robot.name.toLowerCase().includes(event.target.value.toLowerCase()));
-  displayCards(robotsFiltArr);
+    document.querySelectorAll('.card').forEach(el => el.remove());
+    let robotsFiltArr = [...robots];
+    robotsFiltArr.filter(robot => robot.name.toLowerCase().includes(event.target.value.toLowerCase()));
+    displayCards(robotsFiltArr);
 });
 
 function createCard(id) {
