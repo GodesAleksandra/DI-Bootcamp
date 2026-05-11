@@ -18,7 +18,7 @@ h1{
 #search {
     width: 50%;
     padding: 12px 20px;
-    margin: 8px 0;
+    margin: 15px 0;
     display: inline-block;
     border: 1px solid #CCC;
     border-radius: 4px;
@@ -47,7 +47,6 @@ h1{
 
 .rounded-border {
   border-radius: 50%;
-  /*border: 5px solid #ff0000;*/
   background-color: #254D48;
   width: 200px;
   height: 200px;
