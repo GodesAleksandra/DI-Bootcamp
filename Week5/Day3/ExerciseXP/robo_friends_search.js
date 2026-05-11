@@ -74,13 +74,17 @@ const robots = [
 const robot_container = document.getElementById("robot-container");
 
 const input = document.getElementById("search");
-input.addEventListener("input", searchCards(event));
-function searchCards(value) {
+input.addEventListener("input", (event) => {
+  console.log("Current typing:", event.target.value);
+});
+
+//input.addEventListener("input", searchCards(event));
+/*function searchCards(event) {
     document.querySelectorAll('card').forEach(card => {
       console.log(card);
       console.log(event.target.value);
     });
-}
+}*/
 
 function createCard(id) {
     let card = document.createElement("div");
