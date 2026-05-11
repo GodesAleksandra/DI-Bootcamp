@@ -11,11 +11,12 @@ Example of anagrams
 "The Morse Code" is an anagram of "Here come dots"*/
 
 function isAnagram(str1, str2) {
-    const letters1 = [...str1.toLowerCase().replace(' ','')].sort();
-    const letters2 = [...str2.toLowerCase().replace(' ','')].sort();
+    const letters1 = [...str1.toLowerCase().replace(/\s/g, '')].sort();
+    const letters2 = [...str2.toLowerCase().replace(/\s/g, '')].sort();
     const isEqual = letters1.length === letters2.length &&
                 letters1.every((val, index) => val === letters2[index]);
     return isEqual;
+    //return letters1.join('') === letters2.join('');
 }
 
 isAnagram('Astronomer', 'Moon starer');
