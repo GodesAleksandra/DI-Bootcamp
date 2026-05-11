@@ -99,6 +99,7 @@ function createTextElement(text, id, font_size, font_weight) {
         img = document.createElement('img');
         img.src = robot.image;
         img.width = 200;
+        img.classList.add('rounded-border');
         div_card.appendChild(img);
         createTextElement(robot.name, robot.id, "20px", "bold");
         createTextElement(robot.username, robot.id, "16px", "normal");
