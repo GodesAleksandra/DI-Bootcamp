@@ -70,3 +70,27 @@ const robots = [
         image:'https://robohash.org/10?200x200'
       }
 ];
+
+const robot_container = document.getElementById("robot-container");
+
+function createCard(id) {
+    card = document.createElement("div");
+    card.classList.add("card");
+    card.setAttribute('id', id);
+    robot_container.appendChild(card);
+}
+
+function createTextElement(text, id) {
+    const p = document.createElement("p");
+    p.textContent = text;
+    document.getElementById(id).appendChild(p);
+}
+
+(function displayCards() {
+    robots.forEach(robot => {
+        createCard(robot.id);
+        createTextElement(robot.name, robot.id);
+     });
+})()
+
+/**/
