@@ -10,3 +10,14 @@ Example of anagrams
 "School master" is an anagram of "The classroom"
 "The Morse Code" is an anagram of "Here come dots"*/
 
+function isAnagram(str1, str2) {
+    const letters1 = [...str1.toLowerCase().replace(' ','')].sort();
+    const letters2 = [...str2.toLowerCase().replace(' ','')].sort();
+    const isEqual = letters1.length === letters2.length &&
+                letters1.every((val, index) => val === letters2[index]);
+    return isEqual;
+}
+
+isAnagram('Astronomer', 'Moon starer');
+isAnagram('School master', 'The classroom');
+isAnagram('The Morse Code', 'Here come dots');
