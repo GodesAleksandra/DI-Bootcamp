@@ -96,7 +96,7 @@ function createTextElement(text, id, font_size, font_weight) {
         div_card = document.getElementById(robot.id);
         img = document.createElement('img');
         img.src = robot.image;
-        img.width = 100;
+        img.width = 200;
         div_card.appendChild(img);
         createTextElement(robot.name, robot.id, "20px", "bold");
         createTextElement(robot.username, robot.id, "16px", "normal");
