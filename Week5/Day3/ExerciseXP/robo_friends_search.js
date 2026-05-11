@@ -97,7 +97,9 @@ function createTextElement(text, id, font_size, font_weight) {
         img.src = robot.image;
         img.width = 100;
         div_card.appendChild(img);
-        createTextElement(robot.name, robot.id, "14px", "bold");
+        createTextElement(robot.name, robot.id, "25px", "bold");
+        createTextElement(robot.username, robot.id, "16px", "normal");
+        createTextElement(robot.email, robot.id, "14px", "normal");
      });
 })()
 
