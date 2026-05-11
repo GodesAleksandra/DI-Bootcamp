@@ -78,7 +78,7 @@ input.addEventListener("input", (event) => {
     document.querySelectorAll('.card').forEach(el => el.remove());
     let robotsFiltArr = robots.filter(robot =>
         console.log(robot.name);
-        robot.name.toLowerCase().includes(event.target.value.toLowerCase())
+        robot.name.toLowerCase().includes(event.target.value.toLowerCase());
     );
     console.log(robotsFiltArr);
     displayCards(robotsFiltArr);
