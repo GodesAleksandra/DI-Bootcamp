@@ -21,6 +21,7 @@ h1{
     flex-diraction: row;
     flex-wrap: wrap;
     justify-content: center;
+    background-image: url('circuit-pattern.png');
 }
 
 .card {
