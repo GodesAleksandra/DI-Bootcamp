@@ -108,9 +108,9 @@ function createTextElement(text, id, font_size, font_weight) {
     document.getElementById(id).appendChild(p);
 }
 
-(function displayCards() {
+(function displayCards(robotsArr) {
     let div_card, img;
-    robots.forEach(robot => {
+    robotsArr.forEach(robot => {
         createCard(robot.id);
         div_card = document.getElementById(robot.id);
         img = document.createElement('img');
