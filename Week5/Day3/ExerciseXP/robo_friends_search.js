@@ -74,22 +74,28 @@ const robots = [
 const robot_container = document.getElementById("robot-container");
 
 function createCard(id) {
-    card = document.createElement("div");
+    let card = document.createElement("div");
     card.classList.add("card");
     card.setAttribute('id', id);
     robot_container.appendChild(card);
 }
 
-function createTextElement(text, id) {
+function createTextElement(text) {
     const p = document.createElement("p");
     p.textContent = text;
-    document.getElementById(id).appendChild(p);
+    div_card.appendChild(p);
 }
 
 (function displayCards() {
+    let div_card, img;
     robots.forEach(robot => {
         createCard(robot.id);
-        createTextElement(robot.name, robot.id);
+        div_card = document.getElementById(robot.id);
+        img = document.createElement('img');
+        img.src = robot.image;
+        img.width = 100;
+        div_card.appendChild(img);
+        createTextElement(robot.name);
      });
 })()
 
