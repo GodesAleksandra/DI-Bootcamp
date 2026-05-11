@@ -74,8 +74,8 @@ const robots = [
 const robot_container = document.getElementById("robot-container");
 
 const input = document.getElementById("search");
-input.addEventListener("change", searchCards);
-function searchCards() {
+input.addEventListener("change", searchCards(input.value));
+function searchCards(value) {
     document.querySelectorAll('card').forEach(card => {
       console.log(card);
     });
