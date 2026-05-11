@@ -26,8 +26,13 @@ videoViral.watch();
 const videoBW = new Video('The Best and Worst', 'Lily Black', 50);
 videoBW.watch();
 
-const videos = [{ title: 'Bradley', uploader: 'Bradley Bouley', time: 30 },
-                { title: 'Chloe', uploader: 'Chloe Alnaji', time: 50 },
-                { title: 'Jonathan', uploader: 'Jonathan Baughn', time: 29 },
-                { title: 'Michael', uploader: 'Michael Herman', time: 45 },
-                { title: 'Robert', uploader: 'Robert Hajek', time: 60 }];
+const videos = [{ title: 'The truth about yourself', uploader: 'Bradley Bouley', time: 30 },
+                { title: 'Give Me 9 Minutes', uploader: 'Chloe Alnaji', time: 50 },
+                { title: 'The best title', uploader: 'Jonathan Baughn', time: 29 },
+                { title: 'Baby Shark Dance', uploader: 'Michael Herman', time: 45 },
+                { title: 'Bath Song', uploader: 'Robert Hajek', time: 60 }];
+
+videos.forEach(video => {
+    let videoNew = new Video(video.title, video.uploader, video.time);
+    videoNew.watch();
+});
