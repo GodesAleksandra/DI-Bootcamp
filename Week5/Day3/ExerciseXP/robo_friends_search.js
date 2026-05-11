@@ -75,7 +75,11 @@ const robot_container = document.getElementById("robot-container");
 
 const input = document.getElementById("search");
 input.addEventListener("input", (event) => {
-  console.log("Current typing:", event.target.value);
+  //console.log("Current typing:", event.target.value);
+   document.querySelectorAll('card').forEach(card => {
+      console.log(card);
+      console.log(event.target.value);
+    });
 });
 
 //input.addEventListener("input", searchCards(event));
