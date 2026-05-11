@@ -32,7 +32,7 @@ h1{
 
 #robot-container {
     display: flex;
-    flex-diraction: row;
+    flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
 }
