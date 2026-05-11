@@ -78,6 +78,7 @@ function createCard(id) {
     card.classList.add("card");
     card.setAttribute('id', id);
     card.style.backgroundImage = "url('card-pattern.png')";
+    card.style.backgroundColor = "#2ED1CC";
     robot_container.appendChild(card);
 }
 
