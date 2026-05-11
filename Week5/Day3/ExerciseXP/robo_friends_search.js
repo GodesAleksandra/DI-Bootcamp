@@ -75,19 +75,10 @@ const robot_container = document.getElementById("robot-container");
 
 const input = document.getElementById("search");
 input.addEventListener("input", (event) => {
-  //console.log("Current typing:", event.target.value);
   let robotsFiltArr = [...robots];
   robotsFiltArr.filter(robot => robot.name.toLowerCase().includes(event.target.value.toLowerCase()));
   displayCards(robotsFiltArr);
 });
-
-//input.addEventListener("input", searchCards(event));
-/*function searchCards(event) {
-    document.querySelectorAll('card').forEach(card => {
-      console.log(card);
-      console.log(event.target.value);
-    });
-}*/
 
 function createCard(id) {
     let card = document.createElement("div");
@@ -107,7 +98,7 @@ function createTextElement(text, id, font_size, font_weight) {
     document.getElementById(id).appendChild(p);
 }
 
-(function displayCards(robotsArr = robots) {
+function displayCards(robotsArr = robots) {
     let div_card, img;
     robotsArr.forEach(robot => {
         createCard(robot.id);
@@ -121,6 +112,6 @@ function createTextElement(text, id, font_size, font_weight) {
         createTextElement(robot.username, robot.id, "16px", "normal");
         createTextElement(robot.email, robot.id, "12px", "normal");
      });
-})()
+}
 
-/**/
+displayCards();
