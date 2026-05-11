@@ -85,7 +85,7 @@ function createTextElement(text, id, font_size, font_weight) {
     p.textContent = text;
     p.style.fontSize = font_size;
     p.style.fontWeight  = font_weight;
-    p.style.textIndent = "10px";
+    p.style.lineHeight = "1.5";
     document.getElementById(id).appendChild(p);
 }
 
