@@ -80,9 +80,11 @@ function createCard(id) {
     robot_container.appendChild(card);
 }
 
-function createTextElement(text, id) {
+function createTextElement(text, id, font_size, font_weight) {
     const p = document.createElement("p");
     p.textContent = text;
+    p.style.fontSize = font_size;
+    p.style.fontWeight  = font_weight;
     document.getElementById(id).appendChild(p);
 }
 
@@ -95,7 +97,7 @@ function createTextElement(text, id) {
         img.src = robot.image;
         img.width = 100;
         div_card.appendChild(img);
-        createTextElement(robot.name, robot.id);
+        createTextElement(robot.name, robot.id, 12, bold);
      });
 })()
 
