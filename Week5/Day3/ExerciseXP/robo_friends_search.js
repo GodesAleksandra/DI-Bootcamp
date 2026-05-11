@@ -77,6 +77,7 @@ function createCard(id) {
     let card = document.createElement("div");
     card.classList.add("card");
     card.setAttribute('id', id);
+    card.style.backgroundImage = "url('card-pattern.png')";
     robot_container.appendChild(card);
 }
 
