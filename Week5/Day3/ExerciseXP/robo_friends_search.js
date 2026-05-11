@@ -85,7 +85,7 @@ function createTextElement(text, id, font_size, font_weight) {
     p.textContent = text;
     p.style.fontSize = font_size;
     p.style.fontWeight  = font_weight;
-    p.style.lineHeight = "1.5";
+    p.style.lineHeight = "0.1";
     document.getElementById(id).appendChild(p);
 }
 
@@ -98,9 +98,9 @@ function createTextElement(text, id, font_size, font_weight) {
         img.src = robot.image;
         img.width = 100;
         div_card.appendChild(img);
-        createTextElement(robot.name, robot.id, "25px", "bold");
+        createTextElement(robot.name, robot.id, "20px", "bold");
         createTextElement(robot.username, robot.id, "16px", "normal");
-        createTextElement(robot.email, robot.id, "14px", "normal");
+        createTextElement(robot.email, robot.id, "12px", "normal");
      });
 })()
 
