@@ -73,6 +73,14 @@ const robots = [
 
 const robot_container = document.getElementById("robot-container");
 
+const input = document.getElementById("search");
+input.addEventListener("change", searchCards);
+function searchCards() {
+    document.querySelectorAll('card').forEach(card => {
+      console.log(card);
+    });
+}
+
 function createCard(id) {
     let card = document.createElement("div");
     card.classList.add("card");
