@@ -8,10 +8,10 @@ When you click the Send button, the form will be submitted with a GET method. (y
 Where will the sent data appear?*/
 
 /* When the element’s method attribute is GET (or is omitted), the information in the form is added to the end of the action URL as a query string:
-file:///C:/Users/1/Desktop/DI-Bootcamp/Week5/Day2/ExerciseXP/xp.html?name=Aleksandra&comments=no+comments
+xp.html?name=Aleksandra&comments=no+comments
 In the Network tab:
 Request URL
-file:///C:/Users/1/Desktop/DI-Bootcamp/Week5/Day2/ExerciseXP/xp.html?name=Aleksandra&comments=no+comments
+xp.html?name=Aleksandra&comments=no+comments
 Request Method
 GET
 
@@ -25,7 +25,7 @@ When you click the Send button, the form will be submitted with a POST method.(y
 Where will the sent data appear? Hint : Look at the Network Tab*/
 
 /*If we change the method to POST, we get the information as part of the data body:
-Request URL: file:///C:/Users/1/Desktop/DI-Bootcamp/Week5/Day2/ExerciseXP/ex_2.html
+Request URL: ex_2.html
 Request Method: POST
 
 From Data
