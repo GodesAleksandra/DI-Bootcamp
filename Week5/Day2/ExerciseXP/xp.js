@@ -24,3 +24,14 @@ Use the same form structure as Exercise 1.
 When you click the Send button, the form will be submitted with a POST method.(you can use the same HTML file for the action url)
 Where will the sent data appear? Hint : Look at the Network Tab*/
 
+/*If we change the method to POST, we get the information as part of the data body:
+Request URL: file:///C:/Users/1/Desktop/DI-Bootcamp/Week5/Day2/ExerciseXP/ex_2.html
+Request Method: POST
+
+From Data
+name: Aleksandra
+comments: no comments
+
+ContentType "application/x-www-form-urlencoded"
+Body "name=Aleksandra&comments=no+comments"*/
+
