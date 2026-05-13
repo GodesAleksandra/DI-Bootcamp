@@ -2,7 +2,7 @@
 Create a form with two fields (name, last name) and a submit button.
 When you click the Send button, retrieve the data from the inputs, and append it on the DOM as a JSON string.
 */
-
+let form = document.forms[0];
 form.addEventListener("submit", createJSON);
 function createJSON(event){
     event.preventDefault();
