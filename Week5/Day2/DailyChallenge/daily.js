@@ -11,6 +11,7 @@ function createJSON(event){
     formData.forEach(function(value, key) {
         valFormJSON = valFormJSON + '"' + key + '":"' + value + '",';
     });
+    //const data = Object.fromEntries(new FormData(event.target)); const jsonString = JSON.stringify(data);.
     valFormJSON = valFormJSON.slice(0, -1) + "}";
     p = document.createElement("p");
     p.textContent = valFormJSON;
