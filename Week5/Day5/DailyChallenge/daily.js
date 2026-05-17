@@ -153,9 +153,9 @@ const toMorse = (morseJS) => {
 function joinWords(morseTranslation) {
     const result = morseTranslation.join('\n');
     console.log(result);
-    p = document.createElement("p");
-    p.innerText = result;
-    document.body.appendChild(p);
+    morseParagraph = document.createElement("p");
+    morseParagraph.innerText = result;
+    document.body.appendChild(morseParagraph);
 }
 
 toJs(morse)
