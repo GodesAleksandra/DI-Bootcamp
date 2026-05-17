@@ -126,7 +126,7 @@ let morseJS = {};
 const toJs = (morse) => {
   return new Promise((resolve, reject) => {
     morseJS = JSON.parse(morse);
-    if(morseJS) {
+    if(morseJS) { //if(Object.keys(morseJS).length === 0)
       resolve(morseJS);
     } else {
       reject(`morseJS is empty`);
@@ -161,5 +161,5 @@ function joinWords(morseTranslation) {
 toJs(morse)
   .then((morseJS) => toMorse(morseJS))
   .then((morseTranslation) => joinWords(morseTranslation))
-  .then((result) => console.log(result))
+  //.then((result) => console.log(result))
   .catch(error => console.log(error));
