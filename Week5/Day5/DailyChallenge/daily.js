@@ -63,7 +63,6 @@ if the user entered the word "¡Hola!", the promise rejects because the characte
 
 
 The third function called joinWords(morseTranslation), takes one argument: the morse translation array
-
 this function joins the morse translation by using line break and display it on the page (ie. On the DOM)
 
 Chain the three functions.
@@ -135,30 +134,43 @@ const toJs = (morse) => {
   });
 };
 
-/*The second function called toMorse(morseJS), takes one argument: the new morse javascript object.
-This function asks the user for a word or a sentence.
-if the user entered a character that doesn’t exist in the new morse javascript object, throw an error. (use reject)
-else return an array with the morse translation of the user’s word.
-if the user enters the word "Hello", the promise resolves with this value ["....", ".", ".-..", ".-..","---"]
-if the user entered the word "¡Hola!", the promise rejects because the character "¡" doesn't exist in the morse javascript object*/
-
 const toMorse = (morseJS) => {
   return new Promise((resolve, reject) => {
     const word = prompt("What is a word or a sentence?").toLowerCase();
     const letters = [...word];
-    let wordMorse = [];
+    let morseTranslation = [];
     letters.forEach((element, index, array) => {
-      wordMorse.push(morseJS[element]);
+      morseTranslation.push(morseJS[element]);
     });
-    if(!wordMorse.includes(undefined)) {
-      resolve(wordMorse);
+    if(!morseTranslation.includes(undefined)) {
+      resolve(morseTranslation);
     } else {
       reject(`You entered a character that doesn’t exist in the morse object`);
     }
   });
 };
 
+function joinWords(morseTranslation) {
+    const result = morseTranslation.join('\n');
+    p = document.createElement("p");
+    p.textContent = result;
+    document.body.appendChild(p);
+}
+
 toJs(morse)
   .then((morseJS) => toMorse(morseJS))
+  .then((morseTranslation) => joinWords(morseTranslation))
   .then((result) => console.log(result))
   .catch(error => console.log(error));
+
+/*The third function called joinWords(morseTranslation), takes one argument: the morse translation array
+this function joins the morse translation by using line break and display it on the page (ie. On the DOM)
+
+Chain the three functions.
+Example:
+"Hello" gives you
+....
+.
+.-..
+.-..
+---*/
