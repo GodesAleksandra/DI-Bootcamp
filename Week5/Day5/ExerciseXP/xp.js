@@ -34,3 +34,17 @@ compareToTen(8)
 /*Exercise 2 : Promises
 Create a promise that resolves itself in 4 seconds and returns a “success” string.*/
 
+const resolvingPromise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("Success result");
+  }, 4000);
+});
+
+resolvingPromise.then((message) => {
+  console.log(message);
+});
+
+/*Exercise 3 : Resolve & Reject
+Use Promise.resolve(value) to create a promise that will resolve itself with a value of 3.
+Use Promise.reject(error) to create a promise that will reject itself with the string “Boo!”*/
+
