@@ -154,7 +154,7 @@ function joinWords(morseTranslation) {
     const result = morseTranslation.join('\n');
     console.log(result);
     p = document.createElement("p");
-    p.textContent = result;
+    p.innerText = result;
     document.body.appendChild(p);
 }
 
