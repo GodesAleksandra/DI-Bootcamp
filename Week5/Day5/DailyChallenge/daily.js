@@ -144,9 +144,14 @@ if the user entered the word "¡Hola!", the promise rejects because the characte
 
 const toMorse = (morseJS) => {
   return new Promise((resolve, reject) => {
-    const word = prompt("What is a word or a sentence?");
-    if(Object.keys(morseJS).includes(word)) {
-      resolve('Yes');
+    const word = prompt("What is a word or a sentence?").toLowerCase();
+    const letters = [...word];
+    let wordMorse = [];
+    letters.forEach((element, index, array) => {
+      wordMorse.push(morseJS[element]);
+    });
+    if(!wordMorse.includes(undefined)) {
+      resolve(wordMorse);
     } else {
       reject(`You entered a character that doesn’t exist in the morse object`);
     }
