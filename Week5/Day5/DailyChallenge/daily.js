@@ -152,6 +152,7 @@ const toMorse = (morseJS) => {
 
 function joinWords(morseTranslation) {
     const result = morseTranslation.join('\n');
+    console.log(result);
     p = document.createElement("p");
     p.textContent = result;
     document.body.appendChild(p);
@@ -162,15 +163,3 @@ toJs(morse)
   .then((morseTranslation) => joinWords(morseTranslation))
   .then((result) => console.log(result))
   .catch(error => console.log(error));
-
-/*The third function called joinWords(morseTranslation), takes one argument: the morse translation array
-this function joins the morse translation by using line break and display it on the page (ie. On the DOM)
-
-Chain the three functions.
-Example:
-"Hello" gives you
-....
-.
-.-..
-.-..
----*/
