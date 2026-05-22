@@ -38,3 +38,36 @@ Use the Fetch API to retrieve 10 gifs about the “sun”. The starting position
 Make sure to check the status of the Response and to catch any occuring errors.
 Console.log the Javascript Object that you receive.*/
 
+
+console.log("Starting ...")
+
+const getSunGifs = () => {
+    console.log("Working ...")
+    fetch("https://api.giphy.com/v1/gifs/search?q=sun&limit=10&offset=2&rating=g&api_key=hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My")
+        .then((response) => {
+            if(response.ok){
+                return response.json()
+            } else {
+                throw new Error("Wrong gif")
+            }
+        })
+        .then((obj) => {
+            console.log(obj);
+        })
+        .catch(function (error) {
+            console.log(`We got the error ${error}`)
+        });
+    console.log("Work Done ...")
+}
+
+getSunGifs()
+
+/*Exercise 3 : Async function
+Improve the program below :
+fetch("https://www.swapi.tech/api/starships/9/")
+    .then(response => response.json())
+    .then(objectStarWars => console.log(objectStarWars.result));
+Create an async function, that will await for the above GET request.
+The program shouldn’t contain any then() method.
+Make sure to check the status of the Response and to catch any occuring errors.*/
+
