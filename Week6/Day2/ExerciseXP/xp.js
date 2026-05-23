@@ -77,11 +77,11 @@ const fetchStarWars = async (endpoint) => {
         if (response.status == 400) {
             throw new Error("Something went wrong")
         } else {
-            console.log("response", response)
+            //console.log("response", response)
             let data = await response.json();
-            console.log("data", data);
-            let starWarsRes = data.results.objectStarWars.result;
-            console.log(starWarsRes);
+            //console.log("data", data);
+            let objectStarWars = data.result;
+            console.log(objectStarWars);
         }
     } catch (err) {
         console.log("In the catch ", err)
@@ -89,3 +89,22 @@ const fetchStarWars = async (endpoint) => {
 }
 
 fetchStarWars("https://www.swapi.tech/api/starships/9/");
+
+/*Exercise 4: Analyze
+Analyse the code provided below - what will be the outcome?*/
+
+function resolveAfter2Seconds() {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve('resolved');
+        }, 2000);
+    });
+}
+
+async function asyncCall() {
+    console.log('calling');
+    let result = await resolveAfter2Seconds();
+    console.log(result);
+}
+
+asyncCall();
