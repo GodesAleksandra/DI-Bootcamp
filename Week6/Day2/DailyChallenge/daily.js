@@ -24,7 +24,7 @@ formElem.onsubmit = async (e) => {
             const image_url = result.data[0].images.original.url;
             const img = document.createElement("img");
             img.src = image_url; // Set source
-            formData.append(img);
+            document.body.append(img);
             //console.log(image_url);
         })
         .catch(function (error) {
