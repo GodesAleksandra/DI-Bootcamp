@@ -74,7 +74,7 @@ Make sure to check the status of the Response and to catch any occuring errors.*
 const fetchStarWars = async (endpoint) => {
     try {
         const response = await fetch(endpoint);
-        if (response.status == 400) {
+        if (!response.ok) {
             throw new Error("Something went wrong")
         } else {
             //console.log("response", response)
