@@ -9,10 +9,7 @@ Create a program to retrieve the data from the API URL provided above.
 Use the fetch() method to make a GET request to the Giphy API and Console.log the Javascript Object that you receive.
 Make sure to check the status of the Response and to catch any occuring errors.*/
 
-console.log("Starting ...")
-
 const getGifs = () => {
-    console.log("Working ...")
     fetch("https://api.giphy.com/v1/gifs/search?q=hilarious&rating=g&api_key=hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My")
         .then((response) => {
             if(response.ok){
@@ -27,7 +24,6 @@ const getGifs = () => {
         .catch(function (error) {
             console.log(`We got the error ${error}`)
         });
-    console.log("Work Done ...")
 }
 
 getGifs()
@@ -39,10 +35,7 @@ Make sure to check the status of the Response and to catch any occuring errors.
 Console.log the Javascript Object that you receive.*/
 
 
-console.log("Starting ...")
-
 const getSunGifs = () => {
-    console.log("Working ...")
     fetch("https://api.giphy.com/v1/gifs/search?q=sun&limit=10&offset=2&rating=g&api_key=hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My")
         .then((response) => {
             if(response.ok){
@@ -57,7 +50,6 @@ const getSunGifs = () => {
         .catch(function (error) {
             console.log(`We got the error ${error}`)
         });
-    console.log("Work Done ...")
 }
 
 getSunGifs()
