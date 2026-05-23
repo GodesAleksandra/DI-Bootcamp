@@ -108,3 +108,6 @@ async function asyncCall() {
 }
 
 asyncCall();
+//Output:
+//calling
+//resolved
