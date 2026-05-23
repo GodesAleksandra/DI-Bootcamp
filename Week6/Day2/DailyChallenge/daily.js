@@ -10,7 +10,7 @@ formElem.onsubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(formElem);
     const category = formData.get('category'); // Matches the 'name' attribute in HTML
-    const url = 'https://api.giphy.com/v1/gifs/search?q='+category+'&limit=1&rating=g&api_key=hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My';
+    const url = `https://api.giphy.com/v1/gifs/search?q=${category}&limit=1&rating=g&api_key=hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My`;
     console.log(url);
 
     fetch(url)
