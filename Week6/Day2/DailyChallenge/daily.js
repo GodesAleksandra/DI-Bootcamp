@@ -10,16 +10,31 @@ formElem.onsubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(formElem);
     const category = formData.get('category'); // Matches the 'name' attribute in HTML
-    console.log(category);
     const url = 'https://api.giphy.com/v1/gifs/search?q='+category+'&limit=1&rating=g&api_key=hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My';
+    console.log(url);
 
-    let response = await fetch(url, {
+    fetch(url)
+        .then((response) => {
+            if(response.ok){
+                return response.json()
+            } else {
+                throw new Error("Wrong gif")
+            }
+        })
+        .then((result) => {
+            console.log(result.images.url);
+        })
+        .catch(function (error) {
+            console.log(`We got the error ${error}`)
+        });
+
+    /*let response = await fetch(url, {
         method: 'POST',
         body: formData
     });
 
     let result = await response.json();
-    console.log(result.images);
+    console.log(result.images.url);*/
 };
 
     /*let formData = new FormData();
