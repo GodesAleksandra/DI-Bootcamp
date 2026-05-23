@@ -16,6 +16,7 @@ formElem.onsubmit = async (e) => {
     fetch(url)
         .then((response) => {
             if(response.ok){
+                console.log('ok');
                 return response.json()
             } else {
                 throw new Error("Wrong gif")
