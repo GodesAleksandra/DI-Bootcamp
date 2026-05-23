@@ -6,11 +6,6 @@ The gif should be appended with a DELETE button next to it. Hint : to find the U
 Allow the user to delete a specific gif by clicking the DELETE button.
 Allow the user to remove all of the GIFs by clicking a DELETE ALL button.*/
 
-const formData = new FormData(form);
-const userId = formData.get('userId'); // Matches the 'name' attribute in HTML
-
-const url = `https://example.com{userId}`;
-
 formElem.onsubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(formElem);
