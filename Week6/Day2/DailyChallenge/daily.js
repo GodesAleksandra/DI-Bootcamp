@@ -30,21 +30,4 @@ formElem.onsubmit = async (e) => {
         .catch(function (error) {
             console.log(`We got the error ${error}`)
         });
-
-    /*let response = await fetch(url, {
-        method: 'POST',
-        body: formData
-    });
-
-    let result = await response.json();
-    console.log(result.images.url);*/
 };
-
-    /*let formData = new FormData();
-    formData.append('key1', 'value1');
-    formData.append('key2', 'value2');
-    console.log(formData);
-    // // List key/value pairs
-    for(let [name, value] of formData) {
-        console.log(`${name} = ${value}`); // key1 = value1, then key2 = value2
-    }*/
