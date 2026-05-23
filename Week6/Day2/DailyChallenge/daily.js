@@ -7,25 +7,25 @@ Allow the user to delete a specific gif by clicking the DELETE button.
 Allow the user to remove all of the GIFs by clicking a DELETE ALL button.*/
 
 formElem.onsubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData(formElem);
-        const category = formData.get('category'); // Matches the 'name' attribute in HTML
-        const url = `https://api.giphy.com/v1/gifs/search?q={category}&limit=1&rating=g&api_key=hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My`;
+    e.preventDefault();
+    const formData = new FormData(formElem);
+    const category = formData.get('category'); // Matches the 'name' attribute in HTML
+    const url = `https://api.giphy.com/v1/gifs/search?q={category}&limit=1&rating=g&api_key=hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My`;
 
-        let response = await fetch(url, {
-            method: 'POST',
-            body: formData
-        });
+    let response = await fetch(url, {
+        method: 'POST',
+        body: formData
+    });
 
-        let result = await response.json();
-        alert(result.message);
-    };
+    let result = await response.json();
+    console.log(result.images);
+};
 
-    let formData = new FormData();
+    /*let formData = new FormData();
     formData.append('key1', 'value1');
     formData.append('key2', 'value2');
     console.log(formData);
     // // List key/value pairs
     for(let [name, value] of formData) {
         console.log(`${name} = ${value}`); // key1 = value1, then key2 = value2
-    }
+    }*/
