@@ -23,7 +23,7 @@ formElem.onsubmit = async (e) => {
             }
         })
         .then((result) => {
-            console.log(result.data[0].images);
+            console.log(result.data[0].images.original.url);
         })
         .catch(function (error) {
             console.log(`We got the error ${error}`)
