@@ -78,7 +78,7 @@ const fetchStarWars = async (endpoint) => {
             throw new Error("Something went wrong")
         } else {
             let data = await response.json();
-            let starWarsRes = objectStarWars.result;
+            let starWarsRes = data.results.objectStarWars.result;
             console.log(starWarsRes);
         }
     } catch (err) {
