@@ -71,3 +71,19 @@ Create an async function, that will await for the above GET request.
 The program shouldn’t contain any then() method.
 Make sure to check the status of the Response and to catch any occuring errors.*/
 
+const fetchStarWars = async (endpoint) => {
+    try {
+        const response = await fetch(endpoint);
+        if (response.status == 400) {
+            throw new Error("Something went wrong")
+        } else {
+            let data = await response.json();
+            let starWarsRes = objectStarWars.result;
+            console.log(starWarsRes);
+        }
+    } catch (err) {
+        console.log("In the catch ", err)
+    }
+}
+
+fetchStarWars("https://www.swapi.tech/api/starships/9/")
