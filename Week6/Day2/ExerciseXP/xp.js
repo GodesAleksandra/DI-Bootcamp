@@ -77,7 +77,9 @@ const fetchStarWars = async (endpoint) => {
         if (response.status == 400) {
             throw new Error("Something went wrong")
         } else {
+            console.log("response", response)
             let data = await response.json();
+            console.log("data", data);
             let starWarsRes = data.results.objectStarWars.result;
             console.log(starWarsRes);
         }
@@ -86,4 +88,4 @@ const fetchStarWars = async (endpoint) => {
     }
 }
 
-fetchStarWars("https://www.swapi.tech/api/starships/9/")
+fetchStarWars("https://www.swapi.tech/api/starships/9/");
