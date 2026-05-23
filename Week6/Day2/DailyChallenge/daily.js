@@ -5,3 +5,32 @@ In the JS file, create a program to fetch one random gif depending on the search
 The gif should be appended with a DELETE button next to it. Hint : to find the URL of the gif, look for the sub-object named “images” inside the data you receive from the API.
 Allow the user to delete a specific gif by clicking the DELETE button.
 Allow the user to remove all of the GIFs by clicking a DELETE ALL button.*/
+
+const formData = new FormData(form);
+const userId = formData.get('userId'); // Matches the 'name' attribute in HTML
+
+const url = `https://example.com{userId}`;
+
+formElem.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(formElem);
+        const category = formData.get('category'); // Matches the 'name' attribute in HTML
+        const url = `https://api.giphy.com/v1/gifs/search?q={category}&limit=1&rating=g&api_key=hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My`;
+
+        let response = await fetch(url, {
+            method: 'POST',
+            body: formData
+        });
+
+        let result = await response.json();
+        alert(result.message);
+    };
+
+    let formData = new FormData();
+    formData.append('key1', 'value1');
+    formData.append('key2', 'value2');
+    console.log(formData);
+    // // List key/value pairs
+    for(let [name, value] of formData) {
+        console.log(`${name} = ${value}`); // key1 = value1, then key2 = value2
+    }
