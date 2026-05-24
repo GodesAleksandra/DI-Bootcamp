@@ -6,6 +6,14 @@ The gif should be appended with a DELETE button next to it. Hint : to find the U
 Allow the user to delete a specific gif by clicking the DELETE button.
 Allow the user to remove all of the GIFs by clicking a DELETE ALL button.*/
 
+/*OVERALL EVALUATION OF ALL URLS ABOVE
+• The core requirement was to use async/await and try/catch, but the solution uses .then() and .catch() promise chains instead. While this works, it doesn't follow the specific instructions of the exercise. The async keyword on the function is present, but await is never used.
+• The instructions specified using the Giphy API's 'random' endpoint. The code uses the 'search' endpoint with a random offset. While this is a creative way to get a random-seeming result, it doesn't follow the documentation provided in the prompt.
+• The delete and delete-all functionalities are implemented very well. The use of event.target.closest('.gif_div') is a great, robust way to handle the single delete.
+• Consider refactoring the API call to use the async/await syntax with a try/catch block for error handling, as this was a key learning objective of the challenge.
+• The HTML for the delete button uses <i class="material-icons">delete</i>, but the required Google Fonts/Icons stylesheet is not linked in the HTML file, so the icon will not render correctly.
+*/
+
 
 
 formElem.onsubmit = async (e) => {
