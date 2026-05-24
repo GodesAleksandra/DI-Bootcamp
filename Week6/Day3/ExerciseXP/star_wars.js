@@ -13,9 +13,9 @@ let homeWorld = document.querySelector('#home-world');
 function getInfo (){
   //Call Loading Data
  	updateWithLoading();
-  //Get Random people in the API between 1 and 88
- 	let randomNumber = Math.floor((Math.random() * 88) + 1);
-   let apiUrl = 'https://swapi.dev/api/people/' + randomNumber + '/';
+  //Get Random people in the API between 1 and 83
+ 	let randomNumber = Math.floor(Math.random() * 83);
+   let apiUrl = 'https://www.swapi.tech/api/people/' + randomNumber + '/';
 
   // ajax
   xhr.open('GET', apiUrl);
@@ -23,7 +23,6 @@ function getInfo (){
   xhr.send();
   xhr.onload = function(){
     if(xhr.status != 200){
-      //console.log(`Error: ${xhr.status}: ${xht.statusText}`);
       updateInfoWithError();
       console.log('there was an error');
     }
