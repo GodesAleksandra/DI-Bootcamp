@@ -46,3 +46,7 @@ formElem.onsubmit = async (e) => {
             console.log(`We got the error ${error}`)
         });
 };
+const deleteAllBtn = document.getElementById("deleteAll");
+deleteAllBtn.addEventListener('click', (event) => {
+    document.querySelectorAll('.gif_div').forEach(el => el.remove());
+});
