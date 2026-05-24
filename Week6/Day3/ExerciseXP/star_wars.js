@@ -27,7 +27,7 @@ function getInfo (){
       console.log('there was an error');
     }
     else{
-      updateInfo(xhr.response);
+      updateInfo(xhr.response.result.properties);
     }
   }
   xhr.onerror = function() {
@@ -51,7 +51,7 @@ function getInfo (){
       console.log('there was an error 2');
     }
     else{
-      updateInfo2(xhr.response)
+      updateInfo2(xhr.response.result.properties)
     }
   }
   xhr.onerror = function() {
