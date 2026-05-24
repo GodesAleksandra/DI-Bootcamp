@@ -23,6 +23,21 @@ const getStarWarsInfo = async () => {
             height.innerText = `Height: ${data.result.properties.height}`;
             gender.innerText = `Gender: ${data.result.properties.gender}`;
             birthYear.innerText = `Birth Year: ${data.result.properties.birth_year}`;
+            try {
+                let planetUrl = data.result.properties.homeworld;
+                const response2 = await fetch(planetUrl);
+                if (!response2.ok) {
+                    //throw new Error("Something went wrong")
+                    console.log('there was an error 2');
+                } else {
+                    //console.log("response", response)
+                    let data = await response2.json();
+                    //console.log("data", data);
+                    homeWorld.innerText = `Home World: ${data.result.properties.name}`;
+                }
+            } catch (err) {
+                console.log("In the catch 2", err);
+            }
             homeWorld.innerText = `Home World: ${data.result.properties.planet}`;
         }
     } catch (err) {
