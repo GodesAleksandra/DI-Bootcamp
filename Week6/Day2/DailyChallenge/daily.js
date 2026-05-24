@@ -25,7 +25,7 @@ formElem.onsubmit = async (e) => {
         })
         .then((result) => {
             const image_div = document.createElement("div");
-            img.classList.add('gif_div');
+            image_div.classList.add('gif_div');
             document.body.append(image_div);
             const image_url = result.data[0].images.original.url;
             const img = document.createElement("img");
