@@ -38,7 +38,7 @@ formElem.onsubmit = async (e) => {
                     itemToRemove.remove();
                 }
             });
-            img.append(deleteBtn);
+            document.body.append(deleteBtn);
         })
         .catch(function (error) {
             console.log(`We got the error ${error}`)
