@@ -31,14 +31,13 @@ const getStarWarsInfo = async () => {
                     console.log('there was an error 2');
                 } else {
                     //console.log("response", response)
-                    let data = await response2.json();
+                    let data2 = await response2.json();
                     //console.log("data", data);
-                    homeWorld.innerText = `Home World: ${data.result.properties.name}`;
+                    homeWorld.innerText = `Home World: ${data2.result.properties.name}`;
                 }
             } catch (err) {
                 console.log("In the catch 2", err);
             }
-            homeWorld.innerText = `Home World: ${data.result.properties.planet}`;
         }
     } catch (err) {
         updateInfoWithError();
