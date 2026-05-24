@@ -24,21 +24,23 @@ formElem.onsubmit = async (e) => {
             }
         })
         .then((result) => {
+            const image_div = document.createElement("div");
+            img.classList.add('gif_div');
+            document.body.append(image_div);
             const image_url = result.data[0].images.original.url;
             const img = document.createElement("img");
             img.src = image_url;
             img.width = 100;
-            img.classList.add('gif_img');
-            document.body.append(img);
+            image_div.append(img);
             const deleteBtn = document.createElement('button');
             deleteBtn.innerHTML = '<i class="material-icons">delete</i>';
             deleteBtn.addEventListener('click', (event) => {
-                const itemToRemove = event.target.closest('.gif_img');
+                const itemToRemove = event.target.closest('.gif_div');
                 if (itemToRemove) {
                     itemToRemove.remove();
                 }
             });
-            document.body.append(deleteBtn);
+            image_div.append(deleteBtn);
         })
         .catch(function (error) {
             console.log(`We got the error ${error}`)
