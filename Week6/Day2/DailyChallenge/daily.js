@@ -6,6 +6,8 @@ The gif should be appended with a DELETE button next to it. Hint : to find the U
 Allow the user to delete a specific gif by clicking the DELETE button.
 Allow the user to remove all of the GIFs by clicking a DELETE ALL button.*/
 
+
+
 formElem.onsubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(formElem);
@@ -26,7 +28,16 @@ formElem.onsubmit = async (e) => {
             const img = document.createElement("img");
             img.src = image_url;
             img.width = 100;
+            img.classList.add('gif_img');
             document.body.append(img);
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '<i class="material-icons">delete</i>';
+            deleteBtn.addEventListener('click', (event) => {
+                const itemToRemove = event.target.closest('.gif_img');
+                if (itemToRemove) {
+                    itemToRemove.remove();
+                }
+            });
         })
         .catch(function (error) {
             console.log(`We got the error ${error}`)
