@@ -8,6 +8,7 @@ body {
 
 .logo {
   background: url("Star_Wars_Logo_1_copy.jpg") center center no-repeat;
+  background-size: 200px;
   width: 400px;
   height: 300px;
   margin:  0 auto;
