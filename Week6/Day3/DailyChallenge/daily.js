@@ -10,7 +10,7 @@ window.onload = async (e) => {
             let data = await response.json();
             //console.log("data", data);
             for (const item of data.supported_codes[0]) {
-                console.log(item.name); // Access specific object properties
+                console.log(item); // Access specific object properties
             }
         }
     } catch (err) {
