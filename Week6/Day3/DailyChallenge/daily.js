@@ -3,7 +3,7 @@ formElem.onsubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(formElem);
         const category = formData.get('category');
-        let apiUrl = 'https://www.swapi.tech/api/people/' + randomNumber + '/';
+        let apiUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/codes';
         const response = await fetch(apiUrl);
         if (!response.ok) {
             throw new Error("Something went wrong");
