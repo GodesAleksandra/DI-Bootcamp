@@ -14,8 +14,8 @@ window.onload = async (e) => {
                 const opt = document.createElement('option');
                 opt.value = item[0];
                 opt.textContent = item[1];
-                select_from.appendChild(opt);
                 select_to.appendChild(opt);
+                select_from.appendChild(opt);
             }
         }
     } catch (err) {
