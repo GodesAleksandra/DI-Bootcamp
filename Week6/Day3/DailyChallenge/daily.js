@@ -31,7 +31,8 @@ formElem.onsubmit = async (e) => {
         const formData = new FormData(formElem);
         const from_currency = formData.get('from');
         const to_currency = formData.get('to');
-        const amount = formData.get('amount');
+        getInfo(fromCurrency, toCurrency);
+        /*const amount = formData.get('amount');
         const total = document.getElementById('total');
         let convertUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ from_currency + '/' + to_currency + '/' + amount;
         const response = await fetch(convertUrl);
@@ -40,8 +41,34 @@ formElem.onsubmit = async (e) => {
         } else {
             let data = await response.json();
             total.value = data.conversion_result;
-        }
+        }*/
     } catch (err) {
         console.log("In the catch 2 ", err);
     }
 }
+
+function getInfo(fromCurrency, toCurrency) {
+    const amount = formData.get('amount');
+    const total = document.getElementById('total');
+    let convertUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ fromCurrency + '/' + toCurrency + '/' + amount;
+    const response = await fetch(convertUrl);
+    if (!response.ok) {
+        throw new Error("Something went wrong 2");
+    } else {
+        let data = await response.json();
+        total.value = data.conversion_result;
+    }
+}
+
+const viceVersaBtn = document.getElementById("vice_versa");
+viceVersaBtn.addEventListener('click', (event) => {
+    try {
+        e.preventDefault();
+        const formData = new FormData(formElem);
+        const from_currency = formData.get('from');
+        const to_currency = formData.get('to');
+        getInfo(toCurrency, fromCurrency);
+    } catch (err) {
+        console.log("In the catch 3 ", err);
+    }
+});
