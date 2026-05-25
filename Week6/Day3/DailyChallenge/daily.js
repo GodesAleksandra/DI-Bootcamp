@@ -31,7 +31,7 @@ formElem.onsubmit = async (e) => {
         const formData = new FormData(formElem);
         const from_currency = formData.get('from');
         const to_currency = formData.get('to');
-        getInfo(fromCurrency, toCurrency);
+        getInfo(from_currency, to_currency);
         /*const amount = formData.get('amount');
         const total = document.getElementById('total');
         let convertUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ from_currency + '/' + to_currency + '/' + amount;
@@ -67,7 +67,11 @@ viceVersaBtn.addEventListener('click', (event) => {
         const formData = new FormData(formElem);
         const from_currency = formData.get('from');
         const to_currency = formData.get('to');
-        getInfo(toCurrency, fromCurrency);
+        const from = document.getElementById('from');
+        const to = document.getElementById('to');
+        from.value = to_currency;
+        to.value = from_currency;
+        getInfo(to_currency, from_currency);
     } catch (err) {
         console.log("In the catch 3 ", err);
     }
