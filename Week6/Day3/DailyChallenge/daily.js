@@ -1,4 +1,24 @@
-formElem.onsubmit = async (e) => {
+window.onload = async (e) => {
+    try {
+        e.preventDefault();
+        let codesUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/codes';
+        const response = await fetch(codesUrl);
+        if (!response.ok) {
+            throw new Error("Something went wrong");
+        } else {
+            //console.log("response", response)
+            let data = await response.json();
+            //console.log("data", data);
+            for (const item of data.supported_codes[0]) {
+                console.log(item.name); // Access specific object properties
+            }
+        }
+    } catch (err) {
+        console.log("In the catch ", err);
+    }
+}
+
+/*formElem.onsubmit = async (e) => {
     try {
         e.preventDefault();
         const formData = new FormData(formElem);
@@ -19,4 +39,4 @@ formElem.onsubmit = async (e) => {
     } catch (err) {
         console.log("In the catch ", err);
     }
-}
+}*/
