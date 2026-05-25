@@ -1,17 +1,16 @@
 body {
-  background-color: black;
+  background-color: white;
   background-image: url("foreign_currency.avif");
   font-family: 'Helvetica Neue';
-  color: yellow;
+  color: black;
   text-align: center;
 }
 
 
 .container{
-  border: 3px solid yellow;
+  border: 3px solid black;
   border-radius: 15px;
   width: 600px;
   height: 250px;
   margin: 0 auto;
-  margin-top: -25px;
 }
