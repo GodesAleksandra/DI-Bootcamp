@@ -4,6 +4,7 @@ body {
   font-family: 'Helvetica Neue';
   color: black;
   text-align: center;
+  display: grid;
 }
 
 
