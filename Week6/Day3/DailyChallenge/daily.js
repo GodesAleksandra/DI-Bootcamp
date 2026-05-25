@@ -8,7 +8,6 @@ window.onload = async (e) => {
         } else {
             let data = await response.json();
             for (const item of data.supported_codes) {
-                //console.log(item[0]);
                 const select_from = document.getElementById('from');
                 const opt_from = document.createElement('option');
                 opt_from.value = item[0];
