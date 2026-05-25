@@ -46,8 +46,8 @@ formElem.onsubmit = async (e) => {
     }
 }
 
-/*const viceVersaBtn = document.getElementById("vice_versa");
-viceVersaBtn.addEventListener('click', (event) => {
+const viceVersaBtn = document.getElementById("vice_versa");
+viceVersaBtn.onclick = async (e) => {
     try {
         e.preventDefault();
         const formData = new FormData(formElem);
@@ -70,4 +70,4 @@ viceVersaBtn.addEventListener('click', (event) => {
     } catch (err) {
         console.log("In the catch 2 ", err);
     }
-}*/
+}
