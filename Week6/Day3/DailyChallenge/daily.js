@@ -33,7 +33,7 @@ formElem.onsubmit = async (e) => {
         const to_currency = formData.get('to');
         const amount = formData.get('amount');
         //const total = document.getElementById('total');
-        function fetchCurrencyExchange(from_currency, to_currency, amount);
+        fetchCurrencyExchange(from_currency, to_currency, amount);
         /*let convertUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ from_currency + '/' + to_currency + '/' + amount;
         const response = await fetch(convertUrl);
         if (!response.ok) {
@@ -72,7 +72,7 @@ viceVersaBtn.onclick = async (e) => {
         const amount = formData.get('amount');
         fromElem.value = to_currency;
         toElem.value = from_currency;
-        function fetchCurrencyExchange(to_currency, from_currency, amount);
+        fetchCurrencyExchange(to_currency, from_currency, amount);
         /*let viceVersaUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ to_currency + '/' + from_currency + '/' + amount;
         const response = await fetch(viceVersaUrl);
         if (!response.ok) {
