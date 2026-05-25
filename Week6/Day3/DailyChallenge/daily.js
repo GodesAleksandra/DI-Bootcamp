@@ -32,17 +32,30 @@ formElem.onsubmit = async (e) => {
         const from_currency = formData.get('from');
         const to_currency = formData.get('to');
         const amount = formData.get('amount');
-        const total = document.getElementById('total');
-        let convertUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ from_currency + '/' + to_currency + '/' + amount;
+        //const total = document.getElementById('total');
+        function fetchCurrencyExchange(from_currency, to_currency, amount);
+        /*let convertUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ from_currency + '/' + to_currency + '/' + amount;
         const response = await fetch(convertUrl);
         if (!response.ok) {
             throw new Error("Something went wrong 2");
         } else {
             let data = await response.json();
             total.value = data.conversion_result;
-        }
+        }*/
     } catch (err) {
         console.log("In the catch 2 ", err);
+    }
+}
+
+async function fetchCurrencyExchange(fromCurrency, toCurrency, amount) {
+    const total = document.getElementById('total');
+    let convertUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ fromCurrency + '/' + toCurrency + '/' + amount;
+    const response = await fetch(convertUrl);
+    if (!response.ok) {
+        throw new Error("Something went wrong 2");
+    } else {
+        let data = await response.json();
+        total.value = data.conversion_result;
     }
 }
 
@@ -50,23 +63,24 @@ const viceVersaBtn = document.getElementById("vice_versa");
 viceVersaBtn.onclick = async (e) => {
     try {
         e.preventDefault();
+        const fromElem = document.getElementById('from');
+        const toElem = document.getElementById('to');
+        //const total = document.getElementById('total');
         const formData = new FormData(formElem);
-        const from_currency = formData.get('from');
-        const to_currency = formData.get('to');
-        const from = document.getElementById('from');
-        const to = document.getElementById('to');
-        from.value = to_currency;
-        to.value = from_currency;
+        const fromForm = formData.get('from');
+        const toForm = formData.get('to');
         const amount = formData.get('amount');
-        const total = document.getElementById('total');
-        let viceVersaUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ to_currency + '/' + from_currency + '/' + amount;
+        fromElem.value = to_currency;
+        toElem.value = from_currency;
+        function fetchCurrencyExchange(to_currency, from_currency, amount);
+        /*let viceVersaUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ to_currency + '/' + from_currency + '/' + amount;
         const response = await fetch(viceVersaUrl);
         if (!response.ok) {
             throw new Error("Something went wrong 2");
         } else {
             let data = await response.json();
             total.value = data.conversion_result;
-        }
+        }*/
     } catch (err) {
         console.log("In the catch 2 ", err);
     }
