@@ -70,9 +70,9 @@ viceVersaBtn.onclick = async (e) => {
         const fromForm = formData.get('from');
         const toForm = formData.get('to');
         const amount = formData.get('amount');
-        fromElem.value = to_currency;
-        toElem.value = from_currency;
-        fetchCurrencyExchange(to_currency, from_currency, amount);
+        fromElem.value = toForm;
+        toElem.value = fromForm;
+        fetchCurrencyExchange(toForm, fromForm, amount);
         /*let viceVersaUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ to_currency + '/' + from_currency + '/' + amount;
         const response = await fetch(viceVersaUrl);
         if (!response.ok) {
@@ -82,6 +82,6 @@ viceVersaBtn.onclick = async (e) => {
             total.value = data.conversion_result;
         }*/
     } catch (err) {
-        console.log("In the catch 2 ", err);
+        console.log("In the catch 3 ", err);
     }
 }
