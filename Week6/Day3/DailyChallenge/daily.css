@@ -28,7 +28,7 @@ label {
 }
 
 input {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.5);
   border: none;
   outline: none; /* Removes the focus ring (optional) */
 }
