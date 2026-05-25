@@ -31,3 +31,7 @@ input, select {
   background: rgba(0, 0, 0, 0.2);
   color: white;
 }
+
+vice_versa {
+    vertical-align: middle;
+}
