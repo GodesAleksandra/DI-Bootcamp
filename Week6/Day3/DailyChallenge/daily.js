@@ -6,11 +6,16 @@ window.onload = async (e) => {
         if (!response.ok) {
             throw new Error("Something went wrong");
         } else {
-            //console.log("response", response)
             let data = await response.json();
-            //console.log("data", data);
             for (const item of data.supported_codes) {
-                console.log(item[0]); // Access specific object properties
+                //console.log(item[0]);
+                const select_from = document.getElementById('from');
+                const select_to = document.getElementById('to');
+                const opt = document.createElement('option');
+                opt.value = item[0];
+                opt.textContent = item[1];
+                select_from.appendChild(opt);
+                select_to.appendChild(opt);
             }
         }
     } catch (err) {
