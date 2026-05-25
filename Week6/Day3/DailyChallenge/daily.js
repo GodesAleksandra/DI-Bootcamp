@@ -59,8 +59,8 @@ viceVersaBtn.addEventListener('click', (event) => {
         to.value = from_currency;
         const amount = formData.get('amount');
         const total = document.getElementById('total');
-        let convertUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ to_currency + '/' + from_currency + '/' + amount;
-        const response = await fetch(convertUrl);
+        let viceVersaUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ to_currency + '/' + from_currency + '/' + amount;
+        const response = await fetch(viceVersaUrl);
         if (!response.ok) {
             throw new Error("Something went wrong 2");
         } else {
