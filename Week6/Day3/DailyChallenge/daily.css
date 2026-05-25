@@ -4,7 +4,6 @@ body {
   font-family: 'Helvetica Neue';
   color: black;
   text-align: center;
-  display: flex;
 }
 
 
@@ -13,5 +12,6 @@ body {
   border-radius: 15px;
   width: 600px;
   height: 250px;
-  margin: auto;
+  margin: 0 auto;
+  margin-top: 50%;
 }
