@@ -10,12 +10,15 @@ window.onload = async (e) => {
             for (const item of data.supported_codes) {
                 //console.log(item[0]);
                 const select_from = document.getElementById('from');
+                const opt_from = document.createElement('option');
+                opt_from.value = item[0];
+                opt_from.textContent = item[1];
+                select_from.appendChild(opt_from);
                 const select_to = document.getElementById('to');
-                const opt = document.createElement('option');
-                opt.value = item[0];
-                opt.textContent = item[1];
-                select_to.appendChild(opt);
-                select_from.appendChild(opt);
+                const opt_to = document.createElement('option');
+                opt_to.value = item[0];
+                opt_to.textContent = item[1];
+                select_to.appendChild(opt_to);
             }
         }
     } catch (err) {
