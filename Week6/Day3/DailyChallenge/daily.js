@@ -32,6 +32,7 @@ formElem.onsubmit = async (e) => {
         const from_currency = formData.get('from');
         const to_currency = formData.get('to');
         const amount = formData.get('amount');
+        const total = document.getElementById('total');
         //console.log(from_currency + '//' + to_currency);
         let convertUrl = 'https://v6.exchangerate-api.com/v6/fca75a019c97f20bc1d4952a/pair/'+ from_currency + '/' + to_currency + '/' + amount;
         const response = await fetch(convertUrl);
@@ -41,7 +42,7 @@ formElem.onsubmit = async (e) => {
             //console.log("response", response)
             let data = await response.json();
             //console.log("data", data);
-            formData.set('total', data.conversion_result);
+            total.value = data.conversion_result;
         }
     } catch (err) {
         console.log("In the catch 2 ", err);
