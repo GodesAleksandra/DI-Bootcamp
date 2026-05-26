@@ -1,3 +1,9 @@
+/*OVERALL EVALUATION OF ALL URLS ABOVE
+• Excellent work on implementing all the required features, including the bonus switch functionality. The application correctly fetches currency codes, performs conversions, and works as expected.
+• A major security concern is that your API key is exposed in the client-side JavaScript file. Anyone visiting the page can view the source code and steal your key. For future projects, never store secret keys in front-end code. The standard practice is to create a simple backend (a server-side proxy) that holds the key and makes the API request on behalf of the front-end.
+• To prevent users from entering non-numeric values, consider adding validation to the 'Amount' field. A simple way to improve this is to change the input type in your HTML from type="text" to type="number".
+• In your window.onload function, the code to create and append <option> elements is repeated for both the 'from' and 'to' dropdowns. You could create a helper function to handle this logic, which would reduce code duplication and make it more maintainable.*/
+
 window.onload = async (e) => {
     try {
         e.preventDefault();
