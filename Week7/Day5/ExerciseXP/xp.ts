@@ -94,9 +94,9 @@ let employee: Employee = {
 };
 
 function describeEmployee(employee: Employee): string | undefined {
-  if ("Manager" in employee) {
+  if (employee.position === 'Manager') {
     return `${employee.name} aged ${employee.age} is a Manager in the ${employee.department} department.`;
-  } else if ("Developer" in employee) {
+  } else if (employee.position === 'Developer') {
     return `${employee.name} aged ${employee.age} is a Developer in the ${employee.department} department.`;
   }
 }
