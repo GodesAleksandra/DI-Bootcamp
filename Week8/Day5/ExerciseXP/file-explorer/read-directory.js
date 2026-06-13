@@ -17,4 +17,3 @@ console.log('Files in the directory:');
 files.forEach(file => {
     console.log('- ' + file);
 });
-s
