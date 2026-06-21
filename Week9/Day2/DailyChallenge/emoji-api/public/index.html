@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Guessing Game</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; text-align: center; padding: 20px; }
+    .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .emoji { font-size: 80px; margin: 20px 0; }
+    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    button { padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #e0e0e0; transition: 0.2s; }
+    button:hover { background: #d0d0d0; }
+    button.correct { background: #4caf50; color: white; }
+    button.incorrect { background: #f44336; color: white; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+    <div class="container">
+    <h1>Emoji Guessing Game</h1>
+    
+    <!-- User Authentication -->
+    <div id="login-section">
+      <input type="text" id="username" placeholder="Enter username" />
+      <button onclick="startGame()">Start Game</button>
+    </div>
+
+    <!-- Game Section -->
+    <div id="game-section" class="hidden">
+      <p>Score: <span id="score">0</span> | Time Left: <span id="timer">15</span>s</p>
+      
+      <label>Difficulty: </label>
+      <select id="difficulty" onchange="fetchNewEmoji()">
+        <option value="easy">Easy (Hint always on)</option>
+        <option value="medium">Medium (No hint)</option>
+        <option value="hard">Hard (10s limit, No hint)</option>
+      </select>
+
+      <div class="emoji" id="emoji-char">❓</div>
+      <p id="hint-text" style="font-style: italic; color: #555;"></p>
+      
+      <div class="options" id="options-container"></div>
+
+      <button id="hint-btn" style="margin-top: 15px; background: #ffeb3b;" onclick="showHint()">💡 Hint</button>
+      <p id="feedback"></p>
+    </div>
+
+    <!-- Leaderboard Section -->
+    <div id="leaderboard-section" class="hidden">
+      <h2>Top Scores</h2>
+      <ol id="leaderboard-list"></ol>
+    </div>
+  </div>
+    <script>
+    let username = '';
+    let totalScore = 0;
+    let currentCorrectName = '';
+    let timerInterval;
+    let timeLeft = 15;
+    let timerRunning = false;
+    let hintUsed = false;
+
+    function startGame() {
+      const user = document.getElementById('username').value;
+      if (!user) return alert('Enter a username!');
+      username = user;
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('game-section').classList.remove('hidden');
+      document.getElementById('leaderboard-section').classList.remove('hidden');
+      fetchNewEmoji();
+    }
+
+    async function fetchNewEmoji() {
+      hintUsed = false;
+      document.getElementById('hint-btn').disabled = false;
+      document.getElementById('hint-text').innerText = '';
+      document.getElementById('feedback').innerText = '';
+
+      const response = await fetch('/api/next-emoji');
+      const data = await response.json();
+      
+      currentCorrectName = data.correctName; 
+      currentHint = data.hint;
+      
+      renderGame(data);
+    }
+
+    function renderGame(data) {
+      document.getElementById('emoji-char').innerText = data.emoji;
+      document.getElementById('hint-text').innerText = '';
+      
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+      
+      data.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.innerText = option;
+        btn.onclick = () => submitGuess(option, data.emoji);
+        container.appendChild(btn);
+      });
+
+      const diff = document.getElementById('difficulty').value;
+      if (diff === 'easy') {
+         document.getElementById('hint-text').innerText = `Clue: ${data.hint}`;
+         document.getElementById('hint-btn').style.display = 'none';
+      } else {
+         document.getElementById('hint-btn').style.display = 'inline-block';
+      }
+      
+      timeLeft = diff === 'hard' ? 10 : 15;
+      document.getElementById('timer').innerText = timeLeft;
+      startTimer();
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').innerText = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          submitGuess('timeout', '');
+        }
+      }, 1000);
+    }
+
+    function showHint() {
+      if (hintUsed) return;
+      hintUsed = true;
+      document.getElementById('hint-btn').disabled = true;
+      document.getElementById('hint-text').innerText = `Clue: ${currentHint}`; 
+    }
+
+    async function submitGuess(guess, emoji) {
+      clearInterval(timerInterval);
+      const buttons = document.querySelectorAll('#options-container button');
+      buttons.forEach(btn => btn.disabled = true);
+      const diff = document.getElementById('difficulty').value;
+      const response = await fetch('/api/guess', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          guess: guess,
+          correctName: currentCorrectName, 
+          difficulty: diff
+        })
+      });
+
+      const result = await response.json();
+      const feedback = document.getElementById('feedback');
+
+      if (guess === 'timeout') {
+         feedback.innerText = "Time's Up! Moving on...";
+      } else if (result.correct) {
+         totalScore += result.pointsAwarded;
+         document.getElementById('score').innerText = totalScore;
+         feedback.innerText = "Correct! + " + result.pointsAwarded + " pts";
+      } else {
+         feedback.innerText = "Incorrect! The answer was " + currentCorrectName;
+      }
+
+      // Update leaderboard
+      const lbRes = await fetch('/api/leaderboard', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, score: totalScore })
+      });
+      const lbData = await lbRes.json();
+      
+      const lbList = document.getElementById('leaderboard-list');
+      lbList.innerHTML = '';
+      lbData.leaderboard.forEach(item => {
+        const li = document.createElement('li');
+        li.innerText = `${item.username}: ${item.score}`;
+        lbList.appendChild(li);
+      });
+
+      // Proceed to next emoji in 2 seconds
+      setTimeout(fetchNewEmoji, 2000);
+    }
+  </script>
+</body>
+</html>
