@@ -31,6 +31,7 @@ This exercise demonstrates a simple to-do list API built using Express.js and ex
 
 const express = require('express');
 const app = express();
+app.use(express.json());
 const PORT = 3000;
 
 const indexRouter = require('./routes/todos');

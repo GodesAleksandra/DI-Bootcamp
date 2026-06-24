@@ -14,8 +14,8 @@ router.get('/todos', (req, res) => {
 // Add a new to-do item
 router.post('/todos', (req, res) => {
     const { id, task } = req.body;
-    const newTodo = { id: todos.length + 1, name };
-    books.push(newTodo);
+    const newTodo = { id: todos.length + 1, task };
+    todos.push(newTodo);
     res.status(201).json(newTodo);
 });
 
@@ -28,7 +28,7 @@ router.put('/todos/:id', (req, res) => {
     }
     const updatedTodo = {
         id: todos[index].id,
-        name: req.body.name,
+        task: req.body.task,
     };
     todos[index] = updatedTodo;
     res.status(200).json("Todo updated");
