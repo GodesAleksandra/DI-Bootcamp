@@ -56,14 +56,14 @@ router.get('/', initQuizSession, (req, res) => {
 // 2. POST /quiz
 router.post('/', initQuizSession, (req, res) => {
     if (req.session.quizCompleted) {
-        return res.status(400).json({ error: "Викторина уже завершена. Проверьте счет на /quiz/score" });
+        return res.status(400).json({ error: "The quiz is already over. Check the score /quiz/score" });
     }
 
     const { answer } = req.body;
     const currentIndex = req.session.currentQuestionIndex;
 
     if (!answer) {
-        return res.status(400).json({ error: "Необходимо передать поле 'answer' в теле запроса" });
+        return res.status(400).json({ error: "You must pass the 'answer' field in the request body" });
     }
 
     const currentQuestion = triviaQuestions[currentIndex];
@@ -71,9 +71,9 @@ router.post('/', initQuizSession, (req, res) => {
 
     if (answer.trim().toLowerCase() === currentQuestion.answer.toLowerCase()) {
         req.session.score += 1;
-        feedback = "Правильно!";
+        feedback = "Correct!";
     } else {
-        feedback = `Неверно. Правильный ответ: ${currentQuestion.answer}`;
+        feedback = `Incorrect. The correct answer: ${currentQuestion.answer}`;
     }
 
     req.session.currentQuestionIndex += 1;
@@ -82,13 +82,13 @@ router.post('/', initQuizSession, (req, res) => {
         req.session.quizCompleted = true;
         return res.json({
             feedback,
-            message: "Викторина окончена! Перейдите на /quiz/score, чтобы узнать результат."
+            message: "The quiz is over! Go to /quiz/score to see your result.."
         });
     }
 
     res.json({
         feedback,
-        message: "Ответ принят. Сделайте GET-запрос на /quiz, чтобы получить следующий вопрос."
+        message: "Response accepted. Make a GET request to /quiz to get the next question."
     });
 });
 
@@ -96,7 +96,7 @@ router.post('/', initQuizSession, (req, res) => {
 router.get('/score', initQuizSession, (req, res) => {
     if (!req.session.quizCompleted && req.session.currentQuestionIndex < triviaQuestions.length) {
         return res.status(400).json({ 
-            error: "Вы еще не закончили викторину", 
+            error: "You haven't finished the quiz yet.", 
             currentQuestion: req.session.currentQuestionIndex + 1 
         });
     }
@@ -106,11 +106,11 @@ router.get('/score', initQuizSession, (req, res) => {
 
     req.session.destroy((err) => {
         if (err) {
-            return res.status(500).json({ error: "Не удалось сбросить игру" });
+            return res.status(500).json({ error: "Failed to reset the game" });
         }
         
         res.json({
-            message: "Финальный результат игры",
+            message: "Final game result",
             score: `${finalScore} из ${totalQuestions}`
         });
     });
