@@ -1,8 +1,8 @@
 -- Database: Hollywood
 
--- DROP DATABASE IF EXISTS "Hollywood";
+ DROP DATABASE IF EXISTS "Hollywood";
 
-/*CREATE DATABASE "Hollywood"
+CREATE DATABASE "Hollywood"
     WITH
     OWNER = postgres
     ENCODING = 'UTF8'
@@ -11,7 +11,7 @@
     LOCALE_PROVIDER = 'libc'
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1
-    IS_TEMPLATE = False;*/
+    IS_TEMPLATE = False;
 
 CREATE TABLE actors(
  actor_id SERIAL PRIMARY KEY,
