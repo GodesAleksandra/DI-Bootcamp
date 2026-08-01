@@ -18,6 +18,7 @@ The Garage component should render Who lives in my <size> Garage?*/
 import Car from './Components/Car';
 import Events from './Events';
 import Phone from './Phone';
+import Color from './Color';
 
 const carinfo = {name: "Ford", model: "Mustang"};
 
@@ -28,6 +29,8 @@ const App = () => (
     <Events />
     <hr />
     <Phone />
+    <hr />
+    <Color />
   </div>
 );
 
