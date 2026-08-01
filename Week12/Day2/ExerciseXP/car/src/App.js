@@ -16,13 +16,15 @@ Use the Garage component inside the Car component and pass the size ‘small’.
 The Garage component should render Who lives in my <size> Garage?*/
 
 import Car from './Components/Car';
+import Events from './Events';
 
 const carinfo = {name: "Ford", model: "Mustang"};
 
 const App = () => (
   <div>
-    <h1>In the App.js</h1>
     <Car carinfo={carinfo} />
+    <hr />
+    <Events />
   </div>
 );
 
