@@ -19,11 +19,11 @@ function App() {
   return (
     <div id="root">
       <h1>Vote Your Language!</h1>
-      <div class="languages">
+      <div className ="languages">
         {languages.map((language, index) => (
-          <div key={index} class="language">
-            <div class="voteCount">{language.votes}</div>
-            <div class="languageName">{language.name}</div>
+          <div key={index} className="language">
+            <div className="voteCount">{language.votes}</div>
+            <div className="languageName">{language.name}</div>
             <button type="button" onClick={() => changeLanguageVotes(index)}>Click Here</button>
           </div>
         ))}
