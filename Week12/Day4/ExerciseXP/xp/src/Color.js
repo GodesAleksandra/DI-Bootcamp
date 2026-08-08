@@ -12,7 +12,15 @@ When the component is mounting, it will be rendered with the favorite color “r
 
 Part III : getSnapshotBeforeUpdate
 Use the getSnapshotBeforeUpdate() method, add a console.log("in getSnapshotBeforeUpdate"). 
-Open the Dev Tools, to see when this message is displayed.*/
+Open the Dev Tools, to see when this message is displayed.
+
+Exercise 3 : Lifecycle #2
+Using the previous exercise (Exercise 2 : Lifecycle)
+Add a new property named show to the state object. Set the value of this property to true.
+Add a Class component named Child to the same file. This new component will render a ‘Hello World!’ message in a header tag.
+This new component uses the componentWillUnmount method to alert an unmounted message.
+Render the Child component in your App, only if the value of the show property is set to true.
+Create a “Delete” button that when clicked on (ie. onClick) will call a function that updates the value of the show property to false.*/
 
 import React from 'react';
 
