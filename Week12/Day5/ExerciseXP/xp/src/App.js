@@ -22,6 +22,7 @@ import React from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import PostList from './PostList';
 
 const HomeScreen = () => (
   <div className="container mt-4">
@@ -82,6 +83,7 @@ const App = () => (
           } 
         />
       </Routes>
+    <PostList />
     </BrowserRouter>
 );
 
