@@ -1,0 +1,43 @@
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  transition: background 0.2s;
+}
+
+.itemNormal {
+  background-color: #ffffff;
+}
+
+.itemCompleted {
+  background-color: #f8f9fa;
+}
+
+.text {
+  flex: 1;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.textCompleted {
+  text-decoration: line-through;
+  color: #6c757d;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.deleteButton:hover {
+  background-color: #bd2130;
+}
