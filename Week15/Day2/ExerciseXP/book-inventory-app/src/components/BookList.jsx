@@ -1,27 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  selectBooks,
-  selectHorrorBooks,
-  selectFantasyBooks,
-  selectScienceFictionBooks,
-} from '../features/bookSlice';
+import { selectBooksByGenre } from '../features/bookSlice';
 
 export default function BookList() {
   const [selectedGenre, setSelectedGenre] = useState('All');
 
-  const books = useSelector((state) => {
-    switch (selectedGenre) {
-      case 'Horror':
-        return selectHorrorBooks(state);
-      case 'Fantasy':
-        return selectFantasyBooks(state);
-      case 'Science Fiction':
-        return selectScienceFictionBooks(state);
-      default:
-        return selectBooks(state);
-    }
-  });
+  const books = useSelector((state) => selectBooksByGenre(state, selectedGenre));
 
   return (
     <div className="inventory-container">

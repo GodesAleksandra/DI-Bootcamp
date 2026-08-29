@@ -21,22 +21,15 @@ export const bookReducer = bookSlice.reducer;
 
 const selectInventoryState = (state) => state.inventory;
 
-export const selectBooks = createSelector(
-  [selectInventoryState],
-  (inventory) => inventory.books
-);
+export const selectBooks = (state) => state.inventory.books;
 
-export const selectHorrorBooks = createSelector(
-  [selectBooks],
-  (books) => books.filter((book) => book.genre === 'Horror')
-);
-
-export const selectFantasyBooks = createSelector(
-  [selectBooks],
-  (books) => books.filter((book) => book.genre === 'Fantasy')
-);
-
-export const selectScienceFictionBooks = createSelector(
-  [selectBooks],
-  (books) => books.filter((book) => book.genre === 'Science Fiction')
+export const selectBooksByGenre = createSelector(
+  [
+    selectBooks,
+    (state, genre) => genre
+  ],
+  (books, genre) => {
+    if (genre === 'All') return books;
+    return books.filter((book) => book.genre === genre);
+  }
 );
