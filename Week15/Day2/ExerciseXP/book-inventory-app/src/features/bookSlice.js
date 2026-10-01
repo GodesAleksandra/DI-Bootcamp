@@ -19,8 +19,6 @@ const bookSlice = createSlice({
 
 export const bookReducer = bookSlice.reducer;
 
-const selectInventoryState = (state) => state.inventory;
-
 export const selectBooks = (state) => state.inventory.books;
 
 export const selectBooksByGenre = createSelector(
