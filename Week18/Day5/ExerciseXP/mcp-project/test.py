@@ -1,7 +1,7 @@
 import httpx
 
 headers = {
-    "Authorization": "Bearer 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",
+    "Authorization": "Bearer YOUR_GROQ_API_KEY",
     "Content-Type": "application/json"
 }
 
