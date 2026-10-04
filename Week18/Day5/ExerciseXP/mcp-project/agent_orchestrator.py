@@ -1,151 +1,189 @@
 import httpx
-import os
 import json
 import asyncio
+import config
 
 class AgentOrchestrator:
     def __init__(self, client_manager):
-        """
-        Initializes the agentic orchestrator targeting the local Ollama instance.
-        """
         self.client_manager = client_manager
-        self.api_url = "http://localhost:11434/api/chat"
-        self.model_name = "llama3"
 
-    def _query_llm(self, context: str, system_prompt: str) -> str:
-        """
-        Queries the local Ollama runtime using standard chat parameters with infinite timeout.
-        """
-        payload = {
-            "model": self.model_name,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": context}
-            ],
-            "stream": False,
-            "options": {
-                "temperature": 0.1,  # Low temperature for strict structured format adherence
-                "num_ctx": 4096
-            }
-        }
+    def _redact_secrets(self, text: str) -> str:
+        """Sanitizes text logs to ensure credentials are never exposed in UI buffers."""
+        sanitized = text
+        for secret_token in config.SENSITIVE_KEYS:
+            if secret_token in sanitized:
+                sanitized = sanitized.replace(secret_token, "[REDACTED_SECURITY_PARAMETER]")
+        return sanitized
+
+    async def _query_llm_with_retry(self, context: str, system_prompt: str) -> str:
+        """Queries LLM using settings from config.py with exponential backoff and absolute timeout bounds."""
+        backend = config.LLM_BACKEND.upper()
         
-        try:
-            response = httpx.post(self.api_url, json=payload, timeout=None)
-            if response.status_code != 200:
-                raise RuntimeError(f"Ollama API Error [{response.status_code}]: {response.text}")
-            data = response.json()
-            return data['message']['content']
-        except httpx.RequestError as transport_error:
-            raise RuntimeError(f"Failed to communicate with local Ollama instance: {transport_error}")
+        if backend == "GROQ":
+            url = "https://groq.com"
+            headers = {
+                "Authorization": f"Bearer {config.GROQ_API_KEY}",
+                "Content-Type": "application/json"
+            }
+            payload = {
+                "model": config.GROQ_MODEL,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": context}
+                ],
+                "temperature": 0.2
+            }
+        else:
+            # Local Ollama compliance setup
+            url = f"{config.OLLAMA_HOST}/api/chat"
+            headers = {"Content-Type": "application/json"}
+            payload = {
+                "model": config.OLLAMA_MODEL,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": context}
+                ],
+                "stream": False,
+                "options": {"temperature": 0.2, "num_keepalive": 0}
+            }
+
+        max_retries = 3
+        backoff_delay = 2.0
+        
+        async with httpx.AsyncClient() as client:
+            for attempt in range(max_retries):
+                try:
+                    response = await client.post(url, json=payload, headers=headers, timeout=180.0)
+                    if response.status_code == 200:
+                        data = response.json()
+                        if backend == "GROQ":
+                            return data['choices'][0]['message']['content']
+                        else:
+                            if "error" in data:
+                                raise RuntimeError(f"Ollama API Error: {data['error']}")
+                            return data['message']['content']
+                    else:
+                        raise RuntimeError(f"Http Bad Status Code: {response.status_code}")
+                except Exception as e:
+                    if attempt == max_retries - 1:
+                        raise RuntimeError(f"LLM Connection completely failed after {max_retries} attempts.") from e
+                    await asyncio.sleep(backoff_delay)
+                    backoff_delay *= 2.0
 
     async def run_mission(self, user_input: str, log_callback) -> str:
-        """
-        Autonomous execution loop. The LLM can choose to call a tool or provide a final answer.
-        The loop runs iteratively up to a maximum of 5 steps.
-        """
-        log_callback("⚙️ **Initializing dynamic workspace discovery...**")
+        history = [{"role": "user", "content": f"User Goal: {user_input}"}]
+        max_turns = 5
         
-        # 1. Fetch live tool schemas from the client manager
-        available_tools = []
-        try:
-            if hasattr(self.client_manager, "get_all_tools"):
-                available_tools = self.client_manager.get_all_tools()
-            elif hasattr(self.client_manager, "get_tools"):
-                available_tools = self.client_manager.get_tools()
-        except Exception as e:
-            log_callback(f"⚠️ [Warning] Tools discovery lookup failed: {e}")
-
-        # 2. Setup the strict execution guidelines for the LLM agent
-        system_prompt = (
-            "You are an expert autonomous agentic orchestrator operating over a Model Context Protocol (MCP) workspace.\n"
-            "Your goal is to fulfill the user's request by utilizing the available tools step-by-step.\n\n"
-            f"Available Tools Schema:\n{json.dumps(available_tools, indent=2)}\n\n"
-            "CRITICAL RESPONSE FORMAT REGULATION:\n"
-            "You must structure your thinking using exactly one of these two blocks on every step:\n\n"
-            "Option A (If you need to execute a tool):\n"
-            "THOUGHT: <your reasoning for this step>\n"
-            "ACTION: {\"server\": \"ServerName\", \"tool\": \"tool_name\", \"arguments\": { ... }}\n\n"
-            "Option B (If you have gathered all answers and are ready to finish):\n"
-            "THOUGHT: <your final reasoning>\n"
-            "FINAL_ANSWER: <your comprehensive summary response to the user>\n\n"
-            "Do not output code blocks like ```json outside of the format fields. Stick to the text keys."
-        )
-
-        history = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"User Strategic Goal: {user_input}"}
-        ]
-
-        max_iterations = 5
-        current_step = 1
-
-        while current_step <= max_iterations:
-            log_callback(f"🧠 **Step {current_step}: Planning and evaluating current state...**")
+        for turn in range(1, max_turns + 1):
+            tools_schema = self.client_manager.get_all_tools()
             
-            # Compile immediate execution state context
-            combined_context = "\n".join([f"{m['role'].upper()}: {m['content']}" for m in history if m['role'] != 'system'])
+            real_tool_names = [t["name"] for t in tools_schema]
+
+            system_prompt = (
+                "You are an active agentic coordinator working inside an enterprise MCP application.\n"
+                f"Available dynamic MCP tools:\n{json.dumps(tools_schema, indent=2)}\n\n"
+                "You MUST respond in exactly ONE of the two formats below. Follow the structure strictly.\n\n"
+                "=== FORMAT VARIANT 1: INVOKE TOOL ===\n"
+                "If you need to use an MCP tool to fetch data or execute an action, output EXACTLY this:\n"
+                "THOUGHT: <your reasoning here>\n"
+                "ACTION:\n"
+                "{\n"
+                "  \"tool\": \"tool_name\",\n"
+                "  \"arguments\": {}\n"
+                "}\n\n"
+                "=== FORMAT VARIANT 2: MISSION RESOLVED ===\n"
+                "If you have fetched the data from GitHub, analyzed it, and are ready to finish, output EXACTLY this:\n"
+                "THOUGHT: <your reasoning>\n"
+                "FINAL_ANSWER:\n"
+                "=== ARCHITECTURAL SUMMARY REPORT ===\n"
+                "1. DETECTED BUG SUMMARY: (Write here what you found in the GitHub issue body)\n"
+                "2. EXCEPTIONS & ROOT CAUSE: (Write the technical reason for the bug)\n"
+                "3. PROPOSED ARCHITECTURAL FIX: (Write how it should be fixed or how it was resolved)\n"
+                "CRITICAL: DO NOT write generic text like 'report has been generated'. You MUST extract real text from the tool responses and write a detailed multi-line analysis!"
+            )
+
             
-            # Request next autonomous decision from the LLM
-            llm_output = self._query_llm(combined_context, system_prompt)
+            log_callback(self._redact_secrets(f"🧠 **[Turn {turn}] Orchestrator analyzing execution plan...**"))
             
-            # Append decision to the conversational thread log
+            context_feed = "\n".join([f"{m['role'].upper()}: {m['content']}" for m in history])
+            
+            try:
+                llm_output = await self._query_llm_with_retry(context_feed, system_prompt)
+            except Exception as llm_err:
+                root_cause = llm_err.__cause__
+                cause_text = f" | Inner Trace: {repr(root_cause)}" if root_cause else ""
+                return f"Mission aborted due to critical LLM core failure: {llm_err}{cause_text}"
+                
             history.append({"role": "assistant", "content": llm_output})
-
-            # Check if the agent decided to present the final resolution
+            
             if "FINAL_ANSWER:" in llm_output:
-                final_text = llm_output.split("FINAL_ANSWER:")[-1].strip()
-                log_callback("🎯 **Agent arrived at final resolution successfully.**")
-                return final_text
-
-            # Parse structural action commands
+                if turn == 1:
+                    history.append({
+                        "role": "user", 
+                        "content": "Error: You cannot finish the mission without calling 'get_issue' first to see the real data. Provide a valid ACTION block now."
+                    })
+                    continue
+                clean_report = llm_output.split("FINAL_ANSWER:")[-1].strip()
+                
+                if "ACTION:" in clean_report:
+                    clean_report = clean_report.split("ACTION:")[0].strip()
+                
+                return self._redact_secrets(clean_report)
+                #return self._redact_secrets(llm_output.split("FINAL_ANSWER:")[-1].strip())
+                
             if "ACTION:" in llm_output:
                 try:
-                    action_part = llm_output.split("ACTION:")[-1].strip()
-                    action_json = json.loads(action_part)
+                    action_str = llm_output.split("ACTION:")[-1].strip()
                     
-                    server = action_json.get("server")
-                    tool_name = action_json.get("tool")
-                    args = action_json.get("arguments", {})
+                    start_idx = action_str.find("{")
+                    if start_idx == -1:
+                        raise ValueError("No JSON object found after ACTION:")
+                        
+                    brace_count = 0
+                    end_idx = -1
+                    for i in range(start_idx, len(action_str)):
+                        if action_str[i] == "{":
+                            brace_count += 1
+                        elif action_str[i] == "}":
+                            brace_count -= 1
+                            if brace_count == 0:
+                                end_idx = i + 1
+                                break
+                                
+                    if end_idx != -1:
+                        action_str = action_str[start_idx:end_idx]
+                    else:
+                        action_str = action_str[start_idx:]
                     
-                    log_callback(f"🎬 **Executing Tool:** `{tool_name}` on server `{server}` with parameters: `{json.dumps(args)}`")
+                    action_json = json.loads(action_str)
+                    raw_tool_name = action_json.get("tool", "")
+                    tool_args = action_json.get("arguments", {})
                     
-                    # 🚀 Dynamic invoke mapping against the active manager lifecycle
-                    tool_result = "Tool execution skipped: client manager execution method not standard."
+                    tool_aliases = {
+                        "get_issue_details": "get_issue",
+                        "fetch_issue_details": "get_issue",
+                        "view_issue": "get_issue",
+                        "get_bug_details": "get_issue"
+                    }
+                    target_tool = tool_aliases.get(raw_tool_name, raw_tool_name)
                     
-                    # Try common naming variants for the execution method inside MCPClientManager
-                    for method_name in ["call_tool", "execute_tool", "run_tool"]:
-                        if hasattr(self.client_manager, method_name):
-                            method = getattr(self.client_manager, method_name)
-                            
-                            # 🚀 FIX: Pass only tool_name and args, omitting the server name to match your 3-arg signature
-                            if asyncio.iscoroutinefunction(method):
-                                tool_result = await method(tool_name, args)
-                            else:
-                                tool_result = method(tool_name, args)
-                            break
+                    log_callback(self._redact_secrets(f"🎬 **Executing tool call** `{target_tool}` (mapped from `{raw_tool_name}`) with inputs: {json.dumps(tool_args)}"))
                     
-                    log_callback(f"📥 **Tool Output Received:** {str(tool_result)[:300]}...")
+                    raw_result = await self.client_manager.invoke_tool(target_tool, tool_args)
                     
-                    # Feed the real execution trace back into the model's short term memory
-                    history.append({
-                        "role": "user", 
-                        "content": f"Tool execution result for [{tool_name}]: {json.dumps(tool_result)}"
-                    })
+                    log_callback(self._redact_secrets(f"📥 **Response received**: {json.dumps(raw_result)[:200]}..."))
+                    history.append({"role": "user", "content": f"Execution data return for [{target_tool}]: {json.dumps(raw_result)}"})
                     
-                except Exception as parse_err:
-                    log_callback(f"⚠️ [Error Handling] Failed to parse or run action block: {parse_err}")
-                    history.append({
-                        "role": "user", 
-                        "content": f"Error parsing your last action. Ensure valid JSON under ACTION key. Details: {parse_err}"
-                    })
+                except Exception as execution_fault:
+                    fault_details = getattr(execution_fault, "message", None)
+                    if not fault_details and hasattr(execution_fault, "args"):
+                        fault_details = str(execution_fault.args)
+                    if not fault_details or fault_details == "()":
+                        fault_details = f"{type(execution_fault).__name__}: {str(execution_fault)}"
+                        
+                    log_callback(f"⚠️ **Error step captured**: {fault_details}. Injecting corrective step...")
+                    history.append({"role": "user", "content": f"Execution error triggered: {fault_details}. Adjust arguments or choose alternative path."})
             else:
-                # Fallback step if the local model responded loosely without explicit headers
-                log_callback("⚠️ [Heuristic Adaptive Fallback] Loose response structure detected. Retrying context sync...")
-                history.append({
-                    "role": "user", 
-                    "content": "Please match the required response format strictly. Use ACTION or FINAL_ANSWER blocks."
-                })
+                history.append({"role": "user", "content": "Error: You violated formatting boundaries. Respond strictly with ACTION or FINAL_ANSWER blocks."})
 
-            current_step += 1
-
-        return "Agent execution terminated: Maximum iteration steps limit reached without resolving the goal."
+        return "Mission timed out: Agent hit loop bounds without converging on final resolution."
