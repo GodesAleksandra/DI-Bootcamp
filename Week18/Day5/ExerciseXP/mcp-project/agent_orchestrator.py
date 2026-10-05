@@ -9,10 +9,24 @@ class AgentOrchestrator:
 
     def _redact_secrets(self, text: str) -> str:
         """Sanitizes text logs to ensure credentials are never exposed in UI buffers."""
-        sanitized = text
-        for secret_token in config.SENSITIVE_KEYS:
-            if secret_token in sanitized:
-                sanitized = sanitized.replace(secret_token, "[REDACTED_SECURITY_PARAMETER]")
+        if not text:
+            return ""            
+        sanitized = text 
+        secrets_to_redact = set()
+        for attr in dir(config):
+            if not attr.startswith("__"):
+                attr_upper = attr.upper()
+                if any(k in attr_upper for k in ["KEY", "TOKEN", "SECRET", "PASSWORD", "PAT"]):
+                    val = getattr(config, attr)
+                    if isinstance(val, str) and len(val) > 3: 
+                        secrets_to_redact.add(val)
+        if hasattr(config, "SENSITIVE_KEYS"):
+            for prefix in config.SENSITIVE_KEYS:
+                if isinstance(prefix, str) and len(prefix) > 2:
+                    secrets_to_redact.add(prefix)
+        for real_secret in sorted(secrets_to_redact, key=len, reverse=True):
+            if real_secret in sanitized:
+                sanitized = sanitized.replace(real_secret, "[REDACTED_SECURITY_PARAMETER]")                
         return sanitized
 
     async def _query_llm_with_retry(self, context: str, system_prompt: str) -> str:
@@ -20,7 +34,7 @@ class AgentOrchestrator:
         backend = config.LLM_BACKEND.upper()
         
         if backend == "GROQ":
-            url = "https://groq.com"
+            url = "https://api.groq.com/openai/v1/chat/completions"
             headers = {
                 "Authorization": f"Bearer {config.GROQ_API_KEY}",
                 "Content-Type": "application/json"
@@ -81,25 +95,26 @@ class AgentOrchestrator:
 
             system_prompt = (
                 "You are an active agentic coordinator working inside an enterprise MCP application.\n"
+                "Your goal is to fully satisfy the User Goal by planning strategic actions and dynamically calling tools.\n\n"
                 f"Available dynamic MCP tools:\n{json.dumps(tools_schema, indent=2)}\n\n"
                 "You MUST respond in exactly ONE of the two formats below. Follow the structure strictly.\n\n"
                 "=== FORMAT VARIANT 1: INVOKE TOOL ===\n"
-                "If you need to use an MCP tool to fetch data or execute an action, output EXACTLY this:\n"
-                "THOUGHT: <your reasoning here>\n"
+                "If you need to use an MCP tool to fetch data, explore state, or execute an action, output EXACTLY this:\n"
+                "THOUGHT: <your technical reasoning here>\n"
                 "ACTION:\n"
                 "{\n"
                 "  \"tool\": \"tool_name\",\n"
                 "  \"arguments\": {}\n"
                 "}\n\n"
                 "=== FORMAT VARIANT 2: MISSION RESOLVED ===\n"
-                "If you have fetched the data from GitHub, analyzed it, and are ready to finish, output EXACTLY this:\n"
-                "THOUGHT: <your reasoning>\n"
+                "If you have successfully processed the required data, analyzed it, and are ready to finish, output EXACTLY this:\n"
+                "THOUGHT: <your final analytical reasoning>\n"
                 "FINAL_ANSWER:\n"
                 "=== ARCHITECTURAL SUMMARY REPORT ===\n"
-                "1. DETECTED BUG SUMMARY: (Write here what you found in the GitHub issue body)\n"
-                "2. EXCEPTIONS & ROOT CAUSE: (Write the technical reason for the bug)\n"
-                "3. PROPOSED ARCHITECTURAL FIX: (Write how it should be fixed or how it was resolved)\n"
-                "CRITICAL: DO NOT write generic text like 'report has been generated'. You MUST extract real text from the tool responses and write a detailed multi-line analysis!"
+                "1. EXECUTIVE SUMMARY: (Provide a high-level summary of what was identified, processed, or accomplished)\n"
+                "2. DATA LOGS & EVIDENCE: (Detail the technical metrics, responses, or data parameters retrieved from tools)\n"
+                "3. RESOLUTION & NEXT STEPS: (State the final comprehensive answer, architectural resolution, or action plan)\n"
+                "CRITICAL: DO NOT write generic placeholder text. You MUST extract real data from tool logs and generate a high-quality multi-line report!"
             )
 
             
@@ -117,19 +132,20 @@ class AgentOrchestrator:
             history.append({"role": "assistant", "content": llm_output})
             
             if "FINAL_ANSWER:" in llm_output:
-                if turn == 1:
+                if turn == 1 and real_tool_names:
                     history.append({
                         "role": "user", 
-                        "content": "Error: You cannot finish the mission without calling 'get_issue' first to see the real data. Provide a valid ACTION block now."
+                        "content": "Error: You cannot resolve the mission immediately without executing any of the available live tools to verify current parameters. Provide a valid ACTION block."
                     })
                     continue
-                clean_report = llm_output.split("FINAL_ANSWER:")[-1].strip()
+                
+                parts = llm_output.split("FINAL_ANSWER:")
+                clean_report = parts[-1].strip()
                 
                 if "ACTION:" in clean_report:
                     clean_report = clean_report.split("ACTION:")[0].strip()
                 
                 return self._redact_secrets(clean_report)
-                #return self._redact_secrets(llm_output.split("FINAL_ANSWER:")[-1].strip())
                 
             if "ACTION:" in llm_output:
                 try:
@@ -153,37 +169,21 @@ class AgentOrchestrator:
                     if end_idx != -1:
                         action_str = action_str[start_idx:end_idx]
                     else:
-                        action_str = action_str[start_idx:]
-                    
+                        action_str = action_str[start_idx:]                    
                     action_json = json.loads(action_str)
-                    raw_tool_name = action_json.get("tool", "")
-                    tool_args = action_json.get("arguments", {})
+                    target_tool = action_json.get("tool", "")
+                    tool_args = action_json.get("arguments", {})                    
+                    log_callback(self._redact_secrets(f"🎬 **Executing tool call** `{target_tool}` with inputs: {json.dumps(tool_args)}"))
+                    tool_result = await self.client_manager.invoke_tool(target_tool, tool_args)
+                    history.append({
+                        "role": "user", 
+                        "content": f"Tool Response: {json.dumps(tool_result)}"
+                    })                    
+                except Exception as parse_err:
+                    history.append({
+                        "role": "user",
+                        "content": f"Failed to execute or parse your ACTION block. Error: {parse_err}. Ensure the tool name matches the schema exactly and arguments are valid JSON."
+                    })
                     
-                    tool_aliases = {
-                        "get_issue_details": "get_issue",
-                        "fetch_issue_details": "get_issue",
-                        "view_issue": "get_issue",
-                        "get_bug_details": "get_issue"
-                    }
-                    target_tool = tool_aliases.get(raw_tool_name, raw_tool_name)
-                    
-                    log_callback(self._redact_secrets(f"🎬 **Executing tool call** `{target_tool}` (mapped from `{raw_tool_name}`) with inputs: {json.dumps(tool_args)}"))
-                    
-                    raw_result = await self.client_manager.invoke_tool(target_tool, tool_args)
-                    
-                    log_callback(self._redact_secrets(f"📥 **Response received**: {json.dumps(raw_result)[:200]}..."))
-                    history.append({"role": "user", "content": f"Execution data return for [{target_tool}]: {json.dumps(raw_result)}"})
-                    
-                except Exception as execution_fault:
-                    fault_details = getattr(execution_fault, "message", None)
-                    if not fault_details and hasattr(execution_fault, "args"):
-                        fault_details = str(execution_fault.args)
-                    if not fault_details or fault_details == "()":
-                        fault_details = f"{type(execution_fault).__name__}: {str(execution_fault)}"
-                        
-                    log_callback(f"⚠️ **Error step captured**: {fault_details}. Injecting corrective step...")
-                    history.append({"role": "user", "content": f"Execution error triggered: {fault_details}. Adjust arguments or choose alternative path."})
-            else:
-                history.append({"role": "user", "content": "Error: You violated formatting boundaries. Respond strictly with ACTION or FINAL_ANSWER blocks."})
-
-        return "Mission timed out: Agent hit loop bounds without converging on final resolution."
+        return "Mission incomplete: Maximum orchestrated execution turns exceeded without resolution."
+																	

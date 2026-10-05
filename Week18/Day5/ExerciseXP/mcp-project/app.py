@@ -1,14 +1,11 @@
 import streamlit as st
 import asyncio
 import sys
+import atexit
 from mcp_client import MCPClientManager
 from agent_orchestrator import AgentOrchestrator
 import config
 import os
-
-# Forced Windows platform adjustment to allow asynchronous subprocess pipelines
-if sys.platform == 'win32':
-    asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 st.set_page_config(page_title="Production MCP Workspace", layout="wide", page_icon="🛡️")
 st.title("🛡️ Enterprise Agentic MCP Workspace")
@@ -19,20 +16,43 @@ if "client_manager" not in st.session_state:
     st.session_state.orchestrator = AgentOrchestrator(st.session_state.client_manager)
     st.session_state.servers_started = False
 
+    # ДОБАВЛЕНО: Глобальный перехватчик завершения работы приложения (Tear-down Hook)
+    # Гарантирует вызов shutdown() при закрытии терминала, остановке сервера или Ctrl+C
+    def global_sync_teardown():
+        try:
+            # Создаем изолированный цикл событий для выполнения асинхронного закрытия подпроцессов
+            loop = asyncio.new_event_loop()
+            loop.run_until_complete(st.session_state.client_manager.shutdown())
+            loop.close()
+        except Exception:
+            pass
+
+    atexit.register(global_sync_teardown)
+
 async def initialize_all_servers(manager: MCPClientManager):
-    """Launches all 3 servers concurrently in a single async context thread."""
-
+    """Launches all 3 servers sequentially with clean configurations to prevent deadlocks."""
     import os
-    env_copy = os.environ.copy()
-    if config.GITHUB_TOKEN:
-        env_copy["GITHUB_TOKEN"] = config.GITHUB_TOKEN
-    os.environ["GITHUB_TOKEN"] = config.GITHUB_TOKEN
+    
+    if getattr(config, "GITHUB_TOKEN", None):
+        os.environ["GITHUB_TOKEN"] = config.GITHUB_TOKEN
 
-    await asyncio.gather(
-        manager.register_and_start("GitHubServer", config.GITHUB_MCP_COMMAND),
-        manager.register_and_start("FetchServer", config.FETCH_MCP_COMMAND),
-        manager.register_and_start("InsightServer", f'"{sys.executable}" custom_insight_server.py')
-    )
+    try:
+        await manager.register_and_start("GitHubServer", config.GITHUB_MCP_COMMAND)
+        st.sidebar.success("✅ GitHubServer initiated successfully!")
+    except Exception as e:
+        st.sidebar.error(f"❌ GitHubServer failed: {e}")
+
+    try:
+        await manager.register_and_start("FetchServer", config.FETCH_MCP_COMMAND)
+        st.sidebar.success("✅ FetchServer initiated successfully!")
+    except Exception as e:
+        st.sidebar.error(f"❌ FetchServer failed: {e}")
+
+    try:
+        await manager.register_and_start("InsightServer", config.INSIGHT_MCP_COMMAND)
+        st.sidebar.success("✅ InsightServer initiated successfully!")
+    except Exception as e:
+        st.sidebar.error(f"❌ InsightServer failed: {e}")
 
 with st.sidebar:
     st.header("🌐 System Infrastructure Runtime")
@@ -78,6 +98,16 @@ if st.session_state.servers_started:
                 st.session_state.orchestrator.run_mission(user_goal, log_callback=ui_callback)
             )
             st.success("✨ Target Accomplished!")
-            st.info(f"**Final System Resolution Output:**\n{final_report}")
+            
+            if final_report and str(final_report).strip():
+                st.info(f"**Final System Resolution Output:**\n{final_report}")
+            else:
+                st.error("⚠️ Оркестратор завершил миссию, но вернул пустой отчет (None или пустую строку).")
+                
+                if hasattr(st.session_state.orchestrator, 'memory') and st.session_state.orchestrator.memory:
+                    st.warning("🔄 Попытка извлечь последний ответ из истории оркестратора:")
+                    # Берем последнее сообщение из истории агента
+                    last_msg = st.session_state.orchestrator.memory[-1]
+                    st.code(str(last_msg))
 else:
     st.warning("Workspace offline. Please ignite backend server infrastructure dependencies via the control panel.")
