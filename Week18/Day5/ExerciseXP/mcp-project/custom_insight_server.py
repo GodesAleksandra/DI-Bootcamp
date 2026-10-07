@@ -50,14 +50,14 @@ async def query_llm_for_analysis(target_data: str, analysis_type: str = "general
     try:
         print(f"[InsightServer Info] Dispatched LLM analysis request to Host: {url}. Backend: {backend}...", file=sys.stderr)
         sys.stderr.flush()
-        async with httpx.AsyncClient(trust_env=False) as client:
+        async with httpx.AsyncClient(trust_env=True) as client:
             response = await client.post(url, json=payload, headers=headers, timeout=20.0)
             print(f"[InsightServer Info] HTTP response received. Status code: {response.status_code}", file=sys.stderr)
             sys.stderr.flush()
             if response.status_code == 200:
                 res_data = response.json()
                 if backend == "GROQ":
-                    return res_data['choices']['message']['content'].strip()
+                    return res_data['choices'][0]['message']['content'].strip()
                 else:
                     return res_data['message']['content'].strip()
             else:

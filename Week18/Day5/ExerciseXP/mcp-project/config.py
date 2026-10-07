@@ -32,9 +32,10 @@ GITHUB_MCP_COMMAND = [NODE_EXE, "--dns-result-order=ipv4first", GITHUB_SERVER_JS
 FETCH_MCP_COMMAND = ["npx.cmd", "-y", "mcp-fetch-server", "--ignore-robots-txt"]
 INSIGHT_MCP_COMMAND = [sys.executable, "custom_insight_server.py"]
 
-DEFAULT_OWNER = "cli"
-DEFAULT_REPO = "cli"
-DEFAULT_ISSUE = 702
+#DEFAULT_OWNER = "cli"
+#DEFAULT_REPO = "cli"
+#DEFAULT_ISSUE = 702
+AGENT_MAX_TURNS = 8
 
 SENSITIVE_KEYS = ["gsk_", "github_pat", "ghp_", "SECRET", "PASSWORD", "API_KEY"]
 
