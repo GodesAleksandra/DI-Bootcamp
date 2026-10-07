@@ -6,6 +6,7 @@ from mcp_client import MCPClientManager
 from agent_orchestrator import AgentOrchestrator
 import config
 import os
+from concurrent.futures import ThreadPoolExecutor
 
 st.set_page_config(page_title="Production MCP Workspace", layout="wide", page_icon="🛡️")
 st.title("🛡️ Enterprise Agentic MCP Workspace")
@@ -16,11 +17,8 @@ if "client_manager" not in st.session_state:
     st.session_state.orchestrator = AgentOrchestrator(st.session_state.client_manager)
     st.session_state.servers_started = False
 
-    # ДОБАВЛЕНО: Глобальный перехватчик завершения работы приложения (Tear-down Hook)
-    # Гарантирует вызов shutdown() при закрытии терминала, остановке сервера или Ctrl+C
     def global_sync_teardown():
         try:
-            # Создаем изолированный цикл событий для выполнения асинхронного закрытия подпроцессов
             loop = asyncio.new_event_loop()
             loop.run_until_complete(st.session_state.client_manager.shutdown())
             loop.close()
@@ -102,11 +100,10 @@ if st.session_state.servers_started:
             if final_report and str(final_report).strip():
                 st.info(f"**Final System Resolution Output:**\n{final_report}")
             else:
-                st.error("⚠️ Оркестратор завершил миссию, но вернул пустой отчет (None или пустую строку).")
+                st.error("⚠️ Orchestrator execution loop completed but returned an empty structural payload (None or Empty String).")
                 
                 if hasattr(st.session_state.orchestrator, 'memory') and st.session_state.orchestrator.memory:
-                    st.warning("🔄 Попытка извлечь последний ответ из истории оркестратора:")
-                    # Берем последнее сообщение из истории агента
+                    st.warning("🔄 Attempting recovery: Displaying last snapshot from orchestrator memory context:")
                     last_msg = st.session_state.orchestrator.memory[-1]
                     st.code(str(last_msg))
 else:

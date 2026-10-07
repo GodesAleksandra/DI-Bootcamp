@@ -48,11 +48,11 @@ async def query_llm_for_analysis(target_data: str, analysis_type: str = "general
         }
 
     try:
-        print(f"[InsightServer] Отправка запроса в Ollama на {url}...", file=sys.stderr)
+        print(f"[InsightServer Info] Dispatched LLM analysis request to Host: {url}. Backend: {backend}...", file=sys.stderr)
         sys.stderr.flush()
         async with httpx.AsyncClient(trust_env=False) as client:
             response = await client.post(url, json=payload, headers=headers, timeout=20.0)
-            print(f"[InsightServer] Ответ получен. Статус: {response.status_code}", file=sys.stderr)
+            print(f"[InsightServer Info] HTTP response received. Status code: {response.status_code}", file=sys.stderr)
             sys.stderr.flush()
             if response.status_code == 200:
                 res_data = response.json()
@@ -63,7 +63,7 @@ async def query_llm_for_analysis(target_data: str, analysis_type: str = "general
             else:
                 return f"[Error] LLM Backend returned bad status code: {response.status_code}"
     except Exception as e:
-        print(f"[InsightServer ERROR] Ошибка подключения к Ollama: {str(e)}", file=sys.stderr)
+        print(f"[InsightServer Critical] HTTP request failed with exception: {str(e)}", file=sys.stderr)
         sys.stderr.flush()
         return f"[Error] Failed to connect to LLM for dynamic insight generation: {str(e)}"
 
@@ -153,7 +153,7 @@ async def handle_mcp_request(request_json: dict) -> dict:
 
 
 def blocking_readline():
-    """Синхронное чтение строки из stdin, стабильное на Windows."""
+    """Synchronous read line from stdin, fully stable on Windows environments."""
     return sys.stdin.readline()
 
 

@@ -7,27 +7,32 @@ class AgentOrchestrator:
     def __init__(self, client_manager):
         self.client_manager = client_manager
 
-    def _redact_secrets(self, text: str) -> str:
-        """Sanitizes text logs to ensure credentials are never exposed in UI buffers."""
-        if not text:
-            return ""            
-        sanitized = text 
-        secrets_to_redact = set()
-        for attr in dir(config):
-            if not attr.startswith("__"):
-                attr_upper = attr.upper()
-                if any(k in attr_upper for k in ["KEY", "TOKEN", "SECRET", "PASSWORD", "PAT"]):
-                    val = getattr(config, attr)
-                    if isinstance(val, str) and len(val) > 3: 
-                        secrets_to_redact.add(val)
-        if hasattr(config, "SENSITIVE_KEYS"):
-            for prefix in config.SENSITIVE_KEYS:
-                if isinstance(prefix, str) and len(prefix) > 2:
-                    secrets_to_redact.add(prefix)
-        for real_secret in sorted(secrets_to_redact, key=len, reverse=True):
-            if real_secret in sanitized:
-                sanitized = sanitized.replace(real_secret, "[REDACTED_SECURITY_PARAMETER]")                
-        return sanitized
+    def _redact_secrets(self, text_payload: str) -> str:
+        """
+        Redacts sensitive credential values from the given text payload using 
+        an explicit, robust allowlist populated directly from configuration values.
+        """
+        if not text_payload or not isinstance(text_payload, str):
+            return text_payload
+
+        SECRET_ATTRIBUTES = [
+            "GITHUB_TOKEN",
+            "GROQ_API_KEY"
+        ]
+
+        redacted_payload = text_payload
+
+        for attr in SECRET_ATTRIBUTES:										 
+																							   
+            secret_value = getattr(config, attr, None)											 
+												
+            if secret_value and isinstance(secret_value, str) and len(secret_value.strip()) > 3:
+                secret_value = secret_value.strip()
+										
+                redacted_payload = redacted_payload.replace(secret_value, f"[REDACTED_{attr}]")
+
+        return redacted_payload
+
 
     async def _query_llm_with_retry(self, context: str, system_prompt: str) -> str:
         """Queries LLM using settings from config.py with exponential backoff and absolute timeout bounds."""
@@ -39,13 +44,18 @@ class AgentOrchestrator:
                 "Authorization": f"Bearer {config.GROQ_API_KEY}",
                 "Content-Type": "application/json"
             }
+
+            safe_system_prompt = system_prompt.strip()
+            safe_context = context.strip()
+
             payload = {
                 "model": config.GROQ_MODEL,
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": context}
                 ],
-                "temperature": 0.2
+                "temperature": 0.2,
+                "max_tokens": 1024
             }
         else:
             # Local Ollama compliance setup
@@ -141,7 +151,6 @@ class AgentOrchestrator:
                 
                 parts = llm_output.split("FINAL_ANSWER:")
                 clean_report = parts[-1].strip()
-                
                 if "ACTION:" in clean_report:
                     clean_report = clean_report.split("ACTION:")[0].strip()
                 
@@ -172,14 +181,41 @@ class AgentOrchestrator:
                         action_str = action_str[start_idx:]                    
                     action_json = json.loads(action_str)
                     target_tool = action_json.get("tool", "")
-                    tool_args = action_json.get("arguments", {})                    
+                    tool_args = action_json.get("arguments", {})  
+
+                    matched_tool = next((t for t in tools_schema if t["name"] == target_tool), None)
+                    if not matched_tool:
+                        raise ValueError(f"Tool '{target_tool}' is not available in tools_schema.")
+                    
+                    input_schema = matched_tool.get("inputSchema")
+                    if input_schema:
+                        from jsonschema import validate, ValidationError
+                        try:
+                            validate(instance=tool_args, schema=input_schema)
+                        except ValidationError as schema_err:
+                            if "issue_number" in tool_args and isinstance(tool_args["issue_number"], str):
+                                if tool_args["issue_number"].isdigit():
+                                    tool_args["issue_number"] = int(tool_args["issue_number"])
+                                    validate(instance=tool_args, schema=input_schema)
+                                else:
+                                    raise schema_err
+                            else:
+                                raise schema_err
                     log_callback(self._redact_secrets(f"🎬 **Executing tool call** `{target_tool}` with inputs: {json.dumps(tool_args)}"))
-                    tool_result = await self.client_manager.invoke_tool(target_tool, tool_args)
+                    #tool_result = await self.client_manager.invoke_tool(target_tool, tool_args)
+                    try:
+                        tool_result = await asyncio.wait_for(
+                            self.client_manager.invoke_tool(target_tool, tool_args), 
+                            timeout=15.0
+                        )
+                    except asyncio.TimeoutError:
+                        raise RuntimeError(f"MCP tool '{target_tool}' timed out after 15 seconds.")
                     history.append({
                         "role": "user", 
                         "content": f"Tool Response: {json.dumps(tool_result)}"
                     })                    
                 except Exception as parse_err:
+                    log_callback(f"⚠️ **Validation/Execution failed:** {parse_err}")
                     history.append({
                         "role": "user",
                         "content": f"Failed to execute or parse your ACTION block. Error: {parse_err}. Ensure the tool name matches the schema exactly and arguments are valid JSON."
