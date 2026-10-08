@@ -1,7 +1,11 @@
-import asyncio
-import json
 import httpx
+import json
+import asyncio
 import config
+import difflib
+from groq import AsyncGroq
+from custom_insight_server import write_report_to_disk
+import datetime
 
 class AgentOrchestrator:
     def __init__(self, client_manager):
@@ -33,25 +37,35 @@ class AgentOrchestrator:
 
         return redacted_payload
 
-    async def _query_llm_with_retry(self, context: str, system_prompt: str) -> str:
+
+    async def _query_llm_with_retry(self, context: str, system_prompt: str, log_callback) -> str:
         """Queries LLM using settings from config.py with exponential backoff and absolute timeout bounds."""
         backend = config.LLM_BACKEND.upper()
         
         if backend == "GROQ":
-            url = "https://api.groq.com/openai/v1/chat/completions"
-            headers = {
-                "Authorization": f"Bearer {config.GROQ_API_KEY}",
-                "Content-Type": "application/json"
-            }
-            payload = {
-                "model": config.GROQ_MODEL,
-                "messages": [
-                    {"role": "system", "content": system_prompt.strip()},
-                    {"role": "user", "content": context.strip()}
-                ],
-                "temperature": 0.2,
-                "max_tokens": 1024
-            }
+            client = AsyncGroq(api_key=config.GROQ_API_KEY)
+
+            try:
+                safe_context = context
+                if len(context) > 5000:
+                    log_callback("✂️ *Context window is full. Compressing history payload to fit Groq Free Tier...*")
+                    safe_context = context[:2000] + "\n\n... [Truncated for Context Window Stability] ...\n\n" + context[-2500:]
+                
+                completion = await client.chat.completions.create(
+                    model=config.GROQ_MODEL,
+                    messages=[
+                        {"role": "system", "content": system_prompt.strip()},
+                        {"role": "user", "content": safe_context.strip()}
+                    ],
+                    temperature=0.1,
+                    max_tokens=512,
+                    tool_choice="none"
+                )
+                return completion.choices[0].message.content
+                    
+            except Exception as e:
+                raise RuntimeError(f"Official Groq SDK invocation failed: {str(e)}")
+            
         else:
             url = f"{config.OLLAMA_HOST}/api/chat"
             headers = {"Content-Type": "application/json"}
@@ -75,12 +89,9 @@ class AgentOrchestrator:
                     
                     if response.status_code == 200:
                         data = response.json()
-                        if backend == "GROQ":
-                            return data['choices'][0]['message']['content']
-                        else:
-                            if "error" in data:
-                                raise ValueError(f"Ollama Internal Error: {data['error']}")
-                            return data['message']['content']
+                        if "error" in data:
+                            raise ValueError(f"Ollama Internal Error: {data['error']}")
+                        return data['message']['content']
                     
                     elif response.status_code in (400, 401, 403, 404):
                         raise ValueError(f"Permanent API Error ({response.status_code}): {response.text}")
@@ -100,19 +111,33 @@ class AgentOrchestrator:
                     
                     await asyncio.sleep(backoff_delay)
                     backoff_delay *= 2.0
-                    
+                
     async def run_mission(self, user_input: str, log_callback) -> str:
-        history = [{"role": "user", "content": f"User Goal: {user_input}"}]
+        safe_input = user_input[:4000] + "... [Truncated to prevent Groq HTTP 413]" if len(user_input) > 4000 else user_input
+        history = [{"role": "user", "content": f"User Goal: {safe_input}"}]
         max_turns = getattr(config, "AGENT_MAX_TURNS", 5)
         
-        for turn in range(1, max_turns + 1):
+        #for turn in range(1, max_turns + 1):
+        turn = 1
+        while turn <= max_turns:
+            if turn > 1:
+                log_callback("⏳ *Cooling down API rate limits before next turn...*")
+                await asyncio.sleep(2.5)
             tools_schema = self.client_manager.get_all_tools()
             real_tool_names = [t["name"] for t in tools_schema]
+
+            optimized_tools_list = []
+            for t in tools_schema:
+                optimized_tools_list.append({
+                    "name": t.get("name"),
+                    "description": t.get("description", "")[:150],
+                    "input_keys": list(t.get("inputSchema", {}).get("properties", {}).keys()) 
+                })
 
             system_prompt = (
                 "You are an active agentic coordinator working inside an enterprise MCP application.\n"
                 "Your goal is to fully satisfy the User Goal by planning strategic actions and dynamically calling tools.\n\n"
-                f"Available dynamic MCP tools:\n{json.dumps(tools_schema, indent=2)}\n\n"
+                f"Available dynamic MCP tools:\n{json.dumps(optimized_tools_list, indent=2)}\n\n"
                 "CRITICAL BOUNDARY RULE: You can ONLY call tools from the 'Available dynamic MCP tools' list above. "
                 "If a tool you want to use is not in that list, it DOES NOT EXIST. In that case, you MUST use alternative methods "
                 "or dynamic generic tools (like web search or text analyzers if available) to fulfill the mission. "
@@ -136,13 +161,14 @@ class AgentOrchestrator:
                 "3. RESOLUTION & NEXT STEPS: (State the final comprehensive answer, architectural resolution, or action plan)\n"
                 "CRITICAL: DO NOT write generic placeholder text. You MUST extract real data from tool logs and generate a high-quality multi-line report!"
             )
+
 			
-            log_callback(self._redact_secrets(f"🧠 **[Turn {turn}] Orchestrator analyzing execution plan...**"))
+            log_callback(self._redact_secrets(f"🧠 **[Turn {turn}/{max_turns}] Orchestrator analyzing execution plan...**"))
             
             context_feed = "\n".join([f"{m['role'].upper()}: {m['content']}" for m in history])
             
             try:
-                llm_output = await self._query_llm_with_retry(context_feed, system_prompt)
+                llm_output = await self._query_llm_with_retry(context_feed, system_prompt, log_callback)
                 if not llm_output or not llm_output.strip():
                     log_callback(f"⚠️ Warning: LLM returned empty output on Turn {turn}. Retrying with strict directive...")
                     history.append({
@@ -164,4 +190,191 @@ class AgentOrchestrator:
                         "content": "Error: You cannot resolve the mission immediately without executing any of the available live tools to verify current parameters. Provide a valid ACTION block."
                     })
                     continue
-                return llm_output
+                lower_output = llm_output.lower()
+                if "failed to generate" in lower_output or "failed to respond" in lower_output:
+                    log_callback("🛑 **Guard Alert: LLM is complaining about tool failure instead of retrying. Forcing retry...**")
+                    history.append({
+                        "role": "user",
+                        "content": (
+                            "Error: You claim the tool failed, but you must look at the actual Tool Execution Result in the context. "
+                            "If the previous tool output was missing or invalid, re-execute the correct tool with proper arguments now. "
+                            "DO NOT submit a final answer with missing evidence."
+                        )
+                    })
+                    continue
+                parts = llm_output.split("FINAL_ANSWER:")
+                clean_report = parts[-1].strip()
+                if "ACTION:" in clean_report:
+                    clean_report = clean_report.split("ACTION:")[0].strip()
+
+                try:
+                    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                    filename = f"mission_report_{timestamp}.md"
+                    
+                    log_callback(f"💾 *Orchestrator pipeline forcing automated report preservation to disk...*")
+                    save_status = write_report_to_disk(filename, clean_report)
+                    log_callback(f"📝 *Filesystem status: {save_status}*")
+                except Exception as save_err:
+                    log_callback(f"⚠️ *Automated internal pipeline saving failed: {str(save_err)}*")
+
+                
+                return self._redact_secrets(clean_report)
+                
+            if "ACTION:" in llm_output:
+                try:
+                    action_str = llm_output.split("ACTION:")[-1].strip()
+                    
+                    start_idx = action_str.find("{")
+                    if start_idx == -1:
+                        raise ValueError("No JSON object found after ACTION:")
+                        
+                    brace_count = 0
+                    end_idx = -1
+                    for i in range(start_idx, len(action_str)):
+                        if action_str[i] == "{":
+                            brace_count += 1
+                        elif action_str[i] == "}":
+                            brace_count -= 1
+                            if brace_count == 0:
+                                end_idx = i + 1
+                                break
+                                
+                    if end_idx == -1:
+                        raise ValueError("Incomplete or malformed JSON block under ACTION.")
+						 
+                    action_json = json.loads(action_str[start_idx:end_idx])
+                    tool_name = action_json.get("tool")
+                    tool_args = action_json.get("arguments", {})
+
+                    matched_tool = next((t for t in tools_schema if t["name"] == tool_name), None)
+
+                    if not matched_tool:
+                        close_matches = difflib.get_close_matches(tool_name, real_tool_names, n=1, cutoff=0.4)
+                        suggestion = f" Did you mean '{close_matches[0]}'?" if close_matches else ""
+
+                        log_callback(f"⚠️ Validation failed: Tool '{tool_name}' is not available in tools_schema.{suggestion}")
+                        
+                        history.append({
+                            "role": "user",
+                            "content": (
+                                f"Error: Tool '{tool_name}' is not registered in the system.{suggestion} "
+                                f"Available tools are: {real_tool_names}. "
+                                f"Adjust your plan: use correct names or proceed using alternative methods."
+																							
+                            )
+                        })
+                        continue
+
+                    input_schema = matched_tool.get("inputSchema")
+                    if input_schema:
+                        from jsonschema import validate, ValidationError
+                        
+                        if isinstance(tool_args, dict):
+                            required_fields = input_schema.get("required", [])
+                            
+                            if "issue_number" in required_fields and "issue_number" not in tool_args:
+                                for alias in ["pull_number", "issue", "number", "id"]:
+                                    if alias in tool_args:
+                                        tool_args["issue_number"] = tool_args.pop(alias)
+                                        break
+                                        
+                            if "issue_number" in tool_args and isinstance(tool_args["issue_number"], str):
+                                if tool_args["issue_number"].isdigit():
+                                    tool_args["issue_number"] = int(tool_args["issue_number"])
+
+                        try:
+                            validate(instance=tool_args, schema=input_schema)
+                        except ValidationError as schema_err:
+                            if "issue_number" in tool_args and isinstance(tool_args["issue_number"], str):
+                                if tool_args["issue_number"].isdigit():
+                                    tool_args["issue_number"] = int(tool_args["issue_number"])
+                                    validate(instance=tool_args, schema=input_schema)
+                                else:
+                                    raise schema_err
+                            else:
+                                raise schema_err
+                    if isinstance(tool_args, dict):
+                        tool_args = {
+                            k: v for k, v in tool_args.items() 
+                            if v is not None and v != "" and v != [] and v != {}
+                        }
+
+                    log_callback(f"🎬 Executing tool call {tool_name} with inputs: {json.dumps(tool_args)}")
+                    
+                    try:
+                        tool_result = await self.client_manager.invoke_tool(tool_name, tool_args)
+                    except Exception as server_err:
+                        error_msg = str(server_err)
+                        log_callback(f"⚠️ Tool execution failed on MCP server: {error_msg}")
+                        
+                        history.append({
+                            "role": "user",
+                            "content": (
+                                f"Error: The tool '{tool_name}' returned a protocol validation error: {error_msg}. "
+                                f"This usually happens when optional fields (like 'proxy' or 'headers') are passed with empty/invalid values. "
+                                f"Please try calling '{tool_name}' again, but COMPLETELY OMIT any empty optional parameters from your 'arguments' object."
+                            )
+                        })
+                        continue
+
+                    cleaned_result = tool_result
+                    
+                    if tool_name == "fetch_html" and isinstance(tool_result, str):
+                        try:
+                            from bs4 import BeautifulSoup
+                            soup = BeautifulSoup(tool_result, "html.parser")
+							
+                            for element in soup(["script", "style", "nav", "footer", "header", "svg"]):
+                                element.extract()
+								
+                            cleaned_result = soup.get_text(separator="\n", strip=True)
+
+                            if len(tool_result) > 5000:
+                                cleaned_result = cleaned_result[:5000] + "\n...[Truncated for Groq payload stability]..."
+                            else:
+                                cleaned_result = cleaned_result
+							
+                        except ImportError:
+                            cleaned_result = tool_result[:4000] + "\n...[Raw HTML truncated]..."
+                            
+                    elif tool_name == "fetch_txt" and isinstance(tool_result, str):
+                        if len(tool_result) > 8000:
+                            cleaned_result = tool_result[:8000] + "\n...[Text truncated for context window stability]..."
+                            
+                    elif tool_name == "fetch_readable" and isinstance(tool_result, str):
+                        if len(tool_result) > 5000:
+                            cleaned_result = tool_result[:5000] + "\n...[Truncated for Groq payload stability]..."
+
+                    history.append({
+                        "role": "user",
+                        "content": f"Tool Execution Result for '{tool_name}':\n{cleaned_result}"
+                    })
+
+
+                except Exception as parse_err:
+                    log_callback(f"⚠️ Failed to process action block: {parse_err}")
+                    history.append({
+                        "role": "user",
+                        "content": f"Error: Failed to process your ACTION block. Details: {str(parse_err)}. Please verify tool names and structure."
+                    })
+                    turn += 1
+                    continue
+            else:
+                error_msg = "Error: Your response did not contain a valid ACTION block or a FINAL_ANSWER report. Please follow the instructions."
+                log_callback(f"⚠️ Invalid response format from LLM. Requesting retry...")
+                history.append({
+                    "role": "user",
+                    "content": error_msg
+                })
+                turn += 1
+                continue
+                
+            turn += 1
+        log_callback(f"🛑 Mission failure: Maximum execution depth of {max_turns} turns reached without final resolution.")
+        fallback_report = (
+        "=== ARCHITECTURAL SUMMARY REPORT ===\n"
+        "1. EXECUTIVE SUMMARY: Mission Failed. The agentic orchestrator exceeded the allocated operational turn budget before synthesizing a definitive answer.\n"
+        f"2. DATA LOGS & EVIDENCE: Trapped at execution depth (Turn {max_turns}/{max_turns}). Last registered agent state involved iterative tool calls or unresolvable schema loops.\n"
+        "3. RESOLUTION & NEXT STEPS: Aborted due to step-budget exhaustion. Please refine your instruction prompt, expand AGENT_MAX_TURNS inside config.py, or verify if the underlying small-scale LLM is stuck in logical loops."
+        )
+        return self._redact_secrets(fallback_report)

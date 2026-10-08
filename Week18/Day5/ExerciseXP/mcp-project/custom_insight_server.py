@@ -3,6 +3,7 @@ import json
 import asyncio
 import httpx
 import config
+import os
 
 async def query_llm_for_analysis(target_data: str, analysis_type: str = "general") -> str:
     """
@@ -67,12 +68,54 @@ async def query_llm_for_analysis(target_data: str, analysis_type: str = "general
         sys.stderr.flush()
         return f"[Error] Failed to connect to LLM for dynamic insight generation: {str(e)}"
 
+def write_report_to_disk(filename: str, content: str) -> str:
+    """
+    Safely writes generated text reports to a designated 'reports' directory.
+    Prevents directory traversal attacks by enforcing strict path resolution.
+    """
+    try:
+        # Создаем безопасную директорию для отчетов в текущем каталоге проекта
+        base_dir = os.path.abspath("./mcp_reports")
+        os.makedirs(base_dir, exist_ok=True)
+        
+        # Защита от выхода из директории (например, если передадут '../../etc/passwd')
+        safe_filename = os.path.basename(filename)
+        if not safe_filename:
+            return "[Error] Invalid or empty filename provided."
+            
+        target_path = os.path.join(base_dir, safe_filename)
+        
+        with open(target_path, "w", encoding="utf-8") as f:
+            f.write(content)
+            
+        return f"[Success] Report successfully written to secure local path: {target_path}"
+    except Exception as e:
+        return f"[Error] Filesystem write operation failed: {str(e)}"
+
 
 async def handle_mcp_request(request_json: dict) -> dict:
     """Processes incoming JSON-RPC requests conforming to the Model Context Protocol."""
     req_id = request_json.get("id")
     method = request_json.get("method")
     params = request_json.get("params", {})
+
+    mcp_output_schema = {
+        "type": "object",
+        "properties": {
+            "content": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "type": {"type": "string"},
+                        "text": {"type": "string"}
+                    },
+                    "required": ["type", "text"]
+                }
+            }
+        },
+        "required": ["content"]
+    }
 
     if method == "tools/list":
         return {
@@ -97,7 +140,27 @@ async def handle_mcp_request(request_json: dict) -> dict:
                                 }
                             },
                             "required": ["data"]
-                        }
+                        },
+                        "outputSchema": mcp_output_schema
+                    },
+                    {
+                        "name": "insight_save_report",
+                        "description": "Persists any text-based synthesis, analysis, or data report to the local file system inside a secure reports catalog.",
+                        "inputSchema": {
+                            "type": "object",
+                            "properties": {
+                                "filename": {
+                                    "type": "string",
+                                    "description": "The target name of the file (e.g., 'system_audit_report.txt' or 'incident_metrics.md')."
+                                },
+                                "content": {
+                                    "type": "string",
+                                    "description": "The full text/markdown content payload to be saved on disk."
+                                }
+                            },
+                            "required": ["filename", "content"]
+                        },
+                        "outputSchema": mcp_output_schema
                     }
                 ]
             }
@@ -135,6 +198,27 @@ async def handle_mcp_request(request_json: dict) -> dict:
                 "id": req_id,
                 "result": {
                     "content": [{"type": "text", "text": detailed_report}]
+                }
+            }
+
+        elif tool_name == "insight_save_report":
+            filename = arguments.get("filename", "")
+            content = arguments.get("content", "")
+            
+            if not filename or not content:
+                return {
+                    "jsonrpc": "2.0",
+                    "id": req_id,
+                    "result": {"content": [{"type": "text", "text": "[Error] Missing filename or content parameters."}]}
+                }
+            
+            save_status = write_report_to_disk(filename, content)
+            
+            return {
+                "jsonrpc": "2.0",
+                "id": req_id,
+                "result": {
+                    "content": [{"type": "text", "text": save_status}]
                 }
             }
         else:
