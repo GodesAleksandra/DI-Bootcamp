@@ -49,60 +49,42 @@ class RealMCPClient:
         await self.discover_tools()
 
     async def _listen_stdout(self):
-        """Listens to the server's stdout, extracts JSON objects, and resolves pending requests."""
+        """Listens to the server's stdout using newline-delimited framing and resolves pending requests."""
         try:
-            buffer = ""
-            while self.process.stdout and not self.process.stdout.at_eof():
-                chunk = await self.process.stdout.read(100)
-                if not chunk:
-                    break
-                
-                buffer += chunk.decode(errors="ignore")
-                
-                while "{" in buffer and "}" in buffer:
-                    start_idx = buffer.find("{")
-                    brace_count = 0
-                    end_idx = -1
-                    
-                    for i in range(start_idx, len(buffer)):
-                        if buffer[i] == "{":
-                            brace_count += 1
-                        elif buffer[i] == "}":
-                            brace_count -= 1
-                            if brace_count == 0:
-                                end_idx = i + 1
-                                break
-                    
-                    if end_idx != -1:
-                        json_str = buffer[start_idx:end_idx]
-                        buffer = buffer[end_idx:]
-                        
-                        try:
-                            parsed_str = json_str.strip()
-                            response = json.loads(parsed_str)
-                            req_id = response.get("id")
+            if not self.process.stdout:
+                logger.error(f"[{self.name}] stdout stream is not available.")
+                return
 
-                            if req_id in self._pending_requests:
-                                future = self._pending_requests.pop(req_id)
-                                if not future.done():
-                                    future.set_result(response)
-                            else:
-                                logger.warning(
-                                    f"[{self.name}] Received JSON-RPC message with unhandled or missing ID: {req_id}"
-                                )
-                        except json.JSONDecodeError as json_err:
-                            logger.error(
-                                f"[{self.name}] Critical JSON decoding failure. "
-                                f"Raw string snippet: {repr(json_str[:200])}. Error: {json_err}"
-                            )
-                        except Exception as ex:
-                            logger.error(
-                                f"[{self.name}] Unexpected error while processing multiplexer frame. "
-                                f"Raw frame: {repr(json_str[:200])}. Details: {ex}", 
-                                exc_info=True
-                            )
+            async for line in self.process.stdout:
+                json_str = line.decode(errors="ignore").strip()
+                
+                if not json_str:
+                    continue
+                    
+                try:
+                    response = json.loads(json_str)
+                    req_id = response.get("id")
+
+                    if req_id in self._pending_requests:
+                        future = self._pending_requests.pop(req_id)
+                        if not future.done():
+                            future.set_result(response)
                     else:
-                        break
+                        logger.warning(
+                            f"[{self.name}] Received JSON-RPC message with unhandled or missing ID: {req_id}"
+                        )
+                except json.JSONDecodeError as json_err:
+                    logger.error(
+                        f"[{self.name}] Critical JSON decoding failure. "
+                        f"Raw string snippet: {repr(json_str[:200])}. Error: {json_err}"
+                    )
+                except Exception as ex:
+                    logger.error(
+                        f"[{self.name}] Unexpected error while processing multiplexer frame. "
+                        f"Raw frame: {repr(json_str[:200])}. Details: {ex}", 
+                        exc_info=True
+                    )
+                    
         except asyncio.CancelledError:
             logger.info(f"[{self.name}] Stdout listening task cancelled normally.")
         except Exception as process_err:
