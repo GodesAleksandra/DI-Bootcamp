@@ -109,8 +109,11 @@ class AgentOrchestrator:
                     if attempt == max_retries - 1:
                         raise RuntimeError(f"LLM Connection completely failed after {max_retries} attempts.") from trans_err
                     
+                    log_callback(f"⚠️ Attempt {attempt + 1} failed. Retrying in {backoff_delay}s... Error: {str(trans_err)}")
                     await asyncio.sleep(backoff_delay)
                     backoff_delay *= 2.0
+
+        raise RuntimeError("LLM query loop exhausted without returning a result or raising a specific exception.")
                 
     async def run_mission(self, user_input: str, log_callback) -> str:
         safe_input = user_input[:4000] + "... [Truncated to prevent Groq HTTP 413]" if len(user_input) > 4000 else user_input
