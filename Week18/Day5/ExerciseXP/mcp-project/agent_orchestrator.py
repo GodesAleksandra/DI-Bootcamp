@@ -41,30 +41,43 @@ class AgentOrchestrator:
     async def _query_llm_with_retry(self, context: str, system_prompt: str, log_callback) -> str:
         """Queries LLM using settings from config.py with exponential backoff and absolute timeout bounds."""
         backend = config.LLM_BACKEND.upper()
+
+        max_retries = 3
+        backoff_delay = 2.0
         
         if backend == "GROQ":
             client = AsyncGroq(api_key=config.GROQ_API_KEY)
 
-            try:
-                safe_context = context
-                if len(context) > 5000:
-                    log_callback("✂️ *Context window is full. Compressing history payload to fit Groq Free Tier...*")
-                    safe_context = context[:2000] + "\n\n... [Truncated for Context Window Stability] ...\n\n" + context[-2500:]
-                
-                completion = await client.chat.completions.create(
-                    model=config.GROQ_MODEL,
-                    messages=[
-                        {"role": "system", "content": system_prompt.strip()},
-                        {"role": "user", "content": safe_context.strip()}
-                    ],
-                    temperature=0.1,
-                    max_tokens=512,
-                    tool_choice="none"
-                )
-                return completion.choices[0].message.content
+            safe_context = context
+            if len(context) > 5000:
+                log_callback("✂️ *Context window is full. Compressing history payload to fit Groq Free Tier...*")
+                safe_context = context[:2000] + "\n\n... [Truncated for Context Window Stability] ...\n\n" + context[-2500:]
+
+            for attempt in range(max_retries):
+                try:
+                    completion = await client.chat.completions.create(
+                        model=config.GROQ_MODEL,
+                        messages=[
+                            {"role": "system", "content": system_prompt.strip()},
+                            {"role": "user", "content": safe_context.strip()}
+                        ],
+                        temperature=0.1,
+                        max_tokens=512,
+                        tool_choice="none"
+                    )
+                    return completion.choices[0].message.content
                     
-            except Exception as e:
-                raise RuntimeError(f"Official Groq SDK invocation failed: {str(e)}")
+                except Exception as e:
+                    error_str = str(e).lower()
+                    if "401" in error_str or "403" in error_str or "400" in error_str:
+                        raise RuntimeError(f"Unrecoverable Groq SDK failure: {str(e)}") from e
+                    
+                    if attempt == max_retries - 1:
+                        raise RuntimeError(f"Groq SDK invocation failed after {max_retries} attempts: {str(e)}") from e
+
+                    log_callback(f"⚠️ Groq attempt {attempt + 1} failed. Retrying in {backoff_delay}s... Error: {str(e)}")
+                    await asyncio.sleep(backoff_delay)
+                    backoff_delay *= 2.0
             
         else:
             url = f"{config.OLLAMA_HOST}/api/chat"
@@ -78,9 +91,6 @@ class AgentOrchestrator:
                 "stream": False,
                 "options": {"temperature": 0.2, "num_keepalive": 0}
             }
-
-        max_retries = 3
-        backoff_delay = 2.0
         
         async with httpx.AsyncClient() as client:
             for attempt in range(max_retries):
@@ -319,6 +329,15 @@ class AgentOrchestrator:
                             )
                         })
                         continue
+
+                    if isinstance(tool_result, list):
+                        extracted_text = []
+                        for content_item in tool_result:
+                            if isinstance(content_item, dict) and content_item.get("type") == "text":
+                                extracted_text.append(content_item.get("text", ""))
+                        tool_result = "\n".join(extracted_text)
+                    elif not isinstance(tool_result, str):
+                        tool_result = str(tool_result)
 
                     cleaned_result = tool_result
                     

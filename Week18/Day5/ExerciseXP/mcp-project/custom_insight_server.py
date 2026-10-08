@@ -74,11 +74,9 @@ def write_report_to_disk(filename: str, content: str) -> str:
     Prevents directory traversal attacks by enforcing strict path resolution.
     """
     try:
-        # Создаем безопасную директорию для отчетов в текущем каталоге проекта
         base_dir = os.path.abspath("./mcp_reports")
         os.makedirs(base_dir, exist_ok=True)
         
-        # Защита от выхода из директории (например, если передадут '../../etc/passwd')
         safe_filename = os.path.basename(filename)
         if not safe_filename:
             return "[Error] Invalid or empty filename provided."

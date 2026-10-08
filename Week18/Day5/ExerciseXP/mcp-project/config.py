@@ -24,17 +24,20 @@ if GITHUB_TOKEN:
     os.environ["GITHUB_TOKEN"] = GITHUB_TOKEN
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 NODE_EXE = shutil.which("node") or "node"
+NPX_EXE = shutil.which("npx.cmd") or shutil.which("npx") or "npx"
 
 GITHUB_SERVER_JS = os.path.join(PROJECT_ROOT, "node_modules", "@modelcontextprotocol", "server-github", "dist", "index.js")
 
 GITHUB_MCP_COMMAND = [NODE_EXE, "--dns-result-order=ipv4first", GITHUB_SERVER_JS]
 
-FETCH_MCP_COMMAND = ["npx.cmd", "-y", "mcp-fetch-server"]
+FETCH_MCP_COMMAND = [NPX_EXE, "-y", "mcp-fetch-server"]
 if IGNORE_ROBOTS_TXT:
     FETCH_MCP_COMMAND.append("--ignore-robots-txt")
     
-INSIGHT_MCP_COMMAND = [sys.executable, "custom_insight_server.py"]
+INSIGHT_SERVER_PATH = os.path.join(PROJECT_ROOT, "custom_insight_server.py")
+INSIGHT_MCP_COMMAND = [sys.executable, INSIGHT_SERVER_PATH]
 
 #DEFAULT_OWNER = "cli"
 #DEFAULT_REPO = "cli"

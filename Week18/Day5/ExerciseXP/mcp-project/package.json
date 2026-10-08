@@ -8,6 +8,6 @@
     "@modelcontextprotocol/server-fetch": "^0.6.2"
   },
   "scripts": {
-    "init-infrastructure": "npm install && pip install mcp-server-fetch"
+    "init-infrastructure": "npm install"
   }
 }
