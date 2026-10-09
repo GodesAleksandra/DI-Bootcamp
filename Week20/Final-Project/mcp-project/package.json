@@ -1,0 +1,13 @@
+{
+  "name": "mcp-project",
+  "version": "1.0.0",
+  "description": "Enterprise Agentic MCP Workspace",
+  "main": "app.py",
+  "dependencies": {
+    "@modelcontextprotocol/server-github": "^2025.4.8",
+    "@modelcontextprotocol/server-fetch": "^0.6.2"
+  },
+  "scripts": {
+    "init-infrastructure": "npm install"
+  }
+}
