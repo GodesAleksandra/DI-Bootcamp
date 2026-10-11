@@ -147,7 +147,7 @@ router.post('/refresh', async (req, res) => {
         return res.status(401).json({ message: 'Refresh token not found' });
     }
 
-    refreshToken = refreshToken.replace(/^refreshToken=/i, '').trim().replace(/^["']|["']$/g, '');
+    //refreshToken = refreshToken.replace(/^refreshToken=/i, '').trim().replace(/^["']|["']$/g, '');
 
     try {
         const blacklistCheck = await pool.query(
@@ -185,7 +185,7 @@ router.post('/logout', async (req, res) => {
     let refreshToken = req.cookies.refreshToken;
 
     if (refreshToken) {
-        refreshToken = refreshToken.replace(/^refreshToken=/i, '').trim().replace(/^["']|["']$/g, '');
+    //refreshToken = refreshToken.replace(/^refreshToken=/i, '').trim().replace(/^["']|["']$/g, '');
 
         try {
             await pool.query(
