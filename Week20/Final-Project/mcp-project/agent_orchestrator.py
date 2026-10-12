@@ -1,15 +1,17 @@
+import re
+
 import httpx
 import json
 import asyncio
 import config
 import difflib
 from groq import AsyncGroq
-from custom_insight_server import write_report_to_disk
 import datetime
 
 class AgentOrchestrator:
     def __init__(self, client_manager):
         self.client_manager = client_manager
+        self.memory = []
 
     def _redact_secrets(self, text_payload: str) -> str:
         """
@@ -48,10 +50,8 @@ class AgentOrchestrator:
         if backend == "GROQ":
             client = AsyncGroq(api_key=config.GROQ_API_KEY)
 
-            safe_context = context
-            if len(context) > 5000:
-                log_callback("✂️ *Context window is full. Compressing history payload to fit Groq Free Tier...*")
-                safe_context = context[:2000] + "\n\n... [Truncated for Context Window Stability] ...\n\n" + context[-2500:]
+            if len(context) > 20000:
+                context = context[:5000] + "\n\n... [Truncated for Context Window Stability] ...\n\n" + context[-8000:]
 
             for attempt in range(max_retries):
                 try:
@@ -59,10 +59,10 @@ class AgentOrchestrator:
                         model=config.GROQ_MODEL,
                         messages=[
                             {"role": "system", "content": system_prompt.strip()},
-                            {"role": "user", "content": safe_context.strip()}
+                            {"role": "user", "content": context.strip()}
                         ],
                         temperature=0.1,
-                        max_tokens=512,
+                        max_tokens=450,
                         tool_choice="none"
                     )
                     return completion.choices[0].message.content
@@ -126,16 +126,18 @@ class AgentOrchestrator:
         raise RuntimeError("LLM query loop exhausted without returning a result or raising a specific exception.")
                 
     async def run_mission(self, user_input: str, log_callback) -> str:
-        safe_input = user_input[:4000] + "... [Truncated to prevent Groq HTTP 413]" if len(user_input) > 4000 else user_input
-        history = [{"role": "user", "content": f"User Goal: {safe_input}"}]
+        history = [{"role": "user", "content": f"User Goal: {user_input}"}]
+        self.memory = history
         max_turns = getattr(config, "AGENT_MAX_TURNS", 5)
         
         #for turn in range(1, max_turns + 1):
         turn = 1
         while turn <= max_turns:
+            '''
             if turn > 1:
                 log_callback("⏳ *Cooling down API rate limits before next turn...*")
                 await asyncio.sleep(2.5)
+            '''
             tools_schema = self.client_manager.get_all_tools()
             real_tool_names = [t["name"] for t in tools_schema]
 
@@ -220,17 +222,6 @@ class AgentOrchestrator:
                 if "ACTION:" in clean_report:
                     clean_report = clean_report.split("ACTION:")[0].strip()
 
-                try:
-                    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-                    filename = f"mission_report_{timestamp}.md"
-                    
-                    log_callback(f"💾 *Orchestrator pipeline forcing automated report preservation to disk...*")
-                    save_status = write_report_to_disk(filename, clean_report)
-                    log_callback(f"📝 *Filesystem status: {save_status}*")
-                except Exception as save_err:
-                    log_callback(f"⚠️ *Automated internal pipeline saving failed: {str(save_err)}*")
-
-                
                 return self._redact_secrets(clean_report)
                 
             if "ACTION:" in llm_output:
@@ -238,6 +229,7 @@ class AgentOrchestrator:
                     action_str = llm_output.split("ACTION:")[-1].strip()
                     
                     start_idx = action_str.find("{")
+                    
                     if start_idx == -1:
                         raise ValueError("No JSON object found after ACTION:")
                         
@@ -339,39 +331,7 @@ class AgentOrchestrator:
                     elif not isinstance(tool_result, str):
                         tool_result = str(tool_result)
 
-                    cleaned_result = tool_result
-                    
-                    if tool_name == "fetch_html" and isinstance(tool_result, str):
-                        try:
-                            from bs4 import BeautifulSoup
-                            soup = BeautifulSoup(tool_result, "html.parser")
-							
-                            for element in soup(["script", "style", "nav", "footer", "header", "svg"]):
-                                element.extract()
-								
-                            cleaned_result = soup.get_text(separator="\n", strip=True)
-
-                            if len(tool_result) > 5000:
-                                cleaned_result = cleaned_result[:5000] + "\n...[Truncated for Groq payload stability]..."
-                            else:
-                                cleaned_result = cleaned_result
-							
-                        except ImportError:
-                            cleaned_result = tool_result[:4000] + "\n...[Raw HTML truncated]..."
-                            
-                    elif tool_name == "fetch_txt" and isinstance(tool_result, str):
-                        if len(tool_result) > 8000:
-                            cleaned_result = tool_result[:8000] + "\n...[Text truncated for context window stability]..."
-                            
-                    elif tool_name == "fetch_readable" and isinstance(tool_result, str):
-                        if len(tool_result) > 5000:
-                            cleaned_result = tool_result[:5000] + "\n...[Truncated for Groq payload stability]..."
-
-                    history.append({
-                        "role": "user",
-                        "content": f"Tool Execution Result for '{tool_name}':\n{cleaned_result}"
-                    })
-
+                    history.append({"role": "user", "content": f"Tool Execution Result for '{tool_name}':\n{str(tool_result)[:6000]}"})
 
                 except Exception as parse_err:
                     log_callback(f"⚠️ Failed to process action block: {parse_err}")

@@ -4,6 +4,7 @@ import asyncio
 import httpx
 import config
 import os
+import psycopg2
 
 async def query_llm_for_analysis(target_data: str, analysis_type: str = "general") -> str:
     """
@@ -33,7 +34,7 @@ async def query_llm_for_analysis(target_data: str, analysis_type: str = "general
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_content}
             ],
-            "temperature": 0.3
+            "temperature": 0.2
         }
     else:
         url = f"{getattr(config, 'OLLAMA_HOST', 'http://localhost:11434')}/api/chat"
@@ -45,14 +46,12 @@ async def query_llm_for_analysis(target_data: str, analysis_type: str = "general
                 {"role": "user", "content": user_content}
             ],
             "stream": False,
-            "options": {"temperature": 0.3}
+            "options": {"temperature": 0.2}
         }
 
     try:
-        print(f"[InsightServer Info] Dispatched LLM analysis request to Host: {url}. Backend: {backend}...", file=sys.stderr)
-        sys.stderr.flush()
         async with httpx.AsyncClient(trust_env=True) as client:
-            response = await client.post(url, json=payload, headers=headers, timeout=20.0)
+            response = await client.post(url, json=payload, headers=headers, timeout=45.0)
             print(f"[InsightServer Info] HTTP response received. Status code: {response.status_code}", file=sys.stderr)
             sys.stderr.flush()
             if response.status_code == 200:
@@ -68,52 +67,45 @@ async def query_llm_for_analysis(target_data: str, analysis_type: str = "general
         sys.stderr.flush()
         return f"[Error] Failed to connect to LLM for dynamic insight generation: {str(e)}"
 
-def write_report_to_disk(filename: str, content: str) -> str:
-    """
-    Safely writes generated text reports to a designated 'reports' directory.
-    Prevents directory traversal attacks by enforcing strict path resolution.
-    """
+def save_report_to_postgres(repo_source: str, issue_num: int, content: str) -> str:
+    """Safely saves the final report to a PostgreSQL relational database."""
     try:
-        base_dir = os.path.abspath("./mcp_reports")
-        os.makedirs(base_dir, exist_ok=True)
+        conn = psycopg2.connect(
+            host=getattr(config, "DB_HOST", "localhost"),
+            database=getattr(config, "DB_NAME", "postgres"),
+            user=getattr(config, "DB_USER", "postgres"),
+            password=getattr(config, "DB_PASS", "password"),
+            port=getattr(config, "DB_PORT", "5432")
+        )
+        cur = conn.cursor()
         
-        safe_filename = os.path.basename(filename)
-        if not safe_filename:
-            return "[Error] Invalid or empty filename provided."
-            
-        target_path = os.path.join(base_dir, safe_filename)
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS architectural_reports (
+                id SERIAL PRIMARY KEY,
+                source VARCHAR(255) NOT NULL,
+                issue_number INT NOT NULL,
+                generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                summary_report TEXT NOT NULL
+            );
+        """)
         
-        with open(target_path, "w", encoding="utf-8") as f:
-            f.write(content)
-            
-        return f"[Success] Report successfully written to secure local path: {target_path}"
+        cur.execute(
+            "INSERT INTO architectural_reports (source, issue_number, summary_report) VALUES (%s, %s, %s) RETURNING id;",
+            (repo_source, issue_num, content)
+        )
+        record_id = cur.fetchone()[0]
+        conn.commit()
+        cur.close()
+        conn.close()
+        return f"[Success] Report saved to PostgreSQL with Record ID: {record_id}"
     except Exception as e:
-        return f"[Error] Filesystem write operation failed: {str(e)}"
-
+        return f"[Error] Database persistent write operation failed: {str(e)}"
 
 async def handle_mcp_request(request_json: dict) -> dict:
     """Processes incoming JSON-RPC requests conforming to the Model Context Protocol."""
     req_id = request_json.get("id")
     method = request_json.get("method")
     params = request_json.get("params", {})
-
-    mcp_output_schema = {
-        "type": "object",
-        "properties": {
-            "content": {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "type": {"type": "string"},
-                        "text": {"type": "string"}
-                    },
-                    "required": ["type", "text"]
-                }
-            }
-        },
-        "required": ["content"]
-    }
 
     if method == "tools/list":
         return {
@@ -123,13 +115,13 @@ async def handle_mcp_request(request_json: dict) -> dict:
                 "tools": [
                     {
                         "name": "insight_summarize_data",
-                        "description": "Analyzes raw text payload or dynamic tool outputs and generates an advanced executive summary via LLM synthesis.",
+                        "description": "Synthesizes raw text data or GitHub issue payloads into an executive report via LLM.",
                         "inputSchema": {
                             "type": "object",
                             "properties": {
                                 "data": {
                                     "type": "string",
-                                    "description": "The raw data logs, code, or context text string that needs comprehensive synthesis."
+                                    "description": "Raw context string. This can be a GitHub issue body, log dump, or any unstructured text data for analysis."
                                 },
                                 "analysis_type": {
                                     "type": "string",
@@ -138,27 +130,34 @@ async def handle_mcp_request(request_json: dict) -> dict:
                                 }
                             },
                             "required": ["data"]
-                        },
-                        "outputSchema": mcp_output_schema
+                        }
                     },
                     {
-                        "name": "insight_save_report",
-                        "description": "Persists any text-based synthesis, analysis, or data report to the local file system inside a secure reports catalog.",
+                        "name": "insight_save_to_db",
+                        "description": "Persists the architectural text report to the production PostgreSQL database instance.",
                         "inputSchema": {
                             "type": "object",
                             "properties": {
-                                "filename": {
-                                    "type": "string",
-                                    "description": "The target name of the file (e.g., 'system_audit_report.txt' or 'incident_metrics.md')."
-                                },
-                                "content": {
-                                    "type": "string",
-                                    "description": "The full text/markdown content payload to be saved on disk."
-                                }
+                                "repo_source": {"type": "string", "description": "Format: 'owner/repo'"},
+                                "issue_number": {"type": "integer"},
+                                "content": {"type": "string", "description": "The Markdown/text report payload"}
                             },
-                            "required": ["filename", "content"]
-                        },
-                        "outputSchema": mcp_output_schema
+                            "required": ["repo_source", "issue_number", "content"]
+                        }
+														 
+                    },
+                    {
+                        "name": "insight_fetch_discussion",
+                        "description": "Extracts the full text payload, categories, and replies from a GitHub Repository Discussion thread when traditional issue endpoints return 404.",
+                        "inputSchema": {
+                            "type": "object",
+                            "properties": {
+                                "repo_owner": {"type": "string", "description": "Owner of the repo (e.g., 'cli')."},
+                                "repo_name": {"type": "string", "description": "Name of the repo (e.g., 'cli')."},
+                                "discussion_number": {"type": "integer", "description": "The discussion ID number (e.g., 5315)."}
+                            },
+                            "required": ["repo_owner", "repo_name", "discussion_number"]
+                        }
                     }
                 ]
             }
@@ -181,58 +180,62 @@ async def handle_mcp_request(request_json: dict) -> dict:
                     }
                 }
 
-            generated_analysis = await query_llm_for_analysis(raw_data, analysis_type)
-            
-            detailed_report = (
-                "=== CUSTOM INSIGHT REAL-TIME REPORT ===\n"
-                f"Metrics Profiler: Character Length Generated -> {len(raw_data)}\n"
-                f"Analysis Dimension: Strategy -> {analysis_type.upper()}\n"
-                "---------------------------------------\n"
-                f"{generated_analysis}"
-            )
+            report = await query_llm_for_analysis(raw_data, analysis_type)
 
             return {
                 "jsonrpc": "2.0",
                 "id": req_id,
                 "result": {
-                    "content": [{"type": "text", "text": detailed_report}]
+                    "content": [{"type": "text", "text": report}]
                 }
             }
 
-        elif tool_name == "insight_save_report":
-            filename = arguments.get("filename", "")
-            content = arguments.get("content", "")
+        elif tool_name == "insight_save_to_db":
+            status = save_report_to_postgres(arguments.get("repo_source"), arguments.get("issue_number"), arguments.get("content"))
+            return {"jsonrpc": "2.0", "id": req_id, "result": {"content": [{"type": "text", "text": status}]}}
+        elif tool_name == "insight_fetch_discussion":
+            owner = arguments.get("repo_owner")
+            repo = arguments.get("repo_name")
+            num = arguments.get("discussion_number")
             
-            if not filename or not content:
-                return {
-                    "jsonrpc": "2.0",
-                    "id": req_id,
-                    "result": {"content": [{"type": "text", "text": "[Error] Missing filename or content parameters."}]}
+            token = os.environ.get("GITHUB_TOKEN", "")
+            headers = {"Authorization": f"Bearer {token}"} if token else {}
+            
+            query = """
+            query($owner: String!, $repo: String!, $num: Int!) {
+            repository(owner: $owner, name: $repo) {
+                discussion(number: $num) {
+                title
+                body
+                category { name }
+                comments(first: 10) {
+                    nodes { body }
                 }
-            
-            save_status = write_report_to_disk(filename, content)
-            
-            return {
-                "jsonrpc": "2.0",
-                "id": req_id,
-                "result": {
-                    "content": [{"type": "text", "text": save_status}]
                 }
             }
-        else:
-            return {
-                "jsonrpc": "2.0",
-                "id": req_id,
-                "error": {"code": -32601, "message": f"Method not found: Tool '{tool_name}' doesn't exist."}
             }
-
-
+            """
+            
+            async with httpx.AsyncClient() as client:
+                res = await client.post(
+                    "https://github.com",
+                    json={"query": query, "variables": {"owner": owner, "repo": repo, "num": num}},
+                    headers=headers
+                )
+                if res.status_code == 200:
+                    disc_data = res.json().get("data", {}).get("repository", {}).get("discussion", {})
+                    if not disc_data:
+                        return {"jsonrpc": "2.0", "id": req_id, "result": {"content": [{"type": "text", "text": "Discussion thread not found."}]}}
+                    
+                    flat_text = f"Title: {disc_data.get('title')}\nCategory: {disc_data.get('category', {}).get('name')}\nBody: {disc_data.get('body')}"
+                    return {"jsonrpc": "2.0", "id": req_id, "result": {"content": [{"type": "text", "text": flat_text}]}}
+                return {"jsonrpc": "2.0", "id": req_id, "result": {"content": [{"type": "text", "text": f"GraphQL API Error: {res.status_code}"}]}}
+                    
     return {
         "jsonrpc": "2.0",
         "id": req_id,
         "error": {"code": -32601, "message": f"Method not found: '{method}'"}
     }
-
 
 def blocking_readline():
     """Synchronous read line from stdin, fully stable on Windows environments."""
