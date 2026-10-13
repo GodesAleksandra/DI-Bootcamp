@@ -376,6 +376,9 @@ if st.session_state.servers_started:
                     test_logs.append(f"  {msg}")
                     test_log_canvas.code("\n".join(test_logs))
 
+                # Track failure state for final suite verification
+                has_failures = False
+
                 try:
                     report_output = loop.run_until_complete(
                         st.session_state.orchestrator.run_mission(test_goal, log_callback=agent_test_callback)
@@ -392,12 +395,16 @@ if st.session_state.servers_started:
                     test_logs.append(f"✅ Success: Issue #{issue_id} safely committed to Postgres.\n")
                     
                 except Exception as suite_err:
+                    has_failures = True
                     test_logs.append(f"❌ Failure on Issue #{issue_id}: {str(suite_err)}")
                     test_logs.append("⚠️ State Rollback: Database record omitted due to pipeline failure.\n")
                 
                 test_log_canvas.code("\n".join(test_logs))
                 
-            #test_status_text.success("🎉 Integration Suite Execution Complete!")
-            test_status_text.error("⚠️ Suite execution finished with validation errors. Review logs above.")
+            if has_failures:
+                test_status_text.error("⚠️ Suite execution finished with validation errors. Review logs above.")
+            else:
+                test_status_text.success("🎉 Integration Suite Execution Complete! All scenarios safely committed.")
+
 else:
     st.warning("Workspace offline. Please ignite backend server infrastructure dependencies via the control panel.")

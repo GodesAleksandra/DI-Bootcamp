@@ -28,13 +28,10 @@ class AgentOrchestrator:
 
         redacted_payload = text_payload
 
-        for attr in SECRET_ATTRIBUTES:										 
-																							   
-            secret_value = getattr(config, attr, None)											 
-												
+        for attr in SECRET_ATTRIBUTES:
+            secret_value = getattr(config, attr, None)
             if secret_value and isinstance(secret_value, str) and len(secret_value.strip()) > 3:
                 secret_value = secret_value.strip()
-										
                 redacted_payload = redacted_payload.replace(secret_value, f"[REDACTED_{attr}]")
 
         return redacted_payload
@@ -61,9 +58,11 @@ class AgentOrchestrator:
                             {"role": "system", "content": system_prompt.strip()},
                             {"role": "user", "content": context.strip()}
                         ],
-                        temperature=0.1,
-                        max_tokens=450,
-                        tool_choice="none"
+                        temperature=0.1, # Low temperature is perfect for stable JSON
+                        max_tokens=1024, # Gives enough space for full reports
+                        tool_choice="none",
+                        # Disable thinking to ensure instant, clean JSON blocks
+                        extra_body={"reasoning_effort": "none"} 
                     )
                     return completion.choices[0].message.content
                     
